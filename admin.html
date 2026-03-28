@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | AI-Mall™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --bg2: #ffffff;
+            --card: #ffffff;
+            --border: rgba(0,0,0,0.06);
+            --blue: #0084ff;
+            --purple: #925cff;
+            --cyan: #00d2ff;
+            --green: #00d48e;
+            --red: #ff4d6d;
+            --yellow: #ffb100;
+            --text: #1e293b;
+            --muted: #64748b;
+            --grad: linear-gradient(135deg, #0084ff, #925cff);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+        /* Login Screen */
+        #login-screen {
+            display:flex; align-items:center; justify-content:center;
+            min-height:100vh;
+            background: radial-gradient(circle at top right, rgba(0,132,255,0.05), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(146,92,255,0.05), transparent 50%),
+                        var(--bg);
+        }
+        .login-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 50px 48px;
+            width: 420px;
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.1);
+            text-align:center;
+        }
+        .login-logo { font-family:'Outfit',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:10px; background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; }
+        .login-sub { color:var(--muted); font-size:.9rem; margin-bottom:40px; }
+        .login-input {
+            width:100%; padding:16px 22px; margin-bottom:18px;
+            background:rgba(0,0,0,0.03); border:1px solid transparent;
+            border-radius:14px; color:var(--text); font-size:1rem;
+            outline:none; transition:all .3s ease;
+        }
+        .login-input:focus { border-color:var(--blue); background:white; box-shadow:0 10px 30px rgba(0,132,255,0.05); }
+        .login-btn {
+            width:100%; padding:16px; border:none; border-radius:14px;
+            background:var(--grad); color:white; font-size:1rem; font-weight:700;
+            cursor:pointer; transition:all .3s ease;
+            box-shadow: 0 10px 30px rgba(0,132,255,0.25);
+        }
+        .login-btn:hover { transform:translateY(-3px); box-shadow:0 15px 45px rgba(0,132,255,0.4); }
+        .login-error { color:var(--red); font-size:.85rem; margin-top:20px; display:none; padding:12px; background:rgba(255,77,109,0.05); border-radius:10px; }
+
+        /* Dashboard */
+        #dashboard { display:none; }
+
+        /* Sidebar */
+        .sidebar {
+            position:fixed; left:0; top:0; bottom:0; width:280px;
+            background:var(--bg2); border-right:1px solid var(--border);
+            display:flex; flex-direction:column; padding:40px 0; z-index:100;
+            box-shadow: 10px 0 50px rgba(0,0,0,0.02);
+        }
+        .sidebar-logo { font-family:'Outfit',sans-serif; font-size:1.6rem; font-weight:800; padding:0 32px 35px; background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; border-bottom:1px solid var(--border); }
+        .sidebar-logo span { font-size:.8rem; display:block; color:var(--muted); font-family:'Inter',sans-serif; font-weight:500; margin-top:4px; }
+        .nav-items { padding:30px 20px; flex:1; }
+        .nav-item {
+            display:flex; align-items:center; gap:14px; padding:14px 20px;
+            border-radius:16px; cursor:pointer; margin-bottom:8px;
+            color:var(--muted); font-size:.95rem; font-weight:600;
+            transition:all .25s cubic-bezier(0.4,0,0.2,1);
+        }
+        .nav-item:hover { background:rgba(0,132,255,0.04); color:var(--blue); }
+        .nav-item.active { background:var(--grad); color:white; box-shadow:0 10px 25px rgba(0,132,255,0.25); }
+        .nav-item .nav-icon { font-size:1.2rem; width:24px; text-align:center; }
+        .nav-badge { margin-left:auto; background:var(--blue); color:white; font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .nav-item.active .nav-badge { background:white; color:var(--blue); }
+        .sidebar-footer { padding:30px 32px; border-top:1px solid var(--border); font-size:.85rem; color:var(--muted); }
+        .logout-btn { cursor:pointer; color:var(--red); font-weight:700; margin-top:12px; display:inline-block; font-size:0.9rem; padding:8px 16px; background:rgba(255,77,109,0.05); border-radius:10px; transition:all .2s; }
+        .logout-btn:hover { background:var(--red); color:white; }
+
+        /* Main Content */
+        .main-content { margin-left:280px; padding:60px; min-height:100vh; }
+
+        /* Page Header */
+        .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:45px; }
+        .page-title { font-family:'Outfit',sans-serif; font-size:2.2rem; font-weight:800; color:var(--text); letter-spacing:-0.03em; }
+        .page-subtitle { color:var(--muted); font-size:.95rem; margin-top:8px; font-weight:500; }
+        .refresh-btn {
+            padding:12px 24px; border-radius:14px; border:1px solid var(--border);
+            background:white; color:var(--text); cursor:pointer;
+            font-size:.95rem; font-weight:700; transition:all .25s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .refresh-btn:hover { border-color:var(--blue); color:var(--blue); transform:translateY(-2px); }
+
+        /* Stat Cards */
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:25px; margin-bottom:50px; }
+        .stat-card {
+            background:var(--card); border:1px solid var(--border);
+            border-radius:24px; padding:32px;
+            position:relative; overflow:hidden;
+            transition:all .3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+        }
+        .stat-card:hover { transform:translateY(-6px); box-shadow:0 30px 60px rgba(0,0,0,0.06); }
+        .stat-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; }
+        .stat-card.blue::before { background:var(--blue); }
+        .stat-card.purple::before { background:var(--purple); }
+        .stat-card.green::before { background:var(--green); }
+        .stat-card.yellow::before { background:var(--yellow); }
+        .stat-icon { font-size:2.2rem; margin-bottom:18px; }
+        .stat-num { font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; line-height:1; color:var(--text); }
+        .stat-label { color:var(--muted); font-size:.9rem; margin-top:10px; font-weight:600; }
+        .stat-badge { position:absolute; top:25px; right:25px; font-size:.8rem; font-weight:800; padding:5px 12px; border-radius:20px; }
+        .stat-badge.new { background:rgba(0,132,255,0.08); color:var(--blue); }
+        .stat-badge.today { background:rgba(0,212,142,0.08); color:var(--green); }
+
+        /* Table Section */
+        .section-panel { background:var(--card); border:1px solid var(--border); border-radius:24px; overflow:hidden; margin-bottom:35px; box-shadow:0 20px 60px rgba(0,0,0,0.03); }
+        .panel-header { padding:28px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+        .panel-title { font-size:1.1rem; font-weight:800; display:flex; align-items:center; gap:12px; color:var(--text); }
+        .panel-count { background:rgba(0,132,255,0.08); color:var(--blue); font-size:.85rem; font-weight:800; padding:4px 12px; border-radius:20px; }
+        .panel-actions { display:flex; gap:12px; }
+        .filter-select {
+            padding:10px 18px; border-radius:12px; border:1px solid var(--border);
+            background:rgba(0,0,0,0.02); color:var(--text); font-size:.9rem; font-weight:600; cursor:pointer;
+        }
+
+        /* Table */
+        .table-wrap { overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; }
+        th { padding:18px 32px; text-align:left; font-size:.85rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.01); }
+        td { padding:22px 32px; border-bottom:1px solid var(--border); font-size:.95rem; vertical-align:middle; color:var(--text); }
+        tr:last-child td { border-bottom:none; }
+        tr:hover td { background:rgba(0,132,255,0.02); }
+
+        /* Status Badges */
+        .status-badge { display:inline-block; padding:6px 16px; border-radius:20px; font-size:.8rem; font-weight:800; text-transform:capitalize; }
+        .status-new { background:rgba(0,132,255,0.1); color:var(--blue); }
+        .status-pending { background:rgba(255,193,7,0.1); color:#d48806; }
+        .status-contacted { background:rgba(0,212,142,0.1); color:#00a875; }
+        .status-approved { background:rgba(0,212,142,0.15); color:#00a875; }
+        .status-rejected { background:rgba(255,77,109,0.1); color:var(--red); }
+
+        /* Action buttons */
+        .action-btn {
+            padding:8px 16px; border-radius:10px; border:none; cursor:pointer;
+            font-size:.85rem; font-weight:700; transition:all .25s;
+        }
+        .btn-contact { background:rgba(0,132,255,0.08); color:var(--blue); }
+        .btn-contact:hover { background:var(--blue); color:white; }
+        .btn-approve { background:rgba(0,212,142,0.08); color:#00a875; }
+        .btn-approve:hover { background:#00a875; color:white; }
+        .btn-delete { background:rgba(255,77,109,0.08); color:var(--red); margin-left:8px; }
+        .btn-delete:hover { background:var(--red); color:white; }
+
+        /* Email / name columns */
+        .name-cell strong { display:block; margin-bottom:4px; font-weight:800; font-size:1.05rem; }
+        .name-cell span { font-size:.85rem; color:var(--muted); font-weight:500; }
+        .msg-cell { max-width:300px; color:var(--muted); font-size:.9rem; line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-weight:450; }
+        .timestamp { color:var(--muted); font-size:.85rem; font-weight:500; }
+
+        /* Empty state */
+        .empty-state { text-align:center; padding:100px 40px; color:var(--muted); }
+        .empty-state .empty-icon { font-size:4rem; margin-bottom:20px; }
+        .empty-state h3 { font-size:1.4rem; font-weight:800; color:var(--text); margin-bottom:8px; }
+
+        /* Loading */
+        .loading-row td { text-align:center; padding:60px; color:var(--muted); font-weight:600; }
+
+        /* Tab nav inside dashboard */
+        .tab-nav { display:flex; gap:6px; margin-bottom:32px; background:rgba(0,0,0,0.03); border-radius:14px; padding:6px; width:fit-content; }
+        .tab-btn { padding:12px 24px; border-radius:10px; border:none; cursor:pointer; font-size:.95rem; font-weight:700; background:transparent; color:var(--muted); transition:all .25s; white-space:nowrap; }
+        .tab-btn.active { background:var(--blue); color:white; box-shadow:0 6px 15px rgba(0,132,255,0.3); }
+
+        /* Notification toast */
+        #toast {
+            position:fixed; bottom:40px; right:40px; z-index:9999;
+            padding:18px 32px; border-radius:18px; font-size:.95rem; font-weight:800;
+            transform:translateY(120px); opacity:0; transition:all .4s cubic-bezier(0.175,0.885,0.32,1.275);
+            background:var(--card); border:1px solid var(--border);
+            box-shadow:0 30px 60px rgba(0,0,0,0.1);
+        }
+        #toast.show { transform:translateY(0); opacity:1; }
+        #toast.success { border-color:var(--green); color:#00a875; }
+        #toast.error { border-color:var(--red); color:var(--red); }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+    <div class="login-box">
+        <div class="login-logo">AI-Mall™</div>
+        <p class="login-sub">Admin Dashboard — Secure Access</p>
+        <input type="email" id="admin-email-input" class="login-input" placeholder="Admin Email" onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="password" id="admin-pass-input" class="login-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-btn" onclick="doLogin()">Access Dashboard</button>
+        <p class="login-error" id="login-error">❌ Invalid credentials. Please try again.</p>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">AI-Mall™ <span>Admin Dashboard</span></div>
+        <div class="nav-items">
+            <div class="nav-item active" onclick="showTab('overview')" id="nav-overview">
+                <span class="nav-icon">📊</span> Overview
+            </div>
+            <div class="nav-item" onclick="showTab('contacts')" id="nav-contacts">
+                <span class="nav-icon">📧</span> Contact Enquiries
+                <span class="nav-badge" id="new-contacts-badge">0</span>
+            </div>
+            <div class="nav-item" onclick="showTab('partners')" id="nav-partners">
+                <span class="nav-icon">🤝</span> Partner Applications
+                <span class="nav-badge" id="new-partners-badge">0</span>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div>AI-Mall™ Backend v1.0</div>
+            <div>localhost:3001</div>
+            <span class="logout-btn" onclick="doLogout()">⏻ Logout</span>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+        <!-- OVERVIEW TAB -->
+        <div id="tab-overview">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Dashboard Overview</div>
+                    <div class="page-subtitle">Real-time AI-Mall™ contact & partnership analytics</div>
+                </div>
+                <button class="refresh-btn" onclick="loadAll()">🔄 Refresh</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-badge new" id="badge-new-contacts">New</div>
+                    <div class="stat-icon">📧</div>
+                    <div class="stat-num" id="stat-total-contacts">—</div>
+                    <div class="stat-label">Total Contact Enquiries</div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-badge today" id="badge-today-contacts">Today</div>
+                    <div class="stat-icon">🤝</div>
+                    <div class="stat-num" id="stat-total-partners">—</div>
+                    <div class="stat-label">Partner Applications</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-num" id="stat-today-contacts">—</div>
+                    <div class="stat-label">Enquiries Today</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-num" id="stat-pending-partners">—</div>
+                    <div class="stat-label">Pending Applications</div>
+                </div>
+            </div>
+
+            <!-- Recent contacts preview -->
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📧 Recent Enquiries <span class="panel-count" id="count-recent-contacts">0</span></div>
+                    <button class="refresh-btn" onclick="showTab('contacts')">View All →</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Email</th><th>Interest</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody id="recent-contacts-tbody"><tr class="loading-row"><td colspan="5">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent partners preview -->
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div class="panel-title">🤝 Recent Applications <span class="panel-count" id="count-recent-partners">0</span></div>
+                    <button class="refresh-btn" onclick="showTab('partners')">View All →</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Company</th><th>Type</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody id="recent-partners-tbody"><tr class="loading-row"><td colspan="5">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACTS TAB -->
+        <div id="tab-contacts" style="display:none">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Contact Enquiries</div>
+                    <div class="page-subtitle">All contact form submissions from the AI-Mall™ website</div>
+                </div>
+                <button class="refresh-btn" onclick="loadContacts()">🔄 Refresh</button>
+            </div>
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📧 All Enquiries <span class="panel-count" id="contacts-count">0</span></div>
+                    <div class="panel-actions">
+                        <select class="filter-select" onchange="filterContacts(this.value)">
+                            <option value="all">All Status</option>
+                            <option value="new">New</option>
+                            <option value="contacted">Contacted</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name / Company</th><th>Email</th><th>Interest</th><th>Message</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="contacts-tbody"><tr class="loading-row"><td colspan="7">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARTNERS TAB -->
+        <div id="tab-partners" style="display:none">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Partner Applications</div>
+                    <div class="page-subtitle">Partnership applications submitted through AI-Mall™</div>
+                </div>
+                <button class="refresh-btn" onclick="loadPartners()">🔄 Refresh</button>
+            </div>
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div class="panel-title">🤝 All Applications <span class="panel-count" id="partners-count">0</span></div>
+                    <div class="panel-actions">
+                        <select class="filter-select" onchange="filterPartners(this.value)">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Company / Website</th><th>Email</th><th>Type</th><th>Message</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="partners-tbody"><tr class="loading-row"><td colspan="8">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+const API = 'http://localhost:3001/api';
+let ADMIN_KEY = '';
+let allContacts = [];
+let allPartners = [];
+
+// ── Auth ──
+function checkPreAuth() {
+    if (sessionStorage.getItem('admin_auth') === 'true') {
+        ADMIN_KEY = 'aimall-admin-2026';
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadAll();
+    }
+}
+
+function doLogin() {
+    const email = document.getElementById('admin-email-input').value.trim();
+    const pass = document.getElementById('admin-pass-input').value.trim();
+    const errorEl = document.getElementById('login-error');
+    
+    // Explicitly check requested credentials
+    if (email === "admin@uwo24.com" && pass === "admin@123") {
+        sessionStorage.setItem('admin_auth', 'true');
+        // Use the internal backend key
+        ADMIN_KEY = 'aimall-admin-2026';
+        
+        // Test auth with backend
+        fetch(`${API}/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })
+            .then(r => {
+                if(!r.ok) throw new Error("Auth failed");
+                return r.json();
+            })
+            .then(() => {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                errorEl.style.display = 'none';
+                loadAll();
+            })
+            .catch((err) => {
+                errorEl.textContent = "❌ Backend Server unreachable. Please ensure 'node server.js' is running.";
+                errorEl.style.display = 'block';
+                ADMIN_KEY = '';
+            });
+    } else {
+        errorEl.textContent = "❌ Invalid credentials. Use admin@uwo24.com / admin@123";
+        errorEl.style.display = 'block';
+    }
+}
+
+function doLogout() {
+    ADMIN_KEY = '';
+    sessionStorage.removeItem('admin_auth');
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin-email-input').value = '';
+    document.getElementById('admin-pass-input').value = '';
+    document.getElementById('login-error').style.display = 'none';
+}
+
+// Check on load
+window.addEventListener('load', checkPreAuth);
+
+// ── Navigation ──
+function showTab(tab) {
+    ['overview','contacts','partners'].forEach(t => {
+        document.getElementById(`tab-${t}`).style.display = t === tab ? 'block' : 'none';
+        document.getElementById(`nav-${t}`).classList.toggle('active', t === tab);
+    });
+    if (tab === 'contacts') loadContacts();
+    if (tab === 'partners') loadPartners();
+}
+
+// ── Load All ──
+function loadAll() {
+    loadStats();
+    loadContacts();
+    loadPartners();
+}
+
+// ── Stats ──
+function loadStats() {
+    fetch(`${API}/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })
+        .then(r => r.json())
+        .then(({ stats }) => {
+            document.getElementById('stat-total-contacts').textContent = stats.totalContacts;
+            document.getElementById('stat-total-partners').textContent = stats.totalPartners;
+            document.getElementById('stat-today-contacts').textContent = stats.todayContacts;
+            document.getElementById('stat-pending-partners').textContent = stats.pendingPartners;
+            document.getElementById('badge-new-contacts').textContent = `${stats.newContacts} New`;
+            document.getElementById('badge-today-contacts').textContent = `${stats.todayPartners} Today`;
+            document.getElementById('new-contacts-badge').textContent = stats.newContacts;
+            document.getElementById('new-partners-badge').textContent = stats.pendingPartners;
+        });
+}
+
+// ── Contacts ──
+function loadContacts() {
+    fetch(`${API}/admin/contacts`, { headers: { 'x-admin-key': ADMIN_KEY } })
+        .then(r => r.json())
+        .then(({ data, total }) => {
+            allContacts = data;
+            renderContacts(data);
+            document.getElementById('contacts-count').textContent = total;
+            document.getElementById('count-recent-contacts').textContent = Math.min(total, 5);
+            renderRecentContacts(data.slice(0, 5));
+        });
+}
+
+function renderContacts(data) {
+    const tbody = document.getElementById('contacts-tbody');
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📭</div>No contact enquiries yet.</div></td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.map(c => `
+        <tr>
+            <td class="name-cell"><strong>${esc(c.name)}</strong><span>${esc(c.company||'—')}</span></td>
+            <td><a href="mailto:${esc(c.email)}" style="color:var(--blue)">${esc(c.email)}</a></td>
+            <td>${esc(c.interest||'—')}</td>
+            <td class="msg-cell">${esc(c.message)}</td>
+            <td><span class="status-badge status-${c.status}">${c.status}</span></td>
+            <td class="timestamp">${formatDate(c.created_at)}</td>
+            <td>
+                <button class="action-btn btn-contact" onclick="updateContactStatus(${c.id},'contacted')">✓ Mark Contacted</button>
+                <button class="action-btn btn-delete" onclick="deleteContact(${c.id})">🗑</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function renderRecentContacts(data) {
+    const tbody = document.getElementById('recent-contacts-tbody');
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No enquiries yet</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.map(c => `
+        <tr>
+            <td><strong>${esc(c.name)}</strong></td>
+            <td><a href="mailto:${esc(c.email)}" style="color:var(--blue)">${esc(c.email)}</a></td>
+            <td>${esc(c.interest||'—')}</td>
+            <td><span class="status-badge status-${c.status}">${c.status}</span></td>
+            <td class="timestamp">${formatDate(c.created_at)}</td>
+        </tr>
+    `).join('');
+}
+
+function filterContacts(status) {
+    const filtered = status === 'all' ? allContacts : allContacts.filter(c => c.status === status);
+    renderContacts(filtered);
+}
+
+function updateContactStatus(id, status) {
+    fetch(`${API}/admin/contact/${id}/status`, {
+        method:'PATCH', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_KEY},
+        body: JSON.stringify({ status })
+    }).then(() => { showToast('Status updated ✓', 'success'); loadContacts(); loadStats(); });
+}
+
+function deleteContact(id) {
+    if (!confirm('Delete this enquiry?')) return;
+    fetch(`${API}/admin/contact/${id}`, { method:'DELETE', headers:{'x-admin-key':ADMIN_KEY} })
+        .then(() => { showToast('Deleted ✓', 'success'); loadContacts(); loadStats(); });
+}
+
+// ── Partners ──
+function loadPartners() {
+    fetch(`${API}/admin/partners`, { headers: { 'x-admin-key': ADMIN_KEY } })
+        .then(r => r.json())
+        .then(({ data, total }) => {
+            allPartners = data;
+            renderPartners(data);
+            document.getElementById('partners-count').textContent = total;
+            document.getElementById('count-recent-partners').textContent = Math.min(total, 5);
+            renderRecentPartners(data.slice(0, 5));
+        });
+}
+
+function renderPartners(data) {
+    const tbody = document.getElementById('partners-tbody');
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🤝</div>No partner applications yet.</div></td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.map(p => `
+        <tr>
+            <td class="name-cell"><strong>${esc(p.name)}</strong><span>${esc(p.phone||'')}</span></td>
+            <td class="name-cell"><strong>${esc(p.company)}</strong><span><a href="${esc(p.website||'#')}" target="_blank" style="color:var(--blue)">${esc(p.website||'—')}</a></span></td>
+            <td><a href="mailto:${esc(p.email)}" style="color:var(--blue)">${esc(p.email)}</a></td>
+            <td>${esc(p.partner_type||'—')}</td>
+            <td class="msg-cell">${esc(p.message||'—')}</td>
+            <td><span class="status-badge status-${p.status}">${p.status}</span></td>
+            <td class="timestamp">${formatDate(p.created_at)}</td>
+            <td>
+                <button class="action-btn btn-approve" onclick="updatePartnerStatus(${p.id},'approved')">✓ Approve</button>
+                <button class="action-btn" style="background:rgba(255,77,109,.1);color:var(--red)" onclick="updatePartnerStatus(${p.id},'rejected')">✗ Reject</button>
+                <button class="action-btn btn-delete" onclick="deletePartner(${p.id})">🗑</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function renderRecentPartners(data) {
+    const tbody = document.getElementById('recent-partners-tbody');
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No applications yet</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.map(p => `
+        <tr>
+            <td><strong>${esc(p.name)}</strong></td>
+            <td>${esc(p.company)}</td>
+            <td>${esc(p.partner_type||'—')}</td>
+            <td><span class="status-badge status-${p.status}">${p.status}</span></td>
+            <td class="timestamp">${formatDate(p.created_at)}</td>
+        </tr>
+    `).join('');
+}
+
+function filterPartners(status) {
+    const filtered = status === 'all' ? allPartners : allPartners.filter(p => p.status === status);
+    renderPartners(filtered);
+}
+
+function updatePartnerStatus(id, status) {
+    fetch(`${API}/admin/partner/${id}/status`, {
+        method:'PATCH', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_KEY},
+        body: JSON.stringify({ status })
+    }).then(() => { showToast(`Application ${status} ✓`, 'success'); loadPartners(); loadStats(); });
+}
+
+function deletePartner(id) {
+    if (!confirm('Delete this application?')) return;
+    fetch(`${API}/admin/partner/${id}`, { method:'DELETE', headers:{'x-admin-key':ADMIN_KEY} })
+        .then(() => { showToast('Deleted ✓', 'success'); loadPartners(); loadStats(); });
+}
+
+// ── Helpers ──
+function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatDate(dt) {
+    const d = new Date(dt);
+    return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) +
+           ' ' + d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+}
+
+function showToast(msg, type='success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `show ${type}`;
+    setTimeout(() => t.className = '', 3000);
+}
+
+// Auto-refresh every 30s
+setInterval(() => { if (ADMIN_KEY) loadAll(); }, 30000);
+</script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | AI-Mall™ | Get In Touch</title>
+    <meta name="description" content="Connect with AI-Mall™ for partnerships, enterprise solutions, or support. Let's build the future of AI commerce together.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="loading contact-page">
+    
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">AI-Mall<span class="tm">™</span></div>
+            <div class="loader-bar-container">
+                <div class="loader-bar"></div>
+            </div>
+            <p class="loader-text">Initializing Secure Connection...</p>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-blur"></div>
+
+    <!-- Global Background Elements -->
+    <div class="global-noise"></div>
+    <div class="ambient-glow"></div>
+
+    <!-- Header / Navigation -->
+    <header id="header">
+        <div class="logo" onclick="window.location.href='index.html'">AI-Mall<span class="tm">™</span></div>
+        <nav>
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="a-series.html" class="nav-link">A-Series™</a>
+            <a href="partner.html" class="nav-link">Partners</a>
+            <a href="contact.html" class="nav-link active">Contact</a>
+        </nav>
+        <div class="header-cta">
+            <a href="partner.html" class="btn-premium secondary small">Partner</a>
+            <a href="a-series.html" class="btn-premium primary small">Explore <span class="btn-icon">→</span></a>
+        </div>
+    </header>
+
+    <main id="main-content">
+        
+        <!-- CONTACT HERO SECTION -->
+        <section id="contact-hero" class="minimal-hero">
+            <div class="hero-bg">
+                <img src="ChatGPT Image Mar 25, 2026, 04_53_35 PM.png" alt="AI Interface" class="parallax-img">
+                <div class="hero-overlay soft-white"></div>
+            </div>
+            
+            <div class="contact-particles">
+                <div class="particle" style="top: 20%; left: 15%; width: 4px; height: 4px;"></div>
+                <div class="particle" style="top: 50%; left: 80%; width: 6px; height: 6px;"></div>
+                <div class="particle" style="top: 70%; left: 25%; width: 3px; height: 3px;"></div>
+                <div class="floating-icon mail" style="top: 25%; left: 10%;">📧</div>
+                <div class="floating-icon chat" style="top: 30%; right: 15%;">💬</div>
+            </div>
+            
+            <div class="container">
+                <div class="hero-content">
+                    <div class="section-label reveal-text">Support & Global Sales</div>
+                    <h1 class="headline">Get in <span class="gradient-text">Touch.</span></h1>
+                    <p class="subheadline">Connect with our dedicated experts to unlock the next generation of AI-driven commerce.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN CONTACT INTERFACE -->
+        <section id="contact-main" class="scroll-section">
+            <div class="neural-orb-mid"></div>
+            <div class="container">
+                <!-- Connection Gatekeeper Mosaic -->
+                <div class="connection-gatekeeper reveal-on-scroll">
+                    <h2 class="section-title">Step into the <span class="gradient-text">Future.</span></h2>
+                    <div class="connect-grid">
+                        <a href="partner.html" class="connect-card connect-left">
+                            <div class="card-icon-small">
+                                <img src="logos/Startpartnership (1).png" alt="Start a Partnership">
+                            </div>
+                            <h3>Start a <br> Partnership</h3>
+                            <p>Collaborate with AI Mall to build next-generation AI solutions across the planetary network.</p>
+                            <span class="connect-cta">Become a Partner →</span>
+                        </a>
+                        <a href="a-series.html" class="connect-card focus-card connect-center-reveal">
+                            <div class="card-icon-small">
+                                <img src="logos/exploreaosolutions.png" alt="Explore AI Solutions">
+                            </div>
+                            <h3>Explore AI <br> Solutions</h3>
+                            <p>Discover how our organic neural ecosystem can transform your business architecture.</p>
+                            <span class="connect-cta">View Solutions →</span>
+                        </a>
+                        <a href="#" class="connect-card connect-right" onclick="toggleChat()">
+                            <div class="card-icon-small">
+                                <img src="logos/talkto expert.png" alt="Talk to an Expert">
+                            </div>
+                            <h3>Talk to an <br> Expert</h3>
+                            <p>Connect with our core specialized AI specialists for personalized innovation guidance.</p>
+                            <span class="connect-cta">Start Conversation →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex-layout">
+                    <!-- Left Pillar: Corporate Intel -->
+                    <div class="contact-info-block reveal-on-scroll">
+                        <div class="hq-card">
+                            <div class="section-label">Global Headquarters</div>
+                            <h3>Unified Web <br> Options (UWO™)</h3>
+                            <p class="medium-body text-muted">Tech Plaza, Digital Hub — India <br> Supporting global scale and digital transformation.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Pillar: Form Suite -->
+                    <div class="contact-form-block">
+                        <div class="form-wrapper glass">
+                            <div class="quick-actions-bar">
+                                <a href="tel:+910000000000" class="quick-btn"><span>📞</span> Call Now</a>
+                                <a href="#" class="quick-btn" onclick="toggleChat()"><span>💬</span> Live Chat</a>
+                                <a href="#" class="quick-btn"><span>📅</span> Demo</a>
+                            </div>
+
+                            <form id="ai-contact-form" onsubmit="handleContactSubmission(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <input type="text" id="name" placeholder=" " required onfocus="setFocus(this)" onblur="removeFocus(this)">
+                                        <label for="name">Your Name</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" id="company" placeholder=" " required onfocus="setFocus(this)" onblur="removeFocus(this)">
+                                        <label for="company">Company</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" id="email" placeholder=" " required onfocus="setFocus(this)" onblur="removeFocus(this)">
+                                    <label for="email">Email Address</label>
+                                </div>
+                                <div class="form-group">
+                                    <select id="interest" required onfocus="setFocus(this)" onblur="removeFocus(this)" onchange="checkSelect(this)">
+                                        <option value="" disabled selected></option>
+                                        <option value="partnership">Partnership Opportunity</option>
+                                        <option value="enterprise">Enterprise Integration</option>
+                                        <option value="demo">Book a Product Demo</option>
+                                        <option value="support">Technical Support</option>
+                                    </select>
+                                    <label for="interest">Interest Type</label>
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="message" rows="5" placeholder=" " required onfocus="setFocus(this)" onblur="removeFocus(this)"></textarea>
+                                    <label for="message">How can our AI empower you?</label>
+                                </div>
+
+                                <button type="submit" id="submit-btn" class="btn-premium primary full-width">
+                                    <span class="btn-loader" id="spinner"></span>
+                                    <span class="btn-text" id="btn-text">Send Message</span>
+                                    <span id="success-tick" style="display:none">✅</span>
+                                </button>
+                                <p id="success-msg" style="display: none; text-align: center; margin-top: 20px; color: var(--clr-accent-blue); font-weight: 700;">
+                                    Thanks! Our team will contact you within 24 hours.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cinematic Why Us Mosaic -->
+                <div class="why-us-cinematic reveal-on-scroll">
+                    <div class="trust-grid">
+                        <div class="trust-card card-left pill-blue">
+                            <span class="trust-icon">⚡</span>
+                            <h3>High-Velocity <br> Intelligence</h3>
+                            <p>Real-time AI architecture deploying within 24 hours of engagement.</p>
+                        </div>
+                        <div class="trust-card card-center pill-purple highlight">
+                            <span class="trust-icon">🧠</span>
+                            <h3>Deep Neural <br> Expertise</h3>
+                            <p>Direct priority line to our core specialized AI development cohort.</p>
+                        </div>
+                        <div class="trust-card card-right pill-blue">
+                            <span class="trust-icon">🌍</span>
+                            <h3>Global Edge <br> Logistics</h3>
+                            <p>Distributed world-wide assistance for limitless enterprise scale.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Integration -->
+                <div class="map-integration reveal-on-scroll">
+                    <div class="map-card">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.1!2d77.0!3d28.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDMwJzAwLjAiTiA3N8KwMDAnMDAuMCJF!5e0!3m2!1sen!2sin!4v1617111111111!5m2!1sen!2sin" width="100%" height="450" style="border:0; filter: grayscale(1) invert(0.9) contrast(0.8);" allowfullscreen="" loading="lazy"></iframe>
+                        <div class="map-info-overlay">
+                            <h4>Tech Headquarters — India</h4>
+                            <p class="text-muted">Innovating the future of commerce.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- PREMIUM CHATBOT — EFV™ STYLE              -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="ai-chat-assistant">
+            <div id="chat-window" class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-brand">
+                        <div class="chat-logo-icon" onclick="openAdmin()" style="cursor:pointer;"><img src="logos/Logo.png" alt="AI-Mall" style="width:100%; height:100%; object-fit:contain;"></div>
+                        <div class="chat-title-group">
+                            <h4>AI-Mall™ Assistance</h4>
+                            <div class="status-dot"></div>
+                        </div>
+                    </div>
+                    <div class="chat-close" onclick="toggleChat()">✕</div>
+                </div>
+
+                <div class="chat-body" id="chat-body-view">
+                    <div id="registration-view" class="registration-view">
+                        <div class="reg-welcome">Join AI-Mall™ Intelligence</div>
+                        <form class="reg-form" id="chat-reg-form" onsubmit="handleChatReg(event)">
+                            <input type="text" id="chat-reg-name" class="reg-input" placeholder="Full Name *" required>
+                            <input type="email" id="chat-reg-email" class="reg-input" placeholder="Email Address *" required>
+                            <button type="submit" class="reg-btn">
+                                <span>Join Now</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div id="chat-messages" class="chat-messages" style="display:none; flex-direction:column; gap:15px;">
+                        <div class="chat-msg msg-ai">Hi, I'm AISA. How can I help you today?</div>
+                    </div>
+                </div>
+
+                <div class="chat-footer">
+                    <div class="chat-input-row">
+                        <input type="text" id="chat-main-input" class="chat-text-input" placeholder="Register above to chat..." readonly>
+                        <button class="chat-action-btn mic">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                        </button>
+                        <button class="chat-action-btn send" onclick="sendMessage()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-orb" onclick="toggleChat()">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+        </div>
+        <script>
+            function toggleChat(){document.getElementById('chat-window').classList.toggle('active');}
+            function handleChatReg(e){
+                e.preventDefault();
+                const n=document.getElementById('chat-reg-name').value;
+                localStorage.setItem('chat_registered','true');
+                localStorage.setItem('chat_user',n);
+                document.getElementById('registration-view').style.display='none';
+                document.getElementById('chat-messages').style.display='flex';
+                const i=document.getElementById('chat-main-input');
+                i.placeholder="Type message..."; i.readOnly=false;
+                const m=document.getElementById('chat-messages');
+                const w=document.createElement('div'); w.className='chat-msg msg-ai'; w.textContent="Thank you for joining, "+n+"! How can I assist you further?";
+                m.appendChild(w);
+            }
+            function sendMessage(){
+                const i=document.getElementById('chat-main-input'); const val=i.value.trim(); if(!val||i.readOnly)return;
+                const m=document.getElementById('chat-messages'); const u=document.createElement('div'); u.className='chat-msg msg-user'; u.textContent=val; m.appendChild(u);
+                i.value=""; setTimeout(()=>{
+                    const a=document.createElement('div'); a.className='chat-msg msg-ai'; a.textContent="Our nodes are processing your request. One of our experts will contact you soon."; m.appendChild(a); m.scrollTop=m.scrollHeight;
+                },1000);
+            }
+            function openAdmin() {
+                const email = prompt("Enter Admin Email:");
+                if (email === "admin@uwo24.com") {
+                    const pass = prompt("Enter Password:");
+                    if (pass === "admin@123") {
+                        sessionStorage.setItem('admin_auth', 'true');
+                        window.location.href = "admin.html";
+                    } else {
+                        alert("Incorrect Password!");
+                    }
+                }
+            }
+            window.addEventListener('DOMContentLoaded', ()=>{ if(localStorage.getItem('chat_registered')==='true'){
+                document.getElementById('registration-view').style.display='none'; document.getElementById('chat-messages').style.display='flex';
+                const i=document.getElementById('chat-main-input'); i.placeholder="Type message..."; i.readOnly=false;
+            }});
+        </script>
+
+        <!-- Scripts -->
+        <script>
+            const API_URL = 'http://localhost:3001/api';
+
+            function setFocus(el) { el.parentElement.classList.add('focused'); }
+            function removeFocus(el) { el.parentElement.classList.remove('focused'); checkContent(el); }
+            function checkContent(el) {
+                if (el.value.trim() !== "") el.parentElement.classList.add('has-value');
+                else el.parentElement.classList.remove('has-value');
+            }
+            function checkSelect(el) { checkContent(el); }
+
+            async function handleContactSubmission(e) {
+                e.preventDefault();
+                const btnText = document.getElementById('btn-text');
+                const spinner = document.getElementById('spinner');
+                const tick    = document.getElementById('success-tick');
+                const msg     = document.getElementById('success-msg');
+
+                const data = {
+                    name:     document.getElementById('name').value,
+                    company:  document.getElementById('company').value,
+                    email:    document.getElementById('email').value,
+                    interest: document.getElementById('interest').value,
+                    message:  document.getElementById('message').value
+                };
+
+                btnText.style.display = 'none';
+                spinner.style.display = 'block';
+
+                try {
+                    const res = await fetch(`${API_URL}/contact`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await res.json();
+                    spinner.style.display = 'none';
+                    if (result.success) {
+                        tick.style.display = 'inline-block';
+                        msg.style.display  = 'block';
+                        msg.style.color    = '#00d48e';
+                        msg.textContent    = '✅ ' + result.message;
+                        document.getElementById('ai-contact-form').reset();
+                    } else {
+                        spinner.style.display = 'none';
+                        btnText.style.display = 'inline';
+                        msg.style.display  = 'block';
+                        msg.style.color    = '#ff4d6d';
+                        msg.textContent    = '❌ ' + (result.error || 'Something went wrong.');
+                    }
+                } catch(err) {
+                    spinner.style.display = 'none';
+                    btnText.style.display = 'inline';
+                    msg.style.display  = 'block';
+                    msg.style.color    = '#ff4d6d';
+                    msg.textContent    = '⚠️ Could not connect to server. Is backend running?';
+                }
+            }
+
+            function toggleChat() {
+                document.getElementById('chat-window').classList.toggle('active');
+            }
+
+            window.addEventListener('load', () => {
+                setTimeout(() => document.getElementById('contact-hero').classList.add('active'), 500);
+            });
+        </script>
+
+        <!-- UNIVERSAL FOOTER -->
+        <footer>
+            <div class="container footer-container">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <span class="footer-logo">AI-Mall<span class="tm">™</span></span>
+                        <p class="footer-description">
+                            Your gateway to next-generation intelligent solutions. Empowering businesses with AI-driven innovation and digital transformation.
+                        </p>
+                    </div>
+
+                    <div class="footer-nav">
+                        <div class="footer-col">
+                            <h4>Explore</h4>
+                            <a href="a-series.html" class="footer-link">A-Series™</a>
+                            <a href="partner.html" class="footer-link">Partner With Us</a>
+                            <a href="#" class="footer-link">Privacy Policy</a>
+                        </div>
+                        <div class="footer-col">
+                            <h4>Company</h4>
+                            <a href="about.html" class="footer-link">About Us</a>
+                            <a href="contact.html" class="footer-link">Contact</a>
+                            <a href="#" class="footer-link">Terms & Conditions</a>
+                        </div>
+                    </div>
+
+                    <div class="footer-social-hub">
+                        <h4>Connect</h4>
+                        <div class="social-links">
+                            <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+                            <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                            <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                            <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-divider"></div>
+
+                <div class="footer-bottom">
+                    <div class="footer-legal">
+                        <p>© 2026 Unified Web Options. All rights reserved.</p>
+                        <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Global Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
