@@ -2,6 +2,11 @@
 // Smooth Scroll + Universal Reveal System
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ── Global API Configuration ──
+    // Change this to your production backend URL (e.g., https://your-backend-service.a.run.app)
+    window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:3001/api' 
+        : '/api'; // Use relative path if proxied, or replace with absolute URL
 
     // ═══════════════════════════════════════════
     // 1. LENIS SMOOTH SCROLL
@@ -39,15 +44,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (loader) {
         let progress = 0;
+        const loaderText = document.querySelector('.loader-text');
+        const messages = [
+            "Initializing Neural Network...",
+            "Syncing Global Intelligence...",
+            "Synthesizing Ecosystem...",
+            "Ready for Deployment."
+        ];
+
         const interval = setInterval(() => {
-            progress += Math.random() * 20;
+            progress += Math.random() * 12;
             if (progress > 100) progress = 100;
+            
             if (loaderBar) loaderBar.style.width = `${progress}%`;
+            
+            if (loaderText) {
+                const msgIndex = Math.floor((progress / 100) * (messages.length - 1));
+                loaderText.textContent = messages[msgIndex];
+            }
+
             if (progress === 100) {
                 clearInterval(interval);
-                setTimeout(hideLoader, 400);
+                setTimeout(hideLoader, 500);
             }
-        }, 120);
+        }, 140);
     } else {
         body.classList.remove('loading');
         startHeroAnimations();

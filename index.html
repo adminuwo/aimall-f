@@ -23,11 +23,14 @@
     <!-- Loader -->
     <div id="loader">
         <div class="loader-content">
-            <div class="loader-logo">AI-Mall<span class="tm">™</span></div>
+            <div class="loader-logo-container">
+                <img src="logos/Logo.png" alt="AI-Mall Logo" class="loader-logo-img">
+
+            </div>
             <div class="loader-bar-container">
                 <div class="loader-bar"></div>
             </div>
-            <p class="loader-text">Initializing Intelligence Ecosystem...</p>
+            <p class="loader-text">Neural Synthesis in Progress...</p>
         </div>
     </div>
 
@@ -41,7 +44,9 @@
 
     <!-- Header / Navigation -->
     <header id="header">
-        <div class="logo">AI-Mall<span class="tm">™</span></div>
+        <div class="logo" onclick="window.location.href='index.html'">
+            <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
+        </div>
         <nav>
             <a href="index.html" class="nav-link active">Home</a>
             <a href="about.html" class="nav-link">About</a>
@@ -322,7 +327,9 @@
                 <div class="footer-main">
                     <!-- Brand Section -->
                     <div class="footer-brand">
-                        <span class="footer-logo">AI-Mall<span class="tm">™</span></span>
+                        <div class="footer-logo">
+                        <img src="logos/Logo.png" alt="AI-Mall" class="footer-logo-img">
+                    </div>
                         <p class="footer-description">
                             Your gateway to next-generation intelligent solutions. Empowering businesses with AI-driven
                             innovation and digital transformation.

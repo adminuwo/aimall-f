@@ -156,47 +156,115 @@ body.loading {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+}
+
+#loader::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle at center, rgba(0, 132, 255, 0.03) 0%, transparent 60%);
+    animation: loader-bg-pulse 8s infinite alternate ease-in-out;
+}
+
+@keyframes loader-bg-pulse {
+    0% {
+        transform: scale(1) translate(-10%, -10%);
+    }
+
+    100% {
+        transform: scale(1.1) translate(10%, 10%);
+    }
 }
 
 .loader-content {
     text-align: center;
-    width: 300px;
+    width: 400px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.loader-logo {
+.loader-logo-container {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.loader-logo-img {
+    width: 140px;
+    height: auto;
+    filter: drop-shadow(0 10px 30px rgba(0, 132, 255, 0.15));
+    animation: logo-float 3s infinite ease-in-out;
+}
+
+@keyframes logo-float {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 10px 30px rgba(0, 132, 255, 0.15));
+    }
+
+    50% {
+        transform: translateY(-10px) scale(1.02);
+        filter: drop-shadow(0 25px 45px rgba(0, 132, 255, 0.25));
+    }
+}
+
+.loader-logo-text {
     font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    letter-spacing: -0.03em;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-top: 15px;
+    letter-spacing: -0.02em;
+    color: var(--clr-text-primary);
+    opacity: 0.9;
 }
 
-.loader-logo .tm {
-    font-size: 0.8rem;
+.loader-logo-text .tm {
+    font-size: 0.7rem;
     vertical-align: super;
 }
 
 .loader-bar-container {
-    height: 2px;
-    width: 100%;
-    background: #f0f0f0;
-    border-radius: 2px;
+    height: 3px;
+    width: 240px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
+    position: relative;
 }
 
 .loader-bar {
     height: 100%;
     width: 0%;
     background: var(--grad-ai);
-    transition: width 0.4s ease;
+    box-shadow: 0 0 15px rgba(0, 132, 255, 0.5);
+    transition: width 0.4s cubic-bezier(0.1, 0.5, 0.1, 1);
 }
 
 .loader-text {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--clr-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.25em;
+    font-weight: 700;
+    animation: text-flicker 2s infinite linear;
+}
+
+@keyframes text-flicker {
+
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 /* --- Global Elements --- */
@@ -988,10 +1056,15 @@ header.scrolled {
 }
 
 .logo {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
     cursor: pointer;
+}
+
+.nav-logo-img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
 }
 
 .logo .tm {
@@ -1854,9 +1927,14 @@ footer {
 }
 
 .footer-logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
+    display: block;
+}
+
+.footer-logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
 }
 
 .footer-brand p {
@@ -5402,7 +5480,7 @@ footer {
 
 .p-cta-section {
     position: relative;
-    padding: 160px 0;
+    padding: 100px 0;
     background: linear-gradient(135deg, #050a1a 0%, #0a1535 50%, #10052a 100%);
     overflow: hidden;
     text-align: center;
@@ -5511,7 +5589,7 @@ footer {
     color: white;
     letter-spacing: -.05em;
     line-height: 1.0;
-    margin: 24px 0 30px;
+    margin: 15px 0 20px;
 }
 
 .p-cta-word {
@@ -5533,7 +5611,7 @@ footer {
     font-size: 1.15rem;
     color: rgba(255, 255, 255, .6);
     line-height: 1.8;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     opacity: 0;
 }
 
@@ -5541,7 +5619,7 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 22px 60px;
+    padding: 15px 50px;
     border-radius: 60px;
     background: linear-gradient(135deg, #0084ff, #925cff);
     color: white;

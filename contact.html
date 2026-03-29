@@ -13,18 +13,9 @@
     
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="loading contact-page">
+<body class="contact-page">
     
-    <!-- Loader -->
-    <div id="loader">
-        <div class="loader-content">
-            <div class="loader-logo">AI-Mall<span class="tm">™</span></div>
-            <div class="loader-bar-container">
-                <div class="loader-bar"></div>
-            </div>
-            <p class="loader-text">Initializing Secure Connection...</p>
-        </div>
-    </div>
+
 
     <!-- Custom Cursor -->
     <div id="cursor"></div>
@@ -36,7 +27,9 @@
 
     <!-- Header / Navigation -->
     <header id="header">
-        <div class="logo" onclick="window.location.href='index.html'">AI-Mall<span class="tm">™</span></div>
+        <div class="logo" onclick="window.location.href='index.html'">
+            <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
+        </div>
         <nav>
             <a href="index.html" class="nav-link">Home</a>
             <a href="about.html" class="nav-link">About</a>
@@ -118,6 +111,12 @@
                             <div class="section-label">Global Headquarters</div>
                             <h3>Unified Web <br> Options (UWO™)</h3>
                             <p class="medium-body text-muted">Tech Plaza, Digital Hub — India <br> Supporting global scale and digital transformation.</p>
+                        </div>
+
+                        <div class="hq-card" style="margin-top: 30px;">
+                            <div class="section-label">Intelligence Ecosystem</div>
+                            <h3>AI-Mall<span class="tm">™</span></h3>
+                            <p class="medium-body text-muted">The definitive marketplace for <br> enterprise-grade AI applications and digital agents.</p>
                         </div>
                     </div>
 
@@ -297,7 +296,8 @@
 
         <!-- Scripts -->
         <script>
-            const API_URL = 'http://localhost:3001/api';
+            // Using global API configuration from main.js
+            const API_URL = window.API_BASE_URL || 'http://localhost:3001/api';
 
             function setFocus(el) { el.parentElement.classList.add('focused'); }
             function removeFocus(el) { el.parentElement.classList.remove('focused'); checkContent(el); }
@@ -369,7 +369,9 @@
             <div class="container footer-container">
                 <div class="footer-main">
                     <div class="footer-brand">
-                        <span class="footer-logo">AI-Mall<span class="tm">™</span></span>
+                        <div class="footer-logo">
+                            <img src="logos/Logo.png" alt="AI-Mall" class="footer-logo-img">
+                        </div>
                         <p class="footer-description">
                             Your gateway to next-generation intelligent solutions. Empowering businesses with AI-driven innovation and digital transformation.
                         </p>
