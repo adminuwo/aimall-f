@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>aisa-sout1 RAG Admin — AI-Mall™</title>
+<title>AI-Mall bot RAG Admin — AI-Mall™</title>
 <meta name="description" content="AI-Mall RAG Admin Dashboard: manage knowledge base, analytics, query logs."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -42,7 +42,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:none;}}
 .login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
 .login-logo .icon{width:44px;height:44px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:22px;}
-.login-logo h1{font-size:20px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.login-logo h1{font-size:20px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .login-card p{color:var(--text2);margin-bottom:28px;font-size:14px;}
 .field{margin-bottom:16px;}
 .field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;}
@@ -70,7 +70,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;
 }
 .sidebar-logo{padding:24px 20px;border-bottom:1px solid var(--glass-border);}
-.sidebar-logo .brand{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sidebar-logo .brand{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .sidebar-logo small{font-size:11px;color:var(--text3);display:block;margin-top:2px;}
 nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
 .nav-item{
@@ -86,7 +86,7 @@ nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
 .user-badge{display:flex;align-items:center;gap:8px;padding:10px;border-radius:8px;background:var(--glass);}
 .user-badge .avatar{width:32px;height:32px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
 .user-badge .info{flex:1;min-width:0;}
-.user-badge .info .name{font-size:12px;font-weight:600;truncate:ellipsis;}
+.user-badge .info .name{font-size:12px;font-weight:600;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
 .user-badge .info .role{font-size:10px;color:var(--text3);}
 .btn-logout{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:4px;}
 
@@ -126,7 +126,7 @@ nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,142,247,.1);}
 .stat-card:hover::before{opacity:.04;}
 .stat-icon{font-size:28px;margin-bottom:12px;}
-.stat-val{font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-val{font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .stat-label{font-size:12px;color:var(--text2);margin-top:4px;}
 
 /* ── Section Header ── */
@@ -232,7 +232,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
   <div class="login-card">
     <div class="login-logo">
       <div class="icon">🤖</div>
-      <h1>aisa-sout1 RAG Admin</h1>
+      <h1>AI-Mall bot RAG Admin</h1>
     </div>
     <p>Sign in to manage your AI knowledge base and RAG pipeline.</p>
     <div class="field">
@@ -465,7 +465,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const API = window.location.hostname === 'localhost' ? 'http://localhost:3003' : '';
+const API = window.location.hostname === 'localhost' ? 'http://localhost:8080' : '';
 let TOKEN = localStorage.getItem('rag_token') || '';
 let currentUser = JSON.parse(localStorage.getItem('rag_user') || '{}');
 let logFilter = '';

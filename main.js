@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Global API Configuration ──
     // Change this to your production backend URL (e.g., https://your-backend-service.a.run.app)
     window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:3003/api' 
+        ? 'http://localhost:8080/api' 
         : '/api'; // Use relative path if proxied, or replace with absolute URL
 
     // ═══════════════════════════════════════════
@@ -542,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ═══════════════════════════════════════════
-    // 9. PREMIUM CHATBOT LOGIC (AISA™)
+    // 9. PREMIUM CHATBOT LOGIC (AI-Mall bot™)
     // ═══════════════════════════════════════════
     window.toggleChat = () => {
         const win = document.getElementById('chat-window');
@@ -650,7 +650,38 @@ document.addEventListener('DOMContentLoaded', () => {
                                   firstChunk = false;
                                 }
                                 fullText += data.text;
-                                aiMsg.textContent = fullText;
+                                
+                                // Basic Markdown Parser for streaming text
+                                const parseBasicMarkdown = (text) => {
+                                    if (!text) return '';
+                                    let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+                                    const lines = html.split('\n');
+                                    let result = '';
+                                    let listType = null;
+                                    for (let line of lines) {
+                                        const ulMatch = line.match(/^[\s]*[-*][\s]+(.*)$/);
+                                        const olMatch = line.match(/^[\s]*\d+\.[\s]+(.*)$/);
+                                        const isList = ulMatch || olMatch;
+                                        const curType = ulMatch ? 'ul' : (olMatch ? 'ol' : null);
+                                        const item = ulMatch ? ulMatch[1] : (olMatch ? olMatch[1] : null);
+                                        
+                                        if (isList) {
+                                            if (listType !== curType) {
+                                                if (listType) result += `</${listType}>\n`;
+                                                result += `<${curType} style="margin: 5px 0 5px 20px; padding: 0;">\n`;
+                                                listType = curType;
+                                            }
+                                            result += `  <li style="margin-bottom: 5px;">${item}</li>\n`;
+                                        } else {
+                                            if (listType) { result += `</${listType}>\n`; listType = null; }
+                                            result += line + '<br>';
+                                        }
+                                    }
+                                    if (listType) result += `</${listType}>\n`;
+                                    return result.replace(/(<br>)+$/, '');
+                                };
+                                
+                                aiMsg.innerHTML = parseBasicMarkdown(fullText);
                                 msgBox.scrollTop = msgBox.scrollHeight;
                             }
                         } catch (e) { /* partial chunk */ }

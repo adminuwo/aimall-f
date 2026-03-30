@@ -304,7 +304,7 @@
 <div id="toast"></div>
 
 <script>
-const API = window.API_BASE_URL || 'http://localhost:3001/api';
+const API = window.API_BASE_URL || 'http://localhost:8080/api';
 let ADMIN_KEY = '';
 let allContacts = [];
 let allPartners = [];
@@ -312,7 +312,7 @@ let allPartners = [];
 // ── Auth ──
 function checkPreAuth() {
     if (sessionStorage.getItem('admin_auth') === 'true') {
-        ADMIN_KEY = 'aimall-admin-2026';
+        ADMIN_KEY = 'efvframework';
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         loadAll();
@@ -328,7 +328,7 @@ function doLogin() {
     if (email === "admin@uwo24.com" && pass === "admin@123") {
         sessionStorage.setItem('admin_auth', 'true');
         // Use the internal backend key
-        ADMIN_KEY = 'aimall-admin-2026';
+        ADMIN_KEY = 'efvframework';
         
         // Test auth with backend
         fetch(`${API}/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })

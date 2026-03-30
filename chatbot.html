@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>AISA — AI Smart Assistant | AI-Mall™</title>
-<meta name="description" content="Chat with AISA, the AI-Mall™ RAG-powered AI assistant. Get instant answers from your knowledge base."/>
+<title>AI-Mall Bot — AI Smart Assistant | AI-Mall™</title>
+<meta name="description" content="Chat with AI-Mall Bot, the AI-Mall™ RAG-powered AI assistant. Get instant answers from your knowledge base."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
 <style>
@@ -182,7 +182,7 @@ header{
 <!-- Loader -->
 <div id="loadOverlay">
   <div class="load-logo">🤖</div>
-  <div style="font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">AISA</div>
+  <div style="font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">AI-Mall Bot</div>
   <div style="font-size:12px;color:var(--text2);">Initializing AI Knowledge System…</div>
   <div class="load-bar"><div class="load-fill"></div></div>
 </div>
@@ -193,7 +193,7 @@ header{
     <div class="hdr-left">
       <div class="avatar">🤖</div>
       <div class="hdr-title">
-        <h1>AISA</h1>
+        <h1>AI-Mall Bot</h1>
         <p>AI-Mall Smart Assistant</p>
       </div>
       <div class="status-dot" id="statusDot">Online</div>
@@ -210,7 +210,7 @@ header{
     <div class="welcome" id="welcomeCard">
       <span class="icon">🧠</span>
       <h2>How can I help you?</h2>
-      <p>I'm AISA — powered by your knowledge base. Ask me anything about uploaded documents, or I'll answer from general AI knowledge.</p>
+      <p>Hi, I am AI-Mall bot, how can I help you?</p>
       <div class="suggestions" id="suggestions">
         <div class="suggestion" onclick="send('What documents are available in the knowledge base?')">📚 What documents are in the knowledge base?</div>
         <div class="suggestion" onclick="send('Summarize the key points from the uploaded materials')">📄 Summarize the key points from uploaded documents</div>
@@ -237,7 +237,7 @@ header{
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const API = window.location.hostname === 'localhost' ? 'http://localhost:3003' : '';
+const API = window.location.hostname === 'localhost' ? 'http://localhost:8080' : '';
 const sessionId = 'sess_' + Math.random().toString(36).slice(2,10);
 let chatHistory = [];
 let isStreaming = false;
@@ -272,9 +272,24 @@ function clearChat() {
   chatHistory = [];
   const area = document.getElementById('chatArea');
   area.innerHTML = '';
-  area.appendChild(document.getElementById('welcomeCard') || createWelcome());
-  document.getElementById('welcomeCard')?.style.setProperty('display','flex');
+  area.appendChild(createWelcome());
   updateRagBadge(null);
+}
+
+// ── Create welcome card ────────────────────────────────
+function createWelcome() {
+  const div = document.createElement('div');
+  div.className = 'welcome'; div.id = 'welcomeCard';
+  div.innerHTML = `
+    <span class="icon">🧠</span>
+    <h2>How can I help you?</h2>
+    <p>Hi, I am AI-Mall bot, how can I help you?</p>
+    <div class="suggestions">
+      <div class="suggestion" onclick="send('What documents are available in the knowledge base?')">📚 What documents are in the knowledge base?</div>
+      <div class="suggestion" onclick="send('Summarize the key points from the uploaded materials')">📄 Summarize the key points from uploaded documents</div>
+      <div class="suggestion" onclick="send('What can you help me with?')">💡 What can you help me with?</div>
+    </div>`;
+  return div;
 }
 
 // ── Add message bubble ────────────────────────────────
@@ -295,7 +310,7 @@ function addMsg(role, text, meta) {
     <div class="msg-avatar">${avatar}</div>
     <div>
       <div class="bubble" id="${meta?.id ? meta.id+'_bubble' : ''}">${formatText(text)}</div>
-      ${isAI && meta ? `
+      ${isAI && meta && Object.keys(meta).length > 0 ? `
         <div class="msg-meta">
           ${meta.ragUsed ? '<span class="meta-pill meta-rag">🎯 RAG</span>' : ''}
           ${meta.fallbackUsed ? '<span class="meta-pill meta-fallback">🔄 Fallback</span>' : ''}
@@ -329,13 +344,39 @@ function updateRagBadge(meta) {
   else if (meta.fallbackUsed) { badge.className='rag-badge rag-fallback'; badge.textContent='🔄 Fallback'; }
 }
 
-// ── Format text (basic MD: **bold**, `code`) ──────────
+// ── Format text (basic MD: **bold**, list items, `code`) ──
 function formatText(txt) {
-  return String(txt||'')
+  if (!txt) return '';
+  let html = String(txt)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/`([^`]+)`/g,'<code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-family:\'JetBrains Mono\',monospace;font-size:12px">$1</code>')
-    .replace(/\n/g,'<br>');
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;font-family:\'JetBrains Mono\',monospace;font-size:12.5px">$1</code>');
+    
+  const lines = html.split('\n');
+  let result = '';
+  let listType = null;
+  for (let line of lines) {
+    const ulMatch = line.match(/^[\s]*[-*][\s]+(.*)$/);
+    const olMatch = line.match(/^[\s]*\d+\.[\s]+(.*)$/);
+    const isList = ulMatch || olMatch;
+    const curType = ulMatch ? 'ul' : (olMatch ? 'ol' : null);
+    const item = ulMatch ? ulMatch[1] : (olMatch ? olMatch[1] : null);
+    
+    if (isList) {
+      if (listType !== curType) {
+        if (listType) result += `</${listType}>\n`;
+        result += `<${curType} style="margin: 8px 0 8px 20px; padding: 0;">\n`;
+        listType = curType;
+      }
+      result += `  <li style="margin-bottom: 5px;">${item}</li>\n`;
+    } else {
+      if (listType) { result += `</${listType}>\n`; listType = null; }
+      result += line + '<br>';
+    }
+  }
+  if (listType) result += `</${listType}>\n`;
+  return result.replace(/(<br>)+$/, '');
 }
 
 // ── Main send function ────────────────────────────────
@@ -426,7 +467,7 @@ async function send(preset) {
     removeTyping();
     addMsg('ai', '', {});
     const last = document.querySelector('.msg.ai:last-child .bubble');
-    if (last) last.innerHTML = `<span class="error-msg">⚠️ Connection error: ${err.message}<br><small>Is the backend running on port 3003?</small></span>`;
+    if (last) last.innerHTML = `<span class="error-msg">⚠️ Connection error: ${err.message}<br><small>Is the backend running on port 8080?</small></span>`;
   }
 
   isStreaming = false;
