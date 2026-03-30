@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Global API Configuration ──
     // Change this to your production backend URL (e.g., https://your-backend-service.a.run.app)
     window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:3001/api' 
+        ? 'http://localhost:3003/api' 
         : '/api'; // Use relative path if proxied, or replace with absolute URL
 
     // ═══════════════════════════════════════════
@@ -538,6 +538,160 @@ document.addEventListener('DOMContentLoaded', () => {
             start: 'top -80',
             onEnter:     () => header.classList.add('scrolled'),
             onLeaveBack: () => header.classList.remove('scrolled'),
+        });
+    }
+
+    // ═══════════════════════════════════════════
+    // 9. PREMIUM CHATBOT LOGIC (AISA™)
+    // ═══════════════════════════════════════════
+    window.toggleChat = () => {
+        const win = document.getElementById('chat-window');
+        if (win) win.classList.toggle('active');
+    };
+
+    window.handleChatReg = (e) => {
+        e.preventDefault();
+        const n = document.getElementById('chat-reg-name')?.value;
+        const email = document.getElementById('chat-reg-email')?.value;
+        if (!n || !email) return;
+
+        localStorage.setItem('chat_registered', 'true');
+        localStorage.setItem('chat_user', n);
+        localStorage.setItem('chat_email', email);
+
+        const regView = document.getElementById('registration-view');
+        const msgView = document.getElementById('chat-messages');
+        const input = document.getElementById('chat-main-input');
+
+        if (regView) regView.style.display = 'none';
+        if (msgView) msgView.style.display = 'flex';
+        if (input) {
+            input.placeholder = "Type message...";
+            input.readOnly = false;
+        }
+
+        const msgBox = document.getElementById('chat-messages');
+        if (msgBox) {
+            const welcome = document.createElement('div');
+            welcome.className = 'chat-msg msg-ai';
+            welcome.textContent = `Welcome back, ${n}! How can I assist you with the AI-Mall™ ecosystem today?`;
+            msgBox.appendChild(welcome);
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    };
+
+    window.sendMessage = async () => {
+        const input = document.getElementById('chat-main-input');
+        const val = input?.value.trim();
+        if (!val || input.readOnly) return;
+
+        const msgBox = document.getElementById('chat-messages');
+        if (!msgBox) return;
+
+        // User Message
+        const u = document.createElement('div');
+        u.className = 'chat-msg msg-user';
+        u.textContent = val;
+        msgBox.appendChild(u);
+        input.value = "";
+        msgBox.scrollTop = msgBox.scrollHeight;
+
+        // Show Thinking Indicator
+        const thinking = document.createElement('div');
+        thinking.className = 'thinking';
+        thinking.innerHTML = '<span></span><span></span><span></span>';
+        msgBox.appendChild(thinking);
+        msgBox.scrollTop = msgBox.scrollHeight;
+
+        // Prepare AI Message Container (HIDDEN initially)
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'chat-msg msg-ai';
+        aiMsg.style.display = 'none';
+        msgBox.appendChild(aiMsg);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          controller.abort();
+        }, 45000); // 45s Timeout
+
+        try {
+            const baseUrl = window.API_BASE_URL;
+            const response = await fetch(`${baseUrl}/rag/chat/stream`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: val, sessionId: 'floating-assistant' }),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) throw new Error(`Server ${response.status}`);
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullText = "";
+            let firstChunk = true;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n');
+                
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            if (data.type === 'chunk') {
+                                if (firstChunk) {
+                                  thinking.remove();
+                                  aiMsg.style.display = 'block';
+                                  firstChunk = false;
+                                }
+                                fullText += data.text;
+                                aiMsg.textContent = fullText;
+                                msgBox.scrollTop = msgBox.scrollHeight;
+                            }
+                        } catch (e) { /* partial chunk */ }
+                    }
+                }
+            }
+        } catch (err) {
+            clearTimeout(timeoutId);
+            console.error('Chat Error:', err);
+            thinking.remove();
+            aiMsg.style.display = 'block';
+            if (err.name === 'AbortError') {
+              aiMsg.textContent = "Request timed out. The AI is taking too long to synthesize - please try again later.";
+            } else {
+              aiMsg.textContent = "Connectivity error. Unable to reach AI-Mall™ servers.";
+            }
+        }
+        msgBox.scrollTop = msgBox.scrollHeight;
+    };
+
+    // Initialize Chat state
+    if (localStorage.getItem('chat_registered') === 'true') {
+        const rv = document.getElementById('registration-view');
+        const mv = document.getElementById('chat-messages');
+        const ci = document.getElementById('chat-main-input');
+        if (rv) rv.style.display = 'none';
+        if (mv) mv.style.display = 'flex';
+        if (ci) {
+            ci.placeholder = "Type message...";
+            ci.readOnly = false;
+        }
+    }
+
+    // Enter Key to Send
+    const chatInput = document.getElementById('chat-main-input');
+    if (chatInput) {
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                window.sendMessage();
+            }
         });
     }
 

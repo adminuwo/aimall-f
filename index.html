@@ -23,10 +23,11 @@
 
     <!-- Loader -->
     <div id="loader">
+        <div class="loader-bg-text">AI MALL</div>
         <div class="loader-content">
             <div class="loader-logo-container">
                 <img src="logos/Logo.png" alt="AI-Mall Logo" class="loader-logo-img">
-
+                <div class="loader-logo-text">AI-Mall<span class="tm">™</span></div>
             </div>
             <div class="loader-bar-container">
                 <div class="loader-bar"></div>
@@ -115,7 +116,7 @@
                 <div class="pillars-grid">
                     <div class="pillar-card glass" data-tilt>
                         <div class="card-bg">
-                            <img src="logos/oneplatform.jfif" alt="Feature Background" class="card-bg-img">
+                            <img src="one_platform_ai_bg_1774809641050.png" alt="One Platform Background" class="card-bg-img">
                         </div>
                         <div class="card-overlay"></div>
                         <div class="card-content">
@@ -128,7 +129,7 @@
 
                     <div class="pillar-card glass highlight" data-tilt>
                         <div class="card-bg">
-                            <img src="logos/enterprize.png" alt="Feature Background" class="card-bg-img">
+                            <img src="enterprise_architecture_ai_bg_1774809660388.png" alt="Enterprise Architecture Background" class="card-bg-img">
                         </div>
                         <div class="card-overlay"></div>
                         <div class="card-content">
@@ -141,7 +142,7 @@
 
                     <div class="pillar-card glass" data-tilt>
                         <div class="card-bg">
-                            <img src="logos/marketplace.webp" alt="Feature Background" class="card-bg-img">
+                            <img src="ai_marketplace_bg_1774809678810.png" alt="AI Marketplace Background" class="card-bg-img">
                         </div>
                         <div class="card-overlay"></div>
                         <div class="card-content">
@@ -156,6 +157,10 @@
 
         <!-- A-SERIES PREVIEW SECTION -->
         <section id="a-series" class="scroll-section grid-section">
+            <div class="section-bg">
+                <img src="logos/trolly.jpg" alt="A-Series Background" class="parallax-img" style="opacity: 0.25;">
+                <div class="bg-blur"></div>
+            </div>
             <div class="container">
                 <div class="section-header centered">
                     <div class="section-label">The Ecosystem</div>
@@ -434,7 +439,7 @@
                     </div>
                     <div id="chat-messages" class="chat-messages"
                         style="display:none; flex-direction:column; gap:15px;">
-                        <div class="chat-msg msg-ai">Hi, I'm AISA. How can I help you today?</div>
+                        <div class="chat-msg msg-ai">Hi, I'm aisa-sout1. How can I help you today?</div>
                     </div>
                 </div>
 
@@ -468,45 +473,7 @@
             </div>
         </div>
         <script>
-            function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
-            function handleChatReg(e) {
-                e.preventDefault();
-                const n = document.getElementById('chat-reg-name').value;
-                localStorage.setItem('chat_registered', 'true');
-                localStorage.setItem('chat_user', n);
-                document.getElementById('registration-view').style.display = 'none';
-                document.getElementById('chat-messages').style.display = 'flex';
-                const i = document.getElementById('chat-main-input');
-                i.placeholder = "Type message..."; i.readOnly = false;
-                const m = document.getElementById('chat-messages');
-                const w = document.createElement('div'); w.className = 'chat-msg msg-ai'; w.textContent = "Thank you for joining, " + n + "! How can I assist you further?";
-                m.appendChild(w);
-            }
-            function sendMessage() {
-                const i = document.getElementById('chat-main-input'); const val = i.value.trim(); if (!val || i.readOnly) return;
-                const m = document.getElementById('chat-messages'); const u = document.createElement('div'); u.className = 'chat-msg msg-user'; u.textContent = val; m.appendChild(u);
-                i.value = ""; setTimeout(() => {
-                    const a = document.createElement('div'); a.className = 'chat-msg msg-ai'; a.textContent = "Our nodes are processing your request. One of our experts will contact you soon."; m.appendChild(a); m.scrollTop = m.scrollHeight;
-                }, 1000);
-            }
-            function openAdmin() {
-                const email = prompt("Enter Admin Email:");
-                if (email === "admin@uwo24.com") {
-                    const pass = prompt("Enter Password:");
-                    if (pass === "admin@123") {
-                        sessionStorage.setItem('admin_auth', 'true');
-                        window.location.href = "admin.html";
-                    } else {
-                        alert("Incorrect Password!");
-                    }
-                }
-            }
-            window.addEventListener('DOMContentLoaded', () => {
-                if (localStorage.getItem('chat_registered') === 'true') {
-                    document.getElementById('registration-view').style.display = 'none'; document.getElementById('chat-messages').style.display = 'flex';
-                    const i = document.getElementById('chat-main-input'); i.placeholder = "Type message..."; i.readOnly = false;
-                }
-            });
+            // AISA™ Chatbot logic moved to main.js for cross-page persistence
         </script>
 
     </main>

@@ -14,6 +14,8 @@ export default defineConfig({
         partner: resolve(__dirname, 'partner.html'),
         contact: resolve(__dirname, 'contact.html'),
         admin: resolve(__dirname, 'admin.html'),
+        'rag-admin': resolve(__dirname, 'rag-admin.html'),
+        chatbot: resolve(__dirname, 'chatbot.html'),
       },
     },
   },

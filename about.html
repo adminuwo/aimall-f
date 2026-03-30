@@ -503,45 +503,7 @@
             </div>
         </div>
         <script>
-            function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
-            function handleChatReg(e) {
-                e.preventDefault();
-                const n = document.getElementById('chat-reg-name').value;
-                localStorage.setItem('chat_registered', 'true');
-                localStorage.setItem('chat_user', n);
-                document.getElementById('registration-view').style.display = 'none';
-                document.getElementById('chat-messages').style.display = 'flex';
-                const i = document.getElementById('chat-main-input');
-                i.placeholder = "Type message..."; i.readOnly = false;
-                const m = document.getElementById('chat-messages');
-                const w = document.createElement('div'); w.className = 'chat-msg msg-ai'; w.textContent = "Thank you for joining, " + n + "! How can I assist you further?";
-                m.appendChild(w);
-            }
-            function sendMessage() {
-                const i = document.getElementById('chat-main-input'); const val = i.value.trim(); if (!val || i.readOnly) return;
-                const m = document.getElementById('chat-messages'); const u = document.createElement('div'); u.className = 'chat-msg msg-user'; u.textContent = val; m.appendChild(u);
-                i.value = ""; setTimeout(() => {
-                    const a = document.createElement('div'); a.className = 'chat-msg msg-ai'; a.textContent = "Our nodes are processing your request. One of our experts will contact you soon."; m.appendChild(a); m.scrollTop = m.scrollHeight;
-                }, 1000);
-            }
-            function openAdmin() {
-                const email = prompt("Enter Admin Email:");
-                if (email === "admin@uwo24.com") {
-                    const pass = prompt("Enter Password:");
-                    if (pass === "admin@123") {
-                        sessionStorage.setItem('admin_auth', 'true');
-                        window.location.href = "admin.html";
-                    } else {
-                        alert("Incorrect Password!");
-                    }
-                }
-            }
-            window.addEventListener('DOMContentLoaded', () => {
-                if (localStorage.getItem('chat_registered') === 'true') {
-                    document.getElementById('registration-view').style.display = 'none'; document.getElementById('chat-messages').style.display = 'flex';
-                    const i = document.getElementById('chat-main-input'); i.placeholder = "Type message..."; i.readOnly = false;
-                }
-            });
+            // Using global AISA™ functions from main.js
         </script>
 
     </main>

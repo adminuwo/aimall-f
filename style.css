@@ -159,6 +159,43 @@ body.loading {
     overflow: hidden;
 }
 
+.loader-bg-text {
+    position: absolute;
+    font-family: 'Outfit', sans-serif;
+    font-size: 25vw;
+    font-weight: 900;
+    color: #1a1a1a; /* Dark gray for maximum visibility */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Below the content (z-index 10) */
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    animation: loader-zoom-out 4s infinite cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes loader-zoom-out {
+    0% {
+        transform: scale(2.8);
+        opacity: 0;
+        filter: blur(40px);
+    }
+    20% {
+        opacity: 0.25; /* Highly visible */
+        filter: blur(0px);
+    }
+    85% {
+        opacity: 0.15;
+    }
+    100% {
+        transform: scale(0.6);
+        opacity: 0;
+        filter: blur(20px);
+    }
+}
+
 #loader::before {
     content: '';
     position: absolute;
@@ -680,7 +717,7 @@ footer {
     position: relative;
     padding: 60px 0 30px;
     /* Reduced for a more compact, surgical finish */
-    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 50%, #f3f8ff 100%);
+    background: linear-gradient(135deg, #e0eeff 0%, #f1f7ff 50%, #e7f2ff 100%); /* Deepened from #f0f7ff for more presence */
     overflow: hidden;
     border-top: 1px solid rgba(0, 132, 255, 0.05);
 }
@@ -1518,17 +1555,19 @@ section {
 
 .pillar-card {
     position: relative;
-    padding: 30px;
+    padding: 40px 30px;
     height: 420px;
-    border-radius: 32px;
+    border-radius: 35px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     background: #000;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
     cursor: pointer;
 }
 
@@ -1538,35 +1577,36 @@ section {
     object-fit: cover;
     transform: scale(1.1);
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease;
-    filter: brightness(0.6) saturate(0.8);
+    filter: brightness(0.75) saturate(1.1);
 }
 
 .pillar-card .card-overlay {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.1) 0%,
-            rgba(0, 0, 0, 0.3) 40%,
-            rgba(0, 0, 0, 0.85) 100%);
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.8) 100%);
     transition: all 0.6s ease;
 }
 
 .pillar-card h3 {
     font-family: 'Outfit', sans-serif;
-    font-size: 2rem;
+    font-size: 3.0rem;
     font-weight: 800;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     color: #ffffff !important;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.05em;
+    line-height: 1.0;
+    text-transform: uppercase;
 }
 
 .pillar-card p {
     color: #ffffff !important;
-    font-size: 1.15rem;
-    line-height: 1.5;
+    font-size: 1.5rem;
+    line-height: 1.4;
     margin-bottom: 0;
-    opacity: 0.8;
+    opacity: 0.95;
+    max-width: 95%;
+    font-weight: 500;
 }
 
 /* Hover Effects */
@@ -2896,13 +2936,17 @@ footer {
 }
 
 .chat-window {
-    position: absolute;
-    bottom: 90px;
-    right: 0;
-    width: 380px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    width: clamp(400px, 92vw, 1000px);
+    height: clamp(400px, 85vh, 750px);
     background: white;
-    border-radius: 32px;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+    border-radius: 48px;
+    box-shadow: 0 50px 120px rgba(0, 0, 0, 0.3);
+    transform: translate(-50%, -46%) scale(0.95);
     overflow: hidden;
     opacity: 0;
     visibility: hidden;
@@ -2914,7 +2958,7 @@ footer {
 .chat-window.active {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .chat-header {
@@ -2982,6 +3026,41 @@ footer {
     100% {
         transform: scale(1);
     }
+}
+
+/* --- Thinking Animation --- */
+.thinking {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px 15px;
+    background: #f0f7ff;
+    border-radius: 20px;
+    width: fit-content;
+    margin-bottom: 10px;
+    animation: thinking-fade-in 0.3s ease;
+}
+
+.thinking span {
+    width: 8px;
+    height: 8px;
+    background: var(--clr-accent-blue);
+    border-radius: 50%;
+    display: inline-block;
+    animation: thinking-dots 1.4s infinite ease-in-out both;
+}
+
+.thinking span:nth-child(2) { animation-delay: 0.2s; }
+.thinking span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes thinking-dots {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes thinking-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* --- Cinematic Connection Horizon --- */
@@ -3127,10 +3206,14 @@ footer {
 }
 
 .trust-card .trust-icon {
-    font-size: 3.5rem;
+    width: 80px;
+    height: 80px;
     margin-bottom: 30px;
-    display: inline-block;
-    filter: drop-shadow(0 0 20px rgba(0, 132, 255, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 20px rgba(0, 132, 255, 0.12));
+    margin-inline: auto;
 }
 
 .trust-card h3 {
@@ -5752,26 +5835,26 @@ footer {
 
 .chat-window {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: clamp(380px, 40vw, 480px);
-    /* 35-45% screen width */
-    height: 75vh;
-    /* 70-80% of hero/viewport */
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 32px;
+    top: 50%;
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    width: clamp(400px, 92vw, 1050px);
+    height: clamp(450px, 85vh, 780px); 
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50px; 
     z-index: 10001;
     display: flex;
     flex-direction: column;
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
-    transform: translateX(40px) scale(0.98);
-    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-    backdrop-filter: blur(40px);
-    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1),
-        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    transform: translate(-50%, -46%) scale(0.98);
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    backdrop-filter: blur(50px);
+    box-shadow: 0 60px 150px -30px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.6) inset;
     overflow: hidden;
 }
 
@@ -5779,27 +5862,29 @@ footer {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translateX(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 @media (max-width: 768px) {
     .chat-window {
-        inset: auto 15px 15px 15px;
+        inset: auto 15px 15px 15px !important;
+        top: auto !important;
+        left: 15px !important;
         width: calc(100% - 30px) !important;
         height: 60vh !important;
-        transform: translateY(100px);
-        border-radius: 24px 24px 0 0;
+        transform: translateY(100px) !important;
+        border-radius: 24px 24px 0 0 !important;
     }
 
     .chat-window.active {
-        transform: translateY(0);
+        transform: translateY(0) !important;
     }
 }
 
 .chat-window.active {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 /* Chat Header */
@@ -5839,7 +5924,7 @@ footer {
 .chat-title-group h4 {
     color: var(--clr-text-primary);
     font-family: var(--font-heading);
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     font-weight: 800;
 }
 
@@ -5928,10 +6013,10 @@ footer {
 .reg-input {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    padding: 16px 20px;
+    border-radius: 16px;
+    padding: 20px 24px;
     color: var(--clr-text-primary);
-    font-size: 0.95rem;
+    font-size: 1rem;
     outline: none;
     transition: var(--transition-smooth);
     text-align: left;
@@ -5972,10 +6057,10 @@ footer {
 }
 
 .chat-msg {
-    max-width: 85%;
-    padding: 12px 18px;
-    border-radius: 18px;
-    font-size: 0.92rem;
+    max-width: 80%;
+    padding: 16px 22px;
+    border-radius: 22px;
+    font-size: 1.05rem;
     line-height: 1.5;
 }
 
@@ -5999,7 +6084,7 @@ footer {
 
 /* Chat Footer */
 .chat-footer {
-    padding: 15px 25px 30px;
+    padding: 20px 30px 40px;
     background: rgba(255, 255, 255, 0.2);
     border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
