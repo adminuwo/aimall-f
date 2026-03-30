@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Change this to your production backend URL (e.g., https://your-backend-service.a.run.app)
     window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
         ? 'http://localhost:8080/api' 
-        : '/api'; // Use relative path if proxied, or replace with absolute URL
+        : 'https://aimall-b-246449377479.asia-south1.run.app/api'; // Live Cloud Run backend
 
     // ═══════════════════════════════════════════
     // 1. LENIS SMOOTH SCROLL
