@@ -11,28 +11,135 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="onboarding.css">
     <link rel="icon" type="image/png" href="logos/Logo.png">
+    <script>
+        // Inline script for UI Carousel
+        window.nextUICarousel = function() {
+            const track = document.getElementById('ui-carousel-track');
+            if(!track) return;
+            const slides = track.querySelectorAll('.ui-slide');
+            let activeIndex = -1;
+            slides.forEach((s, i) => { if(s.classList.contains('active')) activeIndex = i; });
+            
+            if(activeIndex > -1) {
+                slides[activeIndex].classList.remove('active');
+                activeIndex = (activeIndex + 1) % slides.length;
+                slides[activeIndex].classList.add('active');
+                
+                track.style.transform = `translateX(-${activeIndex * 100}%)`;
+            }
+        };
+
+        // Fullscreen Gallery Logic
+        window.galleryImages = [
+            "aimallproject/slide-1.png", "aimallproject/slide-2.png", "aimallproject/slide-3.png",
+            "aimallproject/slide-4.png", "aimallproject/slide-5.png", "aimallproject/slide-6.png",
+            "aimallproject/slide-7.png", "aimallproject/slide-8.png", "aimallproject/slide-9.png",
+            "aimallproject/slide-10.png", "aimallproject/slide-11.png", "aimallproject/slide-12.png"
+        ];
+        window.currentGalleryIndex = 0;
+
+        window.openGalleryModal = function() {
+            const modal = document.getElementById('gallery-modal');
+            if(!modal) return;
+            // Sync with current slide of the main carousel
+            const track = document.getElementById('ui-carousel-track');
+            if(track) {
+                const slides = track.querySelectorAll('.ui-slide');
+                slides.forEach((s, i) => { if(s.classList.contains('active')) window.currentGalleryIndex = i; });
+            }
+            updateGalleryImage();
+            modal.classList.add('open');
+        };
+
+        window.closeGalleryModal = function() {
+            const modal = document.getElementById('gallery-modal');
+            if(modal) modal.classList.remove('open');
+        };
+
+        window.galleryNext = function() {
+            window.currentGalleryIndex = (window.currentGalleryIndex + 1) % window.galleryImages.length;
+            updateGalleryImage();
+        };
+
+        window.galleryPrev = function() {
+            window.currentGalleryIndex = (window.currentGalleryIndex - 1 + window.galleryImages.length) % window.galleryImages.length;
+            updateGalleryImage();
+        };
+
+        window.updateGalleryImage = function() {
+            const img = document.getElementById('gallery-img');
+            const curr = document.getElementById('gallery-current');
+            if(img) {
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    img.src = window.galleryImages[window.currentGalleryIndex];
+                    img.style.opacity = '1';
+                }, 150);
+            }
+            if(curr) curr.innerText = window.currentGalleryIndex + 1;
+        };
+    </script>
 </head>
 
 <body class="loading">
 
-    <!-- Loader -->
-    <div id="loader">
+    <!-- Unified Loader & Onboarding Overlay -->
+    <div id="onboarding-overlay">
         <div class="loader-bg-text">AI MALL</div>
-        <div class="loader-content">
-            <div class="loader-logo-container">
-                <img src="logos/Logo.png" alt="AI-Mall Logo" class="loader-logo-img">
-                <div class="loader-logo-text">AI-Mall<span class="tm">™</span></div>
+        
+        <!-- Cinematic Intro Video Section -->
+        <video id="intro-video" class="intro-video" src="intro.mp4" playsinline preload="auto"></video>
+        
+        <div class="intro-controls-v2" style="display: none;">
+            <button id="toggle-sound" class="control-btn toggle-sound" title="Toggle Sound">
+                <svg id="sound-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: none;">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                <svg id="sound-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+                <span class="control-label">Unmute</span>
+            </button>
+            <button id="skip-intro" class="control-btn skip-intro-v2">
+                Skip Intro
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="13 17 18 12 13 7"></polyline>
+                    <polyline points="6 17 11 12 6 7"></polyline>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Minimal Premium Loader -->
+        <div id="new-loader">
+            <div class="pulse-ring"></div>
+            <img src="logos/Logo.png" alt="AI-Mall Logo" class="new-loader-img">
+            <div class="new-loader-text">AI-Mall<span class="tm">™</span></div>
+            <div class="new-loader-line-container">
+                <div class="new-loader-line"></div>
             </div>
-            <div class="loader-bar-container">
-                <div class="loader-bar"></div>
+            <!-- Interaction Request Button Removed -->
+        </div>
+
+        <!-- Welcome Card (Onboarding Modal) -->
+        <div id="welcome-card" style="display: none;">
+            <div class="welcome-card-content">
+                <div class="welcome-icon">
+                    <img src="logos/BOT.png" alt="AI Assistant" class="welcome-bot-img">
+                </div>
+                <h2>Ask me anything</h2>
+                <p>Your intelligent assistant for navigating AI solutions.</p>
+                <div class="welcome-buttons">
+                    <button id="btn-try-now" class="btn-primary">Try Now</button>
+                    <button id="btn-got-it" class="btn-secondary">Got It</button>
+                </div>
             </div>
-            <p class="loader-text">Neural Synthesis in Progress...</p>
         </div>
     </div>
 
@@ -81,7 +188,7 @@
                         AI solutions in one connected, cinematic ecosystem.
                     </p>
                     <div class="cta-group">
-                        <a href="a-series.html" class="btn-premium primary">
+                        <a href="a-series.html" class="btn-premium primary glow">
                             Explore A-Series™
                             <span class="btn-icon">→</span>
                         </a>
@@ -103,11 +210,11 @@
         <!-- VALUE PILLARS SECTION -->
         <section id="pillars" class="scroll-section">
             <div class="section-bg">
-                <img src="ai_mall_pillars_bg_1774607963576.png" alt="Architecture Background" class="parallax-img">
+                <img src="one_platform_ai_bg_1774809641050.png" alt="Engineering Intelligence" class="parallax-img">
                 <div class="bg-blur"></div>
             </div>
 
-            <div class="container">
+            <div class="container" style="position: relative; z-index: 2;">
                 <div class="section-header centered">
                     <div class="section-label">Foundation</div>
                     <h2 class="section-title">Built for the Intelligence Age</h2>
@@ -115,36 +222,22 @@
 
                 <div class="pillars-grid">
                     <div class="pillar-card glass" data-tilt>
-                        <div class="card-bg">
-                            <img src="one_platform_ai_bg_1774809641050.png" alt="One Platform Background" class="card-bg-img">
-                        </div>
-                        <div class="card-overlay"></div>
                         <div class="card-content">
                             <h3>One Platform, Multiple AI Apps</h3>
-                            <p>A-Series™ delivers business-ready automation and cognitive intelligence across multiple
-                                verticals.</p>
+                            <p>A-Series™ delivers business-ready automation and cognitive intelligence across multiple verticals.</p>
                         </div>
                         <div class="card-glow"></div>
                     </div>
 
                     <div class="pillar-card glass highlight" data-tilt>
-                        <div class="card-bg">
-                            <img src="enterprise_architecture_ai_bg_1774809660388.png" alt="Enterprise Architecture Background" class="card-bg-img">
-                        </div>
-                        <div class="card-overlay"></div>
                         <div class="card-content">
                             <h3>Enterprise-Grade Architecture</h3>
-                            <p>Built for scale, security, and plug-and-play integrations across global infrastructures.
-                            </p>
+                            <p>Built for scale, security, and plug-and-play integrations across global infrastructures.</p>
                         </div>
                         <div class="card-glow"></div>
                     </div>
 
                     <div class="pillar-card glass" data-tilt>
-                        <div class="card-bg">
-                            <img src="ai_marketplace_bg_1774809678810.png" alt="AI Marketplace Background" class="card-bg-img">
-                        </div>
-                        <div class="card-overlay"></div>
                         <div class="card-content">
                             <h3>AI Marketplace</h3>
                             <p>A curated hub for professional, enterprise and consumer AI applications.</p>
@@ -155,172 +248,222 @@
             </div>
         </section>
 
-        <!-- A-SERIES PREVIEW SECTION -->
-        <section id="a-series" class="scroll-section grid-section">
-            <div class="section-bg">
-                <img src="logos/trolly.jpg" alt="A-Series Background" class="parallax-img" style="opacity: 0.25;">
-                <div class="bg-blur"></div>
+        <!-- A-SERIES PREMIUM SHOWCASE SECTION -->
+        <section id="a-series" class="aseries-showcase scroll-section">
+            <!-- Particle Canvas Background -->
+            <canvas id="aseries-particles" class="aseries-particle-canvas"></canvas>
+            <!-- Ambient Gradient Blobs -->
+            <div class="aseries-blob blob-blue"></div>
+            <div class="aseries-blob blob-purple"></div>
+            <div class="aseries-blob blob-cyan"></div>
+            <!-- AI Network Lines SVG -->
+            <svg class="aseries-network-lines" viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:rgba(99,102,241,0);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(99,102,241,0.35);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(168,85,247,0);stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <line x1="0" y1="200" x2="1400" y2="600" stroke="url(#lineGrad)" stroke-width="1" class="net-line" />
+                <line x1="200" y1="0" x2="800" y2="800" stroke="url(#lineGrad)" stroke-width="1" class="net-line" style="animation-delay:0.5s"/>
+                <line x1="600" y1="0" x2="1400" y2="500" stroke="url(#lineGrad)" stroke-width="1" class="net-line" style="animation-delay:1s"/>
+                <line x1="0" y1="500" x2="1000" y2="100" stroke="url(#lineGrad)" stroke-width="1" class="net-line" style="animation-delay:1.5s"/>
+                <line x1="900" y1="800" x2="1400" y2="200" stroke="url(#lineGrad)" stroke-width="1" class="net-line" style="animation-delay:2s"/>
+            </svg>
+
+            <div class="aseries-inner">
+                <!-- LEFT: Text Content -->
+                <div class="aseries-text-col" id="aseries-text-col">
+                    <span class="aseries-eyebrow">THE ECOSYSTEM</span>
+                    <h2 class="aseries-heading">
+                        <span class="aseries-heading-line">A-Series™</span>
+                        <span class="aseries-heading-line aseries-gradient-text">Module Suite</span>
+                    </h2>
+                    <p class="aseries-subtext">
+                        A curated stack of enterprise-grade AI modules — each purpose-built to transform a vertical. Discover, deploy, and scale intelligence across your organization.
+                    </p>
+                    <div class="aseries-cta-row">
+                        <a href="a-series.html" class="aseries-btn-primary">
+                            Explore All Modules
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="partner.html" class="aseries-btn-ghost">Partner With Us</a>
+                    </div>
+                    <div class="aseries-stats-row">
+                        <div class="aseries-stat">
+                            <span class="aseries-stat-num">8+</span>
+                            <span class="aseries-stat-lbl">Live Modules</span>
+                        </div>
+                        <div class="aseries-stat-sep"></div>
+                        <div class="aseries-stat">
+                            <span class="aseries-stat-num">10+</span>
+                            <span class="aseries-stat-lbl">Verticals Covered</span>
+                        </div>
+                        <div class="aseries-stat-sep"></div>
+                        <div class="aseries-stat">
+                            <span class="aseries-stat-num">∞</span>
+                            <span class="aseries-stat-lbl">Scalability</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Floating Carousel -->
+                <div class="aseries-carousel-col">
+                    <div class="aseries-carousel-wrapper" id="aseries-carousel-wrapper">
+                        <!-- Cards rendered by JS -->
+                    </div>
+
+                    <!-- Navigation Controls -->
+                    <div class="aseries-nav-row">
+                        <button class="aseries-nav-btn" id="aseries-prev" aria-label="Previous module">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <div class="aseries-dots" id="aseries-dots"></div>
+                        <button class="aseries-nav-btn" id="aseries-next" aria-label="Next module">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Bottom Player Controls -->
+                    <div class="aseries-player-controls">
+                        <button class="aseries-player-btn" id="aseries-like-btn" title="Like" onclick="toggleAseriesLike()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </button>
+                        <button class="aseries-player-btn" id="aseries-shuffle-btn" title="Shuffle" onclick="shuffleAseriesCarousel()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                        </button>
+                        <button class="aseries-player-btn aseries-play-main" id="aseries-autoplay-btn" title="Auto-Play" onclick="toggleAseriesAutoplay()">
+                            <svg id="aseries-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            <svg id="aseries-pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                        </button>
+                        <button class="aseries-player-btn" id="aseries-repeat-btn" title="Loop" onclick="toggleAseriesRepeat()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                        </button>
+                        <button class="aseries-player-btn" id="aseries-volume-btn" title="Volume">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="container">
-                <div class="section-header centered">
-                    <div class="section-label">The Ecosystem</div>
-                    <h2 class="section-title">A-Series™ Module Suite</h2>
-                    <div class="animated-line"></div>
-                </div>
 
-                <div class="a-series-grid">
-                    <!-- Grid Tiles -->
-                    <div class="a-tile glass-card" data-name="Aibiz™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.28.03 PM.jpeg" alt="Aibiz">
-                            </div>
-                            <span class="tile-label">Ai-Hire™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card" data-name="Aistream™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.29.15 PM.jpeg" alt="Aistream">
-                            </div>
-                            <span class="tile-label">Ai-Base™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card highlight" data-name="AIHIRE">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.30.00 PM.jpeg" alt="AIHIRE">
-                            </div>
-                            <span class="tile-label">Ai-Biz™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card" data-name="Aistudio™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.32.22 PM.jpeg" alt="Aistudio">
-                            </div>
-                            <span class="tile-label">Derm-Foundation™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card" data-name="Aihome™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.32.50 PM.jpeg" alt="Aihome">
-                            </div>
-                            <span class="tile-label">CXR-Foundation™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card" data-name="AiOffice™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.33.32 PM.jpeg" alt="AiOffice">
-                            </div>
-                            <span class="tile-label">Bio-Psync™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card" data-name="AiDesk™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.34.18 PM.jpeg" alt="AiDesk">
-                            </div>
-                            <span class="tile-label">Ai-SuperAssistance™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-
-                    <div class="a-tile glass-card" data-name="Aisales™">
-                        <div class="tile-content">
-                            <div class="tile-icon">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.35.34 PM.jpeg" alt="Aisales">
-                            </div>
-                            <span class="tile-label">Ai-Sales™</span>
-                        </div>
-                        <div class="tile-glow"></div>
-                    </div>
-                </div>
-
-                <div class="grid-tagline reveal-on-scroll">
-                    <p>More modules launching every month.</p>
-                    <div class="animated-divider"></div>
-                </div>
+            <div class="aseries-tagline">
+                <span>More AI modules launching every month.</span>
+                <div class="aseries-tagline-line"></div>
             </div>
         </section>
 
-        <!-- VISION SECTION (STRUCTURED V3 - CLEAN LAYOUT) -->
-        <section id="vision" class="scroll-section vision-structured-v3">
-            <div class="vision-v3-bg"></div>
-            <div class="vision-v3-blobs">
-                <div class="blob blob-1"></div>
-                <div class="blob blob-2"></div>
-            </div>
-            <div class="vision-v3-glow"></div>
-
-            <div class="container wide">
-                <div class="vision-two-col">
-                    <!-- Left: Content Pillar -->
-                    <div class="vision-left-content">
-                        <span class="v3-badge reveal-item">OUR OPERATING PHILOSOPHY</span>
-                        <h2 class="v3-title reveal-heading-v3">
-                            <span class="v3-word">Building</span>
-                            <span class="v3-word">the</span> <br>
-                            <span class="v3-word v3-gradient-text">Intelligence</span>
-                            <span class="v3-word v3-gradient-text">Fabric.</span>
-                        </h2>
-                        <p class="v3-description reveal-item">
-                            AI-Mall is designed as a multi-layer intelligent commerce fabric that powers the next wave
-                            of digital transformation.
-                        </p>
-                        <div class="v3-cta-group reveal-item">
-                            <a href="a-series.html" class="v3-btn-premium-cta">
-                                Explore Ecosystem <span class="v3-btn-icon">→</span>
-                            </a>
-                            <a href="partner.html" class="v3-btn-ghost">
-                                Partner with Us
-                            </a>
-                        </div>
-
-                        <!-- Stats Summary -->
-                        <div class="v3-stats-row reveal-item">
-                            <div class="v3-stat">
-                                <span class="v3-num">10+</span>
-                                <span class="v3-lbl">Years Innovation</span>
-                            </div>
-                            <div class="v3-sep"></div>
-                            <div class="v3-stat">
-                                <span class="v3-num">50+</span>
-                                <span class="v3-lbl">Modules Active</span>
-                            </div>
-                        </div>
+        <!-- A-SERIES MODULE FULLSCREEN MODAL -->
+        <div id="aseries-modal" class="aseries-modal" aria-hidden="true">
+            <div class="aseries-modal-backdrop" onclick="closeAseriesModal()"></div>
+            <div class="aseries-modal-card">
+                <button class="aseries-modal-close" onclick="closeAseriesModal()" aria-label="Close">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <div class="aseries-modal-inner">
+                    <div class="aseries-modal-img-wrap">
+                        <img id="aseries-modal-img" src="" alt="Module Preview">
+                        <div class="aseries-modal-img-glow"></div>
                     </div>
+                    <div class="aseries-modal-info">
+                        <span class="aseries-modal-badge">AI MODULE</span>
+                        <h3 id="aseries-modal-title" class="aseries-modal-title"></h3>
+                        <p id="aseries-modal-desc" class="aseries-modal-desc"></p>
+                        <div class="aseries-modal-nav-row">
+                            <button class="aseries-modal-nav-btn" onclick="prevAseriesModal()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                                Previous
+                            </button>
+                            <span id="aseries-modal-counter" class="aseries-modal-counter">1 / 8</span>
+                            <button class="aseries-modal-nav-btn" onclick="nextAseriesModal()">
+                                Next
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            </button>
+                        </div>
+                        <a href="a-series.html" class="aseries-modal-cta">Explore Module →</a>
+                    </div>
+                </div>
+                <!-- Modal Bottom Controls -->
+                <div class="aseries-modal-footer">
+                    <button class="aseries-modal-ctrl-btn" onclick="toggleAseriesLike()" title="Like">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                    <button class="aseries-modal-ctrl-btn" onclick="prevAseriesModal()" title="Previous">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+                    </button>
+                    <button class="aseries-modal-ctrl-btn aseries-modal-play-btn" onclick="toggleAseriesAutoplay()" title="Auto-Play">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </button>
+                    <button class="aseries-modal-ctrl-btn" onclick="nextAseriesModal()" title="Next">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+                    </button>
+                    <button class="aseries-modal-ctrl-btn" title="Volume">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                    <!-- Right: Video Card Porthole -->
-                    <div class="vision-right-card">
-                        <div class="v3-video-card reveal-card-v3">
-                            <div class="card-inner-glass">
-                                <div class="video-preview-box" id="vision-video-portal">
-                                    <video autoplay muted loop playsinline class="card-video" id="demo-video">
-                                        <source src="video/AIMALL.mp4" type="video/mp4">
-                                    </video>
-                                    <!-- Soft Gradient Overlay -->
-                                    <div class="video-overlay-gradient"></div>
+        <!-- VISION SECTION (PREMIUM REDESIGN) -->
+        <section id="vision" class="scroll-section vision-premium-redesign">
+            <div class="container wide">
+                <div class="premium-main-card reveal-card-v3">
+                    <div class="premium-card-grid">
+                        <!-- Left Side: Text Area -->
+                        <div class="vision-text-area">
+                            <span class="v3-badge reveal-item">OUR OPERATING PHILOSOPHY</span>
+                            <h2 class="premium-heading reveal-heading-v3">
+                                Building the<br>
+                                <span class="premium-gradient-text">Intelligence Fabric.</span>
+                            </h2>
+                            <p class="premium-subtext reveal-item">
+                                AI-Mall is designed as a multi-layer intelligent commerce fabric that powers the next wave of digital transformation with seamless cognitive integration.
+                            </p>
+                            <div class="premium-cta-group reveal-item">
+                                <a href="a-series.html" class="btn-premium-glow">
+                                    Explore Ecosystem <span class="btn-icon">→</span>
+                                </a>
+                                <a href="partner.html" class="btn-premium-outline-v2">
+                                    Partner with Us
+                                </a>
+                            </div>
+
+                            <!-- Integrated Stats -->
+                            <div class="premium-stats-inline reveal-item">
+                                <div class="p-stat">
+                                    <span class="p-num">10+</span>
+                                    <span class="p-lbl">Years Innovation</span>
                                 </div>
-                                <div class="card-bottom-label">
-                                    <span class="label-text">Cinematic Demo Experience</span>
+                                <div class="p-sep"></div>
+                                <div class="p-stat">
+                                    <span class="p-num">50+</span>
+                                    <span class="p-lbl">Modules Active</span>
                                 </div>
                             </div>
-                            <div class="card-ambient-shadow"></div>
+                        </div>
+
+                        <!-- Right Side: Nested Card Area -->
+                        <div class="vision-card-area">
+                            <div class="nested-glass-card floating-vision-card" onclick="openPremiumModal()">
+                                <div class="nested-card-inner">
+                                    <div class="preview-grid">
+                                        <div class="grid-img-wrap"><img src="aimallproject/slide-1.png" alt="AI Visual"></div>
+                                        <div class="grid-img-wrap"><img src="aimallproject/slide-2.png" alt="AI Visual"></div>
+                                        <div class="grid-img-wrap"><img src="aimallproject/slide-3.png" alt="AI Visual"></div>
+                                        <div class="grid-img-wrap"><img src="aimallproject/slide-4.png" alt="AI Visual"></div>
+                                    </div>
+                                    <div class="card-hover-overlay">
+                                        <span>View Gallery</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Centered Try Now Button -->
+                            <div class="try-now-wrapper">
+                                <button class="btn-pill-premium" onclick="openPremiumModal()">
+                                    Try Now
+                                    <div class="btn-glow"></div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -334,8 +477,8 @@
                     <!-- Brand Section -->
                     <div class="footer-brand">
                         <div class="footer-logo">
-                        <img src="logos/Logo.png" alt="AI-Mall" class="footer-logo-img">
-                    </div>
+                            <img src="logos/Logo.png" alt="AI-Mall" class="footer-logo-img">
+                        </div>
                         <p class="footer-description">
                             Your gateway to next-generation intelligent solutions. Empowering businesses with AI-driven
                             innovation and digital transformation.
@@ -348,13 +491,13 @@
                             <h4>Explore</h4>
                             <a href="a-series.html" class="footer-link">A-Series™</a>
                             <a href="partner.html" class="footer-link">Partner With Us</a>
-                            <a href="#" class="footer-link">Privacy Policy</a>
+                            <a href="javascript:void(0)" onclick="openLegalModal('privacy')" class="footer-link">Privacy Policy</a>
                         </div>
                         <div class="footer-col">
                             <h4>Company</h4>
                             <a href="about.html" class="footer-link">About Us</a>
                             <a href="contact.html" class="footer-link">Contact</a>
-                            <a href="#" class="footer-link">Terms & Conditions</a>
+                            <a href="javascript:void(0)" onclick="openLegalModal('terms')" class="footer-link">Terms & Conditions</a>
                         </div>
                     </div>
 
@@ -364,32 +507,58 @@
                         <div class="social-links">
                             <a href="#" class="social-icon" aria-label="Facebook">
                                 <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                                    <path fill="#1877F2" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.464H7.078v-3.464h3.047V9.35c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.464h-2.796v8.39C19.612 22.954 24 17.99 24 12z"/>
+                                    <path fill="#fff" d="M16.571 15.464l.532-3.464h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.514V4.922s-1.374-.235-2.686-.235c-2.741 0-4.533 1.662-4.533 4.669v2.648H7.078v3.464h3.047v8.39c.63.1 1.28.154 1.937.154.658 0 1.307-.054 1.938-.154v-8.39h2.796z"/>
                                 </svg>
                             </a>
                             <a href="#" class="social-icon" aria-label="Instagram">
                                 <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                                </svg>
-                            </a>
-                            <a href="#" class="social-icon" aria-label="LinkedIn">
-                                <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                                </svg>
-                            </a>
-                            <a href="#" class="social-icon" aria-label="Twitter">
-                                <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                    <defs>
+                                        <radialGradient id="rg" r="150%" cx="30%" cy="107%">
+                                            <stop stop-color="#fdf497" offset="0" />
+                                            <stop stop-color="#fdf497" offset="0.05" />
+                                            <stop stop-color="#fd5949" offset="0.45" />
+                                            <stop stop-color="#d6249f" offset="0.6" />
+                                            <stop stop-color="#285AEB" offset="0.9" />
+                                        </radialGradient>
+                                    </defs>
+                                    <path fill="url(#rg)" d="M12 0C8.74 0 8.333.015 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.74 0 12s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                                 </svg>
                             </a>
                             <a href="#" class="social-icon" aria-label="YouTube">
                                 <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505a3.017 3.017 0 00-2.122 2.136C0 8.055 0 12 0 12s0 3.945.501 5.814a3.017 3.017 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.945 24 12 24 12s0-3.945-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                    <path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505a3.017 3.017 0 00-2.122 2.136C0 8.055 0 12 0 12s0 3.945.501 5.814a3.017 3.017 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.945 24 12 24 12s0-3.945-.502-5.814z"/>
+                                    <path fill="#fff" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="WhatsApp">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="#25D366" d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.038 3.069l-.469 1.714 1.757-.461c.746.405 1.591.619 2.443.62h.002c3.181 0 5.769-2.587 5.77-5.767 0-1.542-.613-2.991-1.72-4.103-1.11-1.11-2.559-1.698-4.103-1.698zm3.423 8.21c-.145.405-.729.818-1.002.871-.271.053-.6-.077-1.166-.3-.387-.156-1.572-.647-2.316-1.309a4.87 4.87 0 0 1-1.603-2.222c-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                                    <path fill="#25D366" d="M12.031 0C5.408 0 .041 5.367.038 11.992c0 2.118.553 4.186 1.605 6.008L0 24l6.402-1.682c1.737.947 3.697 1.448 5.688 1.449h.005c6.623 0 11.99-5.367 11.993-11.992A11.99 11.99 0 0 0 12.031 0zM12.03 21.796h-.003a9.89 9.89 0 0 1-5.042-1.385l-.362-.214-3.756.985 1.003-3.667-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="LinkedIn">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="#0A66C2" d="M22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/>
+                                    <path fill="#fff" d="M7.12 20.45V9h-3.51v11.45h3.51zM5.37 7.56c1.13 0 2.04-.91 2.04-2.04 0-1.13-.91-2.04-2.04-2.04-1.13 0-2.04.91-2.04 2.04 0 1.13.91 2.04 2.04 2.04zm15.11 12.89V14.4c0-3.3-1.77-4.83-4.11-4.83-1.89 0-2.73 1.04-3.2 1.77h.03V9.28h-3.41v11.17h3.41v-5.57c0-1.5.28-2.94 2.1-2.94 1.79 0 1.82 1.68 1.82 3.04v5.47h3.36z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="Gmail">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z" />
+                                    <path fill="#EA4335" d="M0 5.457v13.909c0 .904.732 1.636 1.636 1.636h3.819V11.73L12 16.64V9.573L3.927 3.493C2.309 2.279 0 3.434 0 5.457z" />
+                                    <path fill="#34A853" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64V9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z" />
+                                    <path fill="#FBBC04" d="M20.073 3.493L12 9.573l-8.073-6.08c-1.618-1.214-3.927-.059-3.927 1.964v2.727L12 13.636l12-5.454V5.457c0-2.023-2.309-3.178-3.927-1.964z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="Twitter">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="#1DA1F2" d="M23.953 4.57c-.885.392-1.83.656-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="X">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="#000" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
                                 </svg>
                             </a>
                         </div>
@@ -411,7 +580,13 @@
         <!-- PREMIUM CHATBOT — EFV™ STYLE              -->
         <!-- ═══════════════════════════════════════════ -->
         <div id="ai-chat-assistant">
-            <div id="chat-window" class="chat-window">
+            <div class="chat-tooltip" id="chat-tooltip">Ask me anything</div>
+            <div class="chat-orb chatbot-chat-icon" onclick="toggleChat()">
+                <img src="logos/BOT.png" alt="AI Chatbot" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+        </div>
+
+        <div id="chat-window" class="chat-window">
                 <div class="chat-header">
                     <div class="chat-brand">
                         <div class="chat-logo-icon" onclick="openAdmin()" style="cursor:pointer;"><img
@@ -466,17 +641,124 @@
                     </div>
                 </div>
             </div>
-            <div class="chat-orb" onclick="toggleChat()">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-            </div>
-        </div>
+
         <script>
             // AISA™ Chatbot logic moved to main.js for cross-page persistence
         </script>
 
     </main>
+
+    <!-- Premium Gallery Modal (Music Player UI) -->
+    <div id="premium-gallery-modal" class="premium-modal">
+        <div class="modal-backdrop" onclick="closePremiumModal()"></div>
+        <div class="modal-card-outer">
+            <div class="premium-modal-card">
+                <button class="modal-close" onclick="closePremiumModal()">✕</button>
+                
+                <!-- Large Image Slider Section -->
+                <div class="fullscreen-slider-area">
+                    <button class="slider-nav-btn prev" onclick="premiumGalleryPrev()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    <div class="slider-viewport">
+                        <img id="premium-gallery-img" src="aimallproject/slide-1.png" alt="AI Preview">
+                    </div>
+
+                    <button class="slider-nav-btn next" onclick="premiumGalleryNext()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Music Player Styled Controls -->
+                <div class="modal-footer-controls">
+                    <div class="controls-row">
+                        <!-- Left Side: Icon -->
+                        <div class="control-group">
+                            <button class="icon-btn like-btn" title="Like">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Center: Playback Controls -->
+                        <div class="playback-controls">
+                            <button class="icon-btn shuffle-btn" title="Shuffle">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="16 3 21 3 21 8"></polyline>
+                                    <line x1="4" y1="20" x2="21" y2="3"></line>
+                                    <polyline points="21 16 21 21 16 21"></polyline>
+                                    <line x1="15" y1="15" x2="21" y2="21"></line>
+                                    <line x1="4" y1="4" x2="9" y2="9"></line>
+                                </svg>
+                            </button>
+                            
+                            <button class="icon-btn prev-btn" onclick="premiumGalleryPrev()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                                    <line x1="5" y1="19" x2="5" y2="5"></line>
+                                </svg>
+                            </button>
+
+                            <button class="main-play-btn" onclick="toggleGalleryAutoPlay()" id="gallery-play-btn">
+                                <svg id="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                <svg id="pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                                    <rect x="6" y="4" width="4" height="16"></rect>
+                                    <rect x="14" y="4" width="4" height="16"></rect>
+                                </svg>
+                            </button>
+
+                            <button class="icon-btn next-btn" onclick="premiumGalleryNext()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                                    <line x1="19" y1="5" x2="19" y2="19"></line>
+                                </svg>
+                            </button>
+
+                            <button class="icon-btn repeat-btn" title="Repeat">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="17 1 21 5 17 9"></polyline>
+                                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                    <polyline points="7 23 3 19 7 15"></polyline>
+                                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Right: Volume -->
+                        <div class="control-group">
+                            <button class="icon-btn volume-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Modal (Terms & Privacy) -->
+    <div id="legal-modal" class="legal-modal">
+        <div class="legal-modal-backdrop" onclick="closeLegalModal()"></div>
+        <div class="legal-modal-container">
+            <div class="legal-modal-card glass">
+                <button class="legal-modal-close" onclick="closeLegalModal()">✕</button>
+                <div id="legal-modal-content" class="legal-modal-content">
+                    <!-- Dynamic Legal Content Injection -->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>

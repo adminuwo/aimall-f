@@ -36,55 +36,153 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ═══════════════════════════════════════════
-    // 2. CINEMATIC LOADER
+    // 2. ONBOARDING & LOADER FLOW
     // ═══════════════════════════════════════════
-    const loader = document.getElementById('loader');
-    const loaderBar = document.querySelector('.loader-bar');
+    const loaderOverlay = document.getElementById('onboarding-overlay');
+    const newLoader = document.getElementById('new-loader');
+    const welcomeCard = document.getElementById('welcome-card');
+    const chatAssistant = document.getElementById('ai-chat-assistant');
     const body = document.body;
 
-    if (loader) {
-        let progress = 0;
-        const loaderText = document.querySelector('.loader-text');
-        const messages = [
-            "Initializing Neural Network...",
-            "Syncing Global Intelligence...",
-            "Synthesizing Ecosystem...",
-            "Ready for Deployment."
-        ];
+    // Check if user has already onboarded
+    const hasOnboarded = sessionStorage.getItem('ai_mall_onboarded');
 
-        const interval = setInterval(() => {
-            progress += Math.random() * 12;
-            if (progress > 100) progress = 100;
+    if (loaderOverlay && !hasOnboarded) {
+        body.classList.add('onboarding-active');
+        
+        // Hide chatbot while onboarding
+        if (chatAssistant) chatAssistant.classList.add('ai-chat-hidden');
+
+        const introControls = document.querySelector('.intro-controls-v2');
+        const soundToggle = document.getElementById('toggle-sound');
+        const skipBtn = document.getElementById('skip-intro');
+        const introVideo = document.getElementById('intro-video');
+
+        function showWelcomeCard() {
+            if (welcomeCard) {
+                welcomeCard.style.display = 'block';
+                welcomeCard.offsetHeight; 
+                welcomeCard.classList.add('visible');
+            }
+        }
+
+        function handleVideoEnd() {
+            if (introVideo) {
+                introVideo.classList.remove('playing');
+                introVideo.pause();
+            }
+            if (introControls) {
+                introControls.classList.remove('visible');
+                setTimeout(() => introControls.style.display = 'none', 400);
+            }
+            // Transition to card (Step 3)
+            setTimeout(showWelcomeCard, 600);
+        }
+
+        function updateSoundUI(video, isMuted) {
+            const sOn = document.getElementById('sound-on');
+            const sOff = document.getElementById('sound-off');
+            const sLbl = document.querySelector('.control-label');
+            if (!sOn || !sOff || !sLbl) return;
+            if (isMuted) {
+                sOn.style.display = 'none'; sOff.style.display = 'block';
+                sLbl.textContent = "Unmute"; video.muted = true;
+            } else {
+                sOn.style.display = 'block'; sOff.style.display = 'none';
+                sLbl.textContent = "Mute"; video.muted = false;
+            }
+        }
+
+        // STEP 1 & 2: Start with Logo, transition to Video
+        setTimeout(() => {
+            // Fade out logo components (Step 1 end)
+            if (newLoader) {
+                newLoader.style.opacity = '0';
+                newLoader.style.transform = 'scale(0.95)';
+                setTimeout(() => newLoader.style.display = 'none', 600);
+            }
             
-            if (loaderBar) loaderBar.style.width = `${progress}%`;
-            
-            if (loaderText) {
-                const msgIndex = Math.floor((progress / 100) * (messages.length - 1));
-                loaderText.textContent = messages[msgIndex];
+            // Clean move: Hide background text to avoid overlap with video
+            const bgText = document.querySelector('.loader-bg-text');
+            if (bgText) {
+                bgText.style.transition = 'opacity 0.6s ease';
+                bgText.style.opacity = '0';
+                setTimeout(() => bgText.style.display = 'none', 600);
             }
 
-            if (progress === 100) {
-                clearInterval(interval);
-                setTimeout(hideLoader, 500);
+            // Start Video (Step 2 start)
+            if (introVideo) {
+                introVideo.classList.add('playing');
+                if (introControls) {
+                    introControls.style.display = 'flex';
+                    setTimeout(() => introControls.classList.add('visible'), 150);
+                }
+
+                introVideo.play().then(() => {
+                    updateSoundUI(introVideo, false);
+                }).catch(() => {
+                    introVideo.muted = true;
+                    introVideo.play();
+                    updateSoundUI(introVideo, true);
+                });
+
+                if (soundToggle) soundToggle.onclick = () => {
+                    introVideo.muted = !introVideo.muted;
+                    updateSoundUI(introVideo, introVideo.muted);
+                };
+                if (skipBtn) skipBtn.onclick = handleVideoEnd;
+                introVideo.addEventListener('ended', handleVideoEnd);
+            } else {
+                // If no video, skip directly to Step 3
+                showWelcomeCard();
             }
-        }, 140);
+        }, 2200); // 2.2s for the initial brand reveal
     } else {
+        // Already onboarded or elements missing, normal load
+        if (loaderOverlay) loaderOverlay.style.display = 'none';
         body.classList.remove('loading');
+        body.classList.remove('onboarding-active');
         startHeroAnimations();
     }
 
-    function hideLoader() {
-        if (!loader) return;
-        const tl = gsap.timeline({
-            onComplete: () => {
-                loader.style.display = 'none';
-                body.classList.remove('loading');
-                startHeroAnimations();
+    // Onboarding Interactions
+    const btnTryNow = document.getElementById('btn-try-now');
+    const btnGotIt = document.getElementById('btn-got-it');
+
+    function completeOnboarding(openChat = false) {
+        sessionStorage.setItem('ai_mall_onboarded', 'true');
+        
+        // Hide card first
+        if (welcomeCard) welcomeCard.classList.remove('visible');
+        
+        setTimeout(() => {
+            // Fade out overlay revealing the homepage
+            if (loaderOverlay) {
+                loaderOverlay.style.opacity = '0';
+                loaderOverlay.style.pointerEvents = 'none';
             }
-        });
-        tl.to('.loader-content', { opacity: 0, scale: 0.9, duration: 0.7, ease: 'expo.inOut' })
-          .to(loader, { yPercent: -100, duration: 1.1, ease: 'expo.inOut' }, '-=0.3');
+            body.classList.remove('loading');
+            body.classList.remove('onboarding-active');
+            
+            setTimeout(() => {
+                if (loaderOverlay) loaderOverlay.style.display = 'none';
+                // Trigger hero animation smoothly once homepage revealed
+                startHeroAnimations();
+                
+                // Pop-in chatbot after reveal
+                if (chatAssistant) {
+                    chatAssistant.classList.remove('ai-chat-hidden');
+                    chatAssistant.classList.add('ai-chat-pop-in');
+                    if (openChat && window.toggleChat) {
+                        setTimeout(() => window.toggleChat(), 500);
+                    }
+                }
+            }, 800);
+        }, 400);
     }
+
+    if (btnTryNow) btnTryNow.addEventListener('click', () => completeOnboarding(true));
+    if (btnGotIt) btnGotIt.addEventListener('click', () => completeOnboarding(false));
 
 
     // ═══════════════════════════════════════════
@@ -153,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Section Titles / Headings ──
     revealGroup(
-        '.section-title, .hstrip-title, .uwo-title, .hstrip-header h2, .founder-name',
+        '.section-title, .hstrip-title, .uwo-title, .hstrip-header h2, .founder-name, .premium-heading',
         { opacity: 0, y: 40 },
         { duration: 1, ease: 'power4.out', start: 'top 88%' }
     );
@@ -313,36 +411,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ── Vision Section V3 (Home Redesign) ──
-    const visionV3 = document.querySelector('.vision-structured-v3');
-    if (visionV3) {
-        const v3Heading = visionV3.querySelector('.reveal-heading-v3');
-        const v3Card    = visionV3.querySelector('.reveal-card-v3');
-        const v3Items   = visionV3.querySelectorAll('.reveal-item');
+    // ── Vision Section Premium (Home Redesign) ──
+    const visionPremium = document.querySelector('.vision-premium-redesign');
+    if (visionPremium) {
+        const textArea = visionPremium.querySelector('.vision-text-area');
+        const textChildren = textArea ? textArea.children : [];
+        const mainCard = visionPremium.querySelector('.premium-main-card');
+        const nestedCard = visionPremium.querySelector('.nested-glass-card');
 
         ScrollTrigger.create({
-            trigger: visionV3,
-            start: 'top 65%',
+            trigger: visionPremium,
+            start: 'top 70%',
             once: true,
             onEnter: () => {
-                if (v3Heading) v3Heading.classList.add('active');
-                if (v3Card) v3Card.classList.add('active');
-                gsap.to(v3Items, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    stagger: 0.15,
-                    ease: 'power3.out',
-                    delay: 0.5
-                });
+                // Slide from Left for Text
+                gsap.fromTo(textChildren, 
+                    { opacity: 0, x: -60 }, 
+                    { opacity: 1, x: 0, duration: 1.2, stagger: 0.15, ease: 'expo.out' }
+                );
                 
-                // Ensure video attempts play again on entry if needed
-                const visionVideo = document.getElementById('demo-video');
-                if (visionVideo) visionVideo.play().catch(() => {
-                    console.log("Autoplay prevented by browser; user interaction needed.");
-                });
+                // Scale + Fade for Main Card
+                if (mainCard) {
+                    gsap.fromTo(mainCard,
+                        { opacity: 0, scale: 0.95 },
+                        { opacity: 1, scale: 1, duration: 1.5, ease: 'expo.out' }
+                    );
+                }
             }
         });
+
+        // Parallax Tilt for Nested Card
+        if (nestedCard) {
+            nestedCard.addEventListener('mousemove', (e) => {
+                const rect = nestedCard.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(nestedCard, {
+                    rotateY: x / 12,
+                    rotateX: -y / 12,
+                    x: x / 18,
+                    y: y / 18,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                });
+            });
+            nestedCard.addEventListener('mouseleave', () => {
+                gsap.to(nestedCard, { rotateY: 0, rotateX: 0, x: 0, y: 0, duration: 1, ease: 'elastic.out(1, 0.3)' });
+            });
+        }
+
+        // Mouse follow glow for the main card container
+        if (mainCard) {
+            mainCard.addEventListener('mousemove', (e) => {
+                const rect = mainCard.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                mainCard.style.setProperty('--mouse-x', `${x}px`);
+                mainCard.style.setProperty('--mouse-y', `${y}px`);
+            });
+        }
     }
 
     // ── UWO Story Section (About) ──
@@ -546,8 +673,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════
     window.toggleChat = () => {
         const win = document.getElementById('chat-window');
-        if (win) win.classList.toggle('active');
+        const tooltip = document.getElementById('chat-tooltip');
+        const orb = document.querySelector('.chatbot-chat-icon');
+
+        if (win) {
+            win.classList.toggle('active');
+            // Hide engagement elements when chat is opened
+            if (win.classList.contains('active')) {
+                if (tooltip) tooltip.classList.remove('visible');
+                if (orb) orb.classList.remove('active-pop');
+            }
+        }
     };
+    
+    // Proactive Chatbot Engagement (trigger after delay)
+    // Delay: 45 seconds for a premium, non-intrusive feel
+    const ENGAGEMENT_DELAY = 45000; 
+    setTimeout(() => {
+        const tooltip = document.getElementById('chat-tooltip');
+        const orb = document.querySelector('.chatbot-chat-icon');
+        const win = document.getElementById('chat-window');
+        
+        // Only trigger if chat window is NOT already active
+        if (win && !win.classList.contains('active')) {
+           if (tooltip) tooltip.classList.add('visible');
+           if (orb) orb.classList.add('active-pop');
+        }
+    }, ENGAGEMENT_DELAY);
 
     window.handleChatReg = (e) => {
         e.preventDefault();
@@ -695,4 +847,598 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ═══════════════════════════════════════════
+    // 10. PREMIUM GALLERY MODAL LOGIC
+    // ═══════════════════════════════════════════
+    window.premiumImages = [
+        "aimallproject/slide-1.png", "aimallproject/slide-2.png", "aimallproject/slide-3.png",
+        "aimallproject/slide-4.png", "aimallproject/slide-5.png", "aimallproject/slide-6.png",
+        "aimallproject/slide-7.png", "aimallproject/slide-8.png", "aimallproject/slide-9.png",
+        "aimallproject/slide-10.png", "aimallproject/slide-11.png", "aimallproject/slide-12.png"
+    ];
+    window.currentPremiumIndex = 0;
+    window.galleryAutoPlayInterval = null;
+
+    window.openPremiumModal = function() {
+        const modal = document.getElementById('premium-gallery-modal');
+        if (modal) {
+            modal.classList.add('open');
+            window.currentPremiumIndex = 0; // Reset or sync
+            window.updatePremiumImage();
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    window.closePremiumModal = function() {
+        const modal = document.getElementById('premium-gallery-modal');
+        if (modal) {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+            if (window.galleryAutoPlayInterval) {
+                window.stopGalleryAutoPlay();
+            }
+        }
+    };
+
+    window.premiumGalleryNext = function() {
+        window.currentPremiumIndex = (window.currentPremiumIndex + 1) % window.premiumImages.length;
+        window.updatePremiumImage();
+    };
+
+    window.premiumGalleryPrev = function() {
+        window.currentPremiumIndex = (window.currentPremiumIndex - 1 + window.premiumImages.length) % window.premiumImages.length;
+        window.updatePremiumImage();
+    };
+
+    window.updatePremiumImage = function() {
+        const img = document.getElementById('premium-gallery-img');
+        if (img) {
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = window.premiumImages[window.currentPremiumIndex];
+                img.style.opacity = '1';
+            }, 250);
+        }
+        const curr = document.getElementById('gallery-current');
+        if (curr) curr.innerText = window.currentPremiumIndex + 1;
+    };
+
+    window.toggleGalleryAutoPlay = function() {
+        if (window.galleryAutoPlayInterval) {
+            window.stopGalleryAutoPlay();
+        } else {
+            window.startGalleryAutoPlay();
+        }
+    };
+
+    window.startGalleryAutoPlay = function() {
+        const pBtn = document.getElementById('play-icon');
+        const sBtn = document.getElementById('pause-icon');
+        if (pBtn) pBtn.style.display = 'none';
+        if (sBtn) sBtn.style.display = 'block';
+        window.galleryAutoPlayInterval = setInterval(window.premiumGalleryNext, 3500);
+    };
+
+    window.stopGalleryAutoPlay = function() {
+        const pBtn = document.getElementById('play-icon');
+        const sBtn = document.getElementById('pause-icon');
+        if (pBtn) pBtn.style.display = 'block';
+        if (sBtn) sBtn.style.display = 'none';
+        clearInterval(window.galleryAutoPlayInterval);
+        window.galleryAutoPlayInterval = null;
+    };
+
+    // ═══════════════════════════════════════════
+    // 11. LEGAL MODAL LOGIC (TERMS & PRIVACY)
+    // ═══════════════════════════════════════════
+    const legalContent = {
+        terms: `
+            <div class="legal-content-header">
+                <h2 class="legal-content-title"><img src="logos/Logo.png" alt="AI-Mall" class="legal-logo-icon"> AIMall™ – Terms & Conditions</h2>
+            </div>
+            <div class="legal-content-scroll-box">
+                <div class="legal-content-section">
+                    <h3>1. 🔹 Acceptance of Terms</h3>
+                    <p>Welcome to AIMall™, a platform owned and operated by <strong>Unified Web Options & Services Pvt. Ltd. (UWO™)</strong>.</p>
+                    <p>By accessing, registering, or using AIMall™, you confirm that you have read, understood, and agreed to be bound by these Terms & Conditions (“Terms”). If you do not agree, you must discontinue use immediately.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>2. 🔹 About AIMall™</h3>
+                    <p>AIMall™ is a unified AI marketplace and execution ecosystem that enables users to access multiple AI tools, perform tasks (content creation, automation, data processing), and interact through AISA™ (AI Super Assistant). AIMall™ functions as an orchestration platform, not a standalone AI model provider.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>3. 🔹 Eligibility</h3>
+                    <p>Must be at least 18 years of age, have legal capacity for agreements, and provide accurate registration information.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>4. 🔹 Account Security</h3>
+                    <p>You are responsible for maintaining credential confidentiality and all activities under your account. AIMall™ is not liable for unauthorized access.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>5. 🔹 Use of the Platform</h3>
+                    <p>Lawful use only. No fraudulent activity, hacking, IP infringement, or distribution of abusive content.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>6. 🔹 AI Functionality & Limitations</h3>
+                    <p>AI outputs may be inaccurate, incomplete, or biased. AI should NOT be relied upon for critical, legal, medical, or financial decisions without human validation. AIMall™ is an assistive system, not a replacement for human judgment.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>7. 🔹 Third-Party Services</h3>
+                    <p>Access to third-party AI tools is subject to their own terms. AIMall™ does not control or guarantee their performance.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>8. 🔹 Intellectual Property</h3>
+                    <p>Platform technology, branding, and AISA™ are owned by UWO™. Users retain ownership of created content but grant AIMall™ a license for platform functionality.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>9. 🔹 Payments & Subscriptions</h3>
+                    <p>Fees apply for paid plans. Pricing may change. Payments are non-refundable unless stated otherwise.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>12. 🔹 Limitation of Liability</h3>
+                    <p>AIMall™/UWO™ shall not be liable for errors in AI outputs, loss of data, revenue, or decisions made based on platform data. Use is at your own risk.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>15. 🔹 Governing Law</h3>
+                    <p>Governed by the laws of <strong>India</strong>. Disputes subject to <strong>Jabalpur / Delhi</strong> jurisdiction.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>17. 🔹 Contact</h3>
+                    <p>📧 admin@uwo24.com | 🌐 aimall24.com</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="modal-action-btn" onclick="closeLegalModal()">Accept & Close</button>
+            </div>
+        `,
+        privacy: `
+            <div class="legal-content-header">
+                <h2 class="legal-content-title"><img src="logos/Logo.png" alt="AI-Mall" class="legal-logo-icon"> AIMall™ – Privacy Policy</h2>
+            </div>
+            <div class="legal-content-scroll-box">
+                <div class="legal-content-section">
+                    <h3>1. Data Collection</h3>
+                    <p>We process information required for account registration (name, email) and data generated during your interactions with AI agents to facilitate platform services.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>2. Data Sovereignty & Usage</h3>
+                    <p>Inputs are used to generate AI outputs via orchestrated models. We do not sell personal data to third parties without consent. Data is processed to improve your individual user experience.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>3. Third-Party AI Data Processing</h3>
+                    <p>When you utilize third-party AI tools via AIMall™, relevant data may be processed by those providers according to their respective privacy policies.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>4. Security Measures</h3>
+                    <p>We implement industry-standard security to protect your account and data. Users are urged not to upload highly sensitive confidential data unless specifically permitted by their plan.</p>
+                </div>
+                <div class="legal-content-section">
+                    <h3>5. User Rights</h3>
+                    <p>You have the right to update your information and discontinue service at any time. For data inquiries, contact us at <strong>admin@uwo24.com</strong>.</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="modal-action-btn" onclick="closeLegalModal()">I Understand</button>
+            </div>
+        `
+    };
+
+    window.openLegalModal = function(type) {
+        const modal = document.getElementById('legal-modal');
+        const contentBox = document.getElementById('legal-modal-content');
+        const card = modal?.querySelector('.legal-modal-card');
+        if (modal && contentBox && legalContent[type]) {
+            contentBox.innerHTML = legalContent[type];
+            if (card) card.setAttribute('data-lenis-prevent', ''); // Prevent Lenis from blocking scroll
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.lenis) window.lenis.stop();
+        }
+    };
+
+    window.closeLegalModal = function() {
+        const modal = document.getElementById('legal-modal');
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (window.lenis) window.lenis.start();
+        }
+    };
+
+    // Keyboard support for Legal Modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') window.closeLegalModal();
+    });
 });
+
+/* ═══════════════════════════════════════════════════════════════
+   A-SERIES™ PREMIUM SHOWCASE ENGINE
+   Self-initialising — runs after full DOM load
+   ═══════════════════════════════════════════════════════════════ */
+(function initAseriesShowcase() {
+
+    /* ── Module Data ── */
+    const MODULES = [
+        {
+            label: 'Ai-Hire™',
+            tag: 'Recruitment AI',
+            img: 'logos/WhatsApp Image 2026-03-23 at 1.28.03 PM.jpeg',
+            desc: 'AI-powered recruitment engine that screens, ranks, and interviews candidates — cutting time-to-hire by 70%.'
+        },
+        {
+            label: 'Ai-Base™',
+            tag: 'Knowledge AI',
+            img: 'logos/WhatsApp Image 2026-03-23 at 1.29.15 PM.jpeg',
+            desc: 'Enterprise knowledge management powered by RAG. Instantly surface answers from your organization\'s entire data corpus.'
+        },
+        {
+            label: 'Ai-Biz™',
+            tag: 'Business AI',
+            img: 'logos/WhatsApp Image 2026-03-23 at 1.30.00 PM.jpeg',
+            desc: 'End-to-end business intelligence module. Automate decisions, forecast trends, and power data-driven growth.'
+        },
+        {
+            label: 'Derm-Foundation™',
+            tag: 'Healthcare AI',
+            img: 'logos/Derm.jpeg',
+            desc: 'Clinical-grade dermatology AI trained on millions of skin pathology cases. Enables early, accurate detection.'
+        },
+        {
+            label: 'Geospatial-Foundation™',
+            tag: 'Remote Sensing AI',
+            img: 'logos/GEOspatial.jpeg',
+            desc: 'Satellite & aerial imagery analysis at enterprise scale. Urban planning, agriculture, environmental monitoring.'
+        },
+        {
+            label: 'Bio-Psync™',
+            tag: 'Pathology AI',
+            img: 'logos/Biopsync.jpeg',
+            desc: 'AI pathology engine for digital biopsy analysis. Accelerates diagnosis with precision histopathology models.'
+        },
+        {
+            label: 'Ai-SuperAssistance™',
+            tag: 'Cognitive AI',
+            img: 'logos/WhatsApp Image 2026-03-23 at 1.34.18 PM.jpeg',
+            desc: 'Omni-channel intelligent assistant with memory, context, and enterprise integrations. Your AI co-pilot.'
+        },
+        {
+            label: 'Ai-Sales™',
+            tag: 'Revenue AI',
+            img: 'logos/WhatsApp Image 2026-03-23 at 1.35.34 PM.jpeg',
+            desc: 'Predictive sales intelligence that scores leads, drafts outreach, and closes the loop on revenue growth.'
+        }
+    ];
+
+    /* ── State ── */
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    let isAutoPlaying = false;
+    let isLiked = false;
+    let isRepeat = false;
+    let dragStartX = 0;
+    let isDragging = false;
+    let modalIndex = 0;
+
+    /* ── DOM Refs ── */
+    const wrapper    = document.getElementById('aseries-carousel-wrapper');
+    const dotsEl     = document.getElementById('aseries-dots');
+    const prevBtn    = document.getElementById('aseries-prev');
+    const nextBtn    = document.getElementById('aseries-next');
+    const playIcon   = document.getElementById('aseries-play-icon');
+    const pauseIcon  = document.getElementById('aseries-pause-icon');
+    const modal      = document.getElementById('aseries-modal');
+    const modalImg   = document.getElementById('aseries-modal-img');
+    const modalTitle = document.getElementById('aseries-modal-title');
+    const modalDesc  = document.getElementById('aseries-modal-desc');
+    const modalCtr   = document.getElementById('aseries-modal-counter');
+    const textCol    = document.getElementById('aseries-text-col');
+    const carouselCol= wrapper ? wrapper.closest('.aseries-carousel-col') : null;
+    const canvas     = document.getElementById('aseries-particles');
+
+    if (!wrapper) return; // Not on home page
+
+    /* ══════════════════════════════
+       BUILD CAROUSEL CARDS
+    ══════════════════════════════ */
+    function buildCards() {
+        wrapper.innerHTML = '';
+        MODULES.forEach((mod, i) => {
+            const card = document.createElement('div');
+            card.className = 'aseries-card';
+            card.dataset.index = i;
+            card.innerHTML = `
+                <img class="aseries-card-img" src="${mod.img}" alt="${mod.label}" loading="lazy">
+                <div class="aseries-card-overlay"></div>
+                <div class="aseries-card-info">
+                    <span class="aseries-card-label">${mod.label}</span>
+                    <span class="aseries-card-tag">${mod.tag}</span>
+                </div>
+            `;
+            card.addEventListener('click', () => {
+                const offset = getOffset(i);
+                if (offset === 0) {
+                    openAseriesModal(i);
+                } else {
+                    goTo(i);
+                }
+            });
+            /* 3D tilt + cursor glow on center card hover */
+            card.addEventListener('mousemove', (e) => {
+                if (getOffset(i) !== 0) return;
+                const rect = card.getBoundingClientRect();
+                const cx = ((e.clientX - rect.left) / rect.width) * 100;
+                const cy = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--cx', cx + '%');
+                card.style.setProperty('--cy', cy + '%');
+                const rx = (rect.height / 2 - (e.clientY - rect.top)) / 18;
+                const ry = ((e.clientX - rect.left) - rect.width / 2) / 18;
+                card.style.transform = `translate(-50%, -50%) scale(1.04) rotateX(${rx}deg) rotateY(${ry}deg)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                if (getOffset(i) !== 0) return;
+                // smooth back
+                card.style.transform = '';
+                setTimeout(() => { updateOffsets(); }, 50);
+            });
+            wrapper.appendChild(card);
+        });
+        buildDots();
+        updateOffsets();
+    }
+
+    function getOffset(i) {
+        let o = i - currentIndex;
+        const n = MODULES.length;
+        if (o > n / 2)  o -= n;
+        if (o < -n / 2) o += n;
+        return o;
+    }
+
+    function updateOffsets() {
+        const cards = wrapper.querySelectorAll('.aseries-card');
+        cards.forEach((card, i) => {
+            const off = getOffset(i);
+            // clamp display to ±3
+            card.dataset.offset = Math.max(-3, Math.min(3, off));
+        });
+        updateDots();
+    }
+
+    function buildDots() {
+        dotsEl.innerHTML = '';
+        MODULES.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'aseries-dot' + (i === currentIndex ? ' active' : '');
+            dot.setAttribute('aria-label', `Module ${i + 1}`);
+            dot.addEventListener('click', () => goTo(i));
+            dotsEl.appendChild(dot);
+        });
+    }
+
+    function updateDots() {
+        const dots = dotsEl.querySelectorAll('.aseries-dot');
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+
+    function goTo(idx) {
+        currentIndex = ((idx % MODULES.length) + MODULES.length) % MODULES.length;
+        updateOffsets();
+    }
+
+    function goNext() { goTo(currentIndex + 1); }
+    function goPrev() { goTo(currentIndex - 1); }
+
+    /* ══════════════════════════════
+       NAVIGATION CONTROLS
+    ══════════════════════════════ */
+    if (prevBtn) prevBtn.addEventListener('click', () => { goPrev(); resetAutoplay(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goNext(); resetAutoplay(); });
+
+    /* ══════════════════════════════
+       DRAG / SWIPE
+    ══════════════════════════════ */
+    wrapper.addEventListener('mousedown',  (e) => { isDragging = true; dragStartX = e.clientX; });
+    wrapper.addEventListener('mousemove',  (e) => { if (!isDragging) return; e.preventDefault(); });
+    wrapper.addEventListener('mouseup',    (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const dx = e.clientX - dragStartX;
+        if (Math.abs(dx) > 40) { dx < 0 ? goNext() : goPrev(); resetAutoplay(); }
+    });
+    wrapper.addEventListener('mouseleave', () => { isDragging = false; });
+
+    wrapper.addEventListener('touchstart', (e) => { dragStartX = e.touches[0].clientX; }, { passive: true });
+    wrapper.addEventListener('touchend',   (e) => {
+        const dx = e.changedTouches[0].clientX - dragStartX;
+        if (Math.abs(dx) > 40) { dx < 0 ? goNext() : goPrev(); resetAutoplay(); }
+    }, { passive: true });
+
+    /* ══════════════════════════════
+       AUTOPLAY
+    ══════════════════════════════ */
+    function startAutoplay() {
+        clearInterval(autoplayTimer);
+        isAutoPlaying = true;
+        autoplayTimer = setInterval(goNext, 2800);
+        if (playIcon)  playIcon.style.display  = 'none';
+        if (pauseIcon) pauseIcon.style.display = '';
+        document.getElementById('aseries-autoplay-btn')?.classList.add('active');
+    }
+    function stopAutoplay() {
+        clearInterval(autoplayTimer);
+        isAutoPlaying = false;
+        if (playIcon)  playIcon.style.display  = '';
+        if (pauseIcon) pauseIcon.style.display = 'none';
+        document.getElementById('aseries-autoplay-btn')?.classList.remove('active');
+    }
+    function resetAutoplay() { if (isAutoPlaying) { stopAutoplay(); startAutoplay(); } }
+
+    window.toggleAseriesAutoplay = function() {
+        isAutoPlaying ? stopAutoplay() : startAutoplay();
+    };
+    window.shuffleAseriesCarousel = function() {
+        goTo(Math.floor(Math.random() * MODULES.length));
+        resetAutoplay();
+        const btn = document.getElementById('aseries-shuffle-btn');
+        if (btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 700); }
+    };
+    window.toggleAseriesRepeat = function() {
+        isRepeat = !isRepeat;
+        const btn = document.getElementById('aseries-repeat-btn');
+        if (btn) btn.classList.toggle('active', isRepeat);
+    };
+    window.toggleAseriesLike = function() {
+        isLiked = !isLiked;
+        const btns = document.querySelectorAll('#aseries-like-btn, .aseries-modal-footer .aseries-modal-ctrl-btn:first-child');
+        btns.forEach(b => {
+            b.classList.toggle('active', isLiked);
+            b.querySelector('svg path') && (b.querySelector('svg path').style.fill = isLiked ? '#f43f5e' : 'none');
+        });
+    };
+
+    /* ══════════════════════════════
+       FULLSCREEN MODAL
+    ══════════════════════════════ */
+    function updateModalContent(idx) {
+        const mod = MODULES[idx];
+        if (!mod) return;
+        if (modalImg) {
+            modalImg.style.opacity = '0';
+            requestAnimationFrame(() => {
+                modalImg.src = mod.img;
+                modalImg.onload = () => { modalImg.style.opacity = '1'; };
+                if (modalImg.complete) modalImg.style.opacity = '1';
+            });
+        }
+        if (modalTitle) modalTitle.textContent = mod.label;
+        if (modalDesc)  modalDesc.textContent  = mod.desc;
+        if (modalCtr)   modalCtr.textContent   = `${idx + 1} / ${MODULES.length}`;
+    }
+
+    window.openAseriesModal = function(idx) {
+        modalIndex = (idx !== undefined) ? idx : currentIndex;
+        updateModalContent(modalIndex);
+        if (modal) {
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+    window.closeAseriesModal = function() {
+        if (modal) {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    };
+    window.nextAseriesModal = function() {
+        modalIndex = (modalIndex + 1) % MODULES.length;
+        updateModalContent(modalIndex);
+    };
+    window.prevAseriesModal = function() {
+        modalIndex = (modalIndex - 1 + MODULES.length) % MODULES.length;
+        updateModalContent(modalIndex);
+    };
+
+    /* Keyboard nav for modal */
+    document.addEventListener('keydown', (e) => {
+        if (!modal || !modal.classList.contains('open')) return;
+        if (e.key === 'ArrowRight') window.nextAseriesModal();
+        if (e.key === 'ArrowLeft')  window.prevAseriesModal();
+        if (e.key === 'Escape')     window.closeAseriesModal();
+    });
+
+    /* ══════════════════════════════
+       PARTICLE CANVAS
+    ══════════════════════════════ */
+    function initParticles() {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const PARTICLE_COUNT = 80;
+        const particles = [];
+
+        function resize() {
+            canvas.width  = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push({
+                x:    Math.random() * canvas.width,
+                y:    Math.random() * canvas.height,
+                r:    Math.random() * 1.8 + 0.3,
+                vx:   (Math.random() - 0.5) * 0.35,
+                vy:   (Math.random() - 0.5) * 0.35,
+                alpha: Math.random() * 0.6 + 0.15,
+                hue:  Math.random() > 0.5 ? 250 : 280  // indigo or violet
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${p.hue}, 80%, 70%, ${p.alpha})`;
+                ctx.fill();
+
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width)  p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+            });
+
+            // draw connecting lines between nearby particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(129,140,248,${(1 - dist / 100) * 0.18})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    /* ══════════════════════════════
+       SCROLL REVEAL ENTRANCE
+    ══════════════════════════════ */
+    function setupReveal() {
+        const section = document.getElementById('a-series');
+        if (!section) return;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (textCol)     textCol.classList.add('revealed');
+                    if (carouselCol) carouselCol.classList.add('revealed');
+                    observer.disconnect();
+                    // Start autoplay on enter
+                    setTimeout(() => startAutoplay(), 1200);
+                }
+            });
+        }, { threshold: 0.25 });
+        observer.observe(section);
+    }
+
+    /* ══════════════════════════════
+       INIT
+    ══════════════════════════════ */
+    buildCards();
+    initParticles();
+    setupReveal();
+
+})();
+
