@@ -544,12 +544,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════
     window.toggleChat = () => {
         const win = document.getElementById('chat-window');
-        if (win) win.classList.toggle('active');
+        const overlay = document.getElementById('chat-overlay');
+        const body = document.body;
+
+        if (win) {
+            const isActive = win.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active', isActive);
+            body.classList.toggle('no-scroll', isActive);
+            
+            // Stop Lenis from scrolling the background
+            if (isActive) {
+                lenis.stop();
+            } else {
+                lenis.start();
+            }
+        }
     };
 
-    // Wire up bot orb and close button via IDs (inline onclick removed for module compatibility)
+    // Wire up bot orb, overlay and close button via IDs
     document.getElementById('chat-orb-btn')?.addEventListener('click', window.toggleChat);
     document.getElementById('chat-close-btn')?.addEventListener('click', window.toggleChat);
+    document.getElementById('chat-overlay')?.addEventListener('click', window.toggleChat);
 
     window.handleChatReg = (e) => {
         e.preventDefault();
@@ -588,7 +603,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!val || input.readOnly) return;
 
         const msgBox = document.getElementById('chat-messages');
+        const bodyView = document.getElementById('chat-body-view');
         if (!msgBox) return;
+
+        // Helper for auto-scroll
+        const autoScroll = () => { if (bodyView) bodyView.scrollTop = bodyView.scrollHeight; };
 
         // User Message
         const u = document.createElement('div');
@@ -596,14 +615,14 @@ document.addEventListener('DOMContentLoaded', () => {
         u.textContent = val;
         msgBox.appendChild(u);
         input.value = "";
-        msgBox.scrollTop = msgBox.scrollHeight;
+        autoScroll();
 
         // Show Thinking Indicator
         const thinking = document.createElement('div');
         thinking.className = 'thinking';
         thinking.innerHTML = '<span></span><span></span><span></span>';
         msgBox.appendChild(thinking);
-        msgBox.scrollTop = msgBox.scrollHeight;
+        autoScroll();
 
         // Prepare AI Message Container (HIDDEN initially)
         const aiMsg = document.createElement('div');
@@ -612,9 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
         msgBox.appendChild(aiMsg);
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-          controller.abort();
-        }, 45000); // 45s Timeout
+        const timeoutId = setTimeout(() => controller.abort(), 45000);
 
         try {
             const baseUrl = window.API_BASE_URL;
@@ -626,7 +643,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             clearTimeout(timeoutId);
-
             if (!response.ok) throw new Error(`Server ${response.status}`);
 
             const reader = response.body.getReader();
@@ -653,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
                                 fullText += data.text;
                                 
-                                // Basic Markdown Parser for streaming text
+                                // Basic Markdown Parser
                                 const parseBasicMarkdown = (text) => {
                                     if (!text) return '';
                                     let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -666,7 +682,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                         const isList = ulMatch || olMatch;
                                         const curType = ulMatch ? 'ul' : (olMatch ? 'ol' : null);
                                         const item = ulMatch ? ulMatch[1] : (olMatch ? olMatch[1] : null);
-                                        
                                         if (isList) {
                                             if (listType !== curType) {
                                                 if (listType) result += `</${listType}>\n`;
@@ -684,9 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 };
                                 
                                 aiMsg.innerHTML = parseBasicMarkdown(fullText);
-                                msgBox.scrollTop = msgBox.scrollHeight;
+                                autoScroll();
                             }
-                        } catch (e) { /* partial chunk */ }
+                        } catch (e) {}
                     }
                 }
             }
@@ -696,12 +711,12 @@ document.addEventListener('DOMContentLoaded', () => {
             thinking.remove();
             aiMsg.style.display = 'block';
             if (err.name === 'AbortError') {
-              aiMsg.textContent = "Request timed out. The AI is taking too long to synthesize - please try again later.";
+              aiMsg.textContent = "Request timed out. Please try again.";
             } else {
               aiMsg.textContent = "Connectivity error. Unable to reach AI-Mall™ servers.";
             }
         }
-        msgBox.scrollTop = msgBox.scrollHeight;
+        autoScroll();
     };
 
     // Initialize Chat state
