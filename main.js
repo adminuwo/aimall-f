@@ -547,6 +547,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (win) win.classList.toggle('active');
     };
 
+    // Wire up bot orb and close button via IDs (inline onclick removed for module compatibility)
+    document.getElementById('chat-orb-btn')?.addEventListener('click', window.toggleChat);
+    document.getElementById('chat-close-btn')?.addEventListener('click', window.toggleChat);
+
     window.handleChatReg = (e) => {
         e.preventDefault();
         const n = document.getElementById('chat-reg-name')?.value;
