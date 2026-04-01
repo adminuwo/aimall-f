@@ -6,7 +6,8 @@
     position: relative;
     padding: 60px 0;
     overflow: hidden;
-    background-color: #f8fafc; /* Soft white / off-white */
+    background-color: #f8fafc;
+    /* Soft white / off-white */
     z-index: 1;
     font-family: 'Inter', sans-serif;
 }
@@ -14,10 +15,27 @@
 /* Background Enhancements */
 .lt-uwo-bg {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
     overflow: hidden;
     pointer-events: none;
+}
+
+.lt-uwo-image-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('uwo_bg_light_ai_network.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    /* Low opacity as requested */
+    z-index: -2;
 }
 
 .lt-blob {
@@ -29,55 +47,78 @@
 }
 
 .lt-blob-1 {
-    top: -10%; left: -5%;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(147,197,253,0.4) 0%, rgba(255,255,255,0) 70%); /* Light blue */
+    top: -10%;
+    left: -5%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+    /* Light blue */
 }
 
 .lt-blob-2 {
-    bottom: -10%; right: -5%;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(196,181,253,0.3) 0%, rgba(255,255,255,0) 70%); /* Soft purple */
+    bottom: -10%;
+    right: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(196, 181, 253, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+    /* Soft purple */
     animation-delay: -10s;
 }
 
 .lt-shapes {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .lt-shape {
     position: absolute;
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
     opacity: 0.5;
     animation: lt-shape-float 15s infinite alternate ease-in-out;
 }
 
 .lt-shape-1 {
-    top: 20%; left: 15%;
-    width: 100px; height: 100px;
+    top: 20%;
+    left: 15%;
+    width: 100px;
+    height: 100px;
     transform: rotate(15deg);
 }
 
 .lt-shape-2 {
-    bottom: 25%; right: 40%;
-    width: 60px; height: 60px;
+    bottom: 25%;
+    right: 40%;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     animation-delay: -5s;
     transform: rotate(-20deg);
 }
 
 @keyframes lt-blob-float {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(50px, 30px) scale(1.1); }
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(50px, 30px) scale(1.1);
+    }
 }
 
 @keyframes lt-shape-float {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(-30px) rotate(20deg); }
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(-30px) rotate(20deg);
+    }
 }
 
 /* Layout */
@@ -98,7 +139,10 @@
 }
 
 @keyframes lt-fade-slide {
-    to { opacity: 1; transform: translateX(0); }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .lt-uwo-badge {
@@ -125,7 +169,7 @@
     line-height: 1.1;
     color: #000;
     margin-bottom: 15px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .lt-uwo-gradient-text {
@@ -172,7 +216,7 @@
 
 .lt-feat-item:hover {
     background: #ffffff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     transform: translateX(5px);
 }
 
@@ -180,7 +224,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px; height: 36px;
+    width: 36px;
+    height: 36px;
     background: #f1f5f9;
     color: #3b82f6;
     border-radius: 10px;
@@ -204,50 +249,7 @@
     color: #3b82f6;
 }
 
-.lt-uwo-stats {
-    display: flex;
-    gap: 40px;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    padding-top: 20px;
-}
 
-.lt-stat-box {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: lt-stat-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.lt-stat-box:nth-child(1) { animation-delay: 0.2s; }
-.lt-stat-box:nth-child(2) { animation-delay: 0.4s; }
-.lt-stat-box:nth-child(3) { animation-delay: 0.6s; }
-
-@keyframes lt-stat-up {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.lt-stat-number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #0f172a;
-    line-height: 1;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-}
-
-.lt-stat-plus {
-    color: #3b82f6;
-    font-size: 2rem;
-    margin-left: 2px;
-}
-
-.lt-stat-label {
-    font-size: 0.9rem;
-    color: #64748b;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
 
 /* Right Side: Interactive Card */
 .lt-uwo-visual {
@@ -260,7 +262,10 @@
 }
 
 @keyframes lt-card-in {
-    to { opacity: 1; transform: scale(1); }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .lt-glass-card {
@@ -283,16 +288,19 @@
 
 .lt-card-reflection {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 50%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 50%);
     pointer-events: none;
     z-index: 2;
     opacity: 0.8;
 }
 
 .lt-glass-card:hover .lt-card-reflection {
-    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 60%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 60%);
 }
 
 .lt-card-media {
@@ -305,8 +313,11 @@
 
 .lt-media-overlay {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(255,255,255,0.1) 100%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
     z-index: 1;
 }
 
@@ -329,11 +340,11 @@
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 4px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .lt-media-subtitle {
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.9rem;
 }
 
@@ -355,7 +366,7 @@
     text-decoration: none;
     border-radius: 50px;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .lt-cta-button:hover {
@@ -376,6 +387,7 @@
     .lt-uwo-heading {
         font-size: 2.2rem;
     }
+
     .lt-uwo-layout {
         gap: 40px;
     }
@@ -385,13 +397,14 @@
     .lt-uwo-layout {
         flex-direction: column;
     }
-    .lt-uwo-text, .lt-uwo-visual {
+
+    .lt-uwo-text,
+    .lt-uwo-visual {
         max-width: 100%;
     }
-    .lt-uwo-stats {
-        flex-wrap: wrap;
-        gap: 20px;
-    }
+
+
+
     .lt-glass-card:hover {
         transform: none;
     }

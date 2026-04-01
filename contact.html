@@ -36,16 +36,24 @@
         <div class="logo" onclick="window.location.href='index.html'">
             <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
         </div>
-        <nav>
+        <nav id="nav-menu">
             <a href="index.html" class="nav-link">Home</a>
             <a href="about.html" class="nav-link">About</a>
             <a href="a-series.html" class="nav-link">A-Series™</a>
             <a href="partner.html" class="nav-link">Partners</a>
             <a href="contact.html" class="nav-link active">Contact</a>
         </nav>
-        <div class="header-cta">
-            <a href="partner.html" class="btn-premium secondary small">Partner</a>
-            <a href="a-series.html" class="btn-premium primary small">Explore <span class="btn-icon">→</span></a>
+        <div class="header-actions">
+            <div class="header-cta desktop-only">
+                <a href="partner.html" class="nav-btn-link">Partner</a>
+                <a href="a-series.html" class="btn-pill-small">Explore</a>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Toggle Menu">
+                <span class="bar top"></span>
+                <span class="bar mid"></span>
+                <span class="bar bot"></span>
+            </button>
         </div>
     </header>
 
@@ -457,62 +465,31 @@
                     <div class="footer-social-hub">
                         <h4>Connect</h4>
                         <div class="social-links">
-                            <a href="#" class="social-icon" aria-label="Facebook">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#1877F2" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.464H7.078v-3.464h3.047V9.35c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.464h-2.796v8.39C19.612 22.954 24 17.99 24 12z"/>
-                                    <path fill="#fff" d="M16.571 15.464l.532-3.464h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.514V4.922s-1.374-.235-2.686-.235c-2.741 0-4.533 1.662-4.533 4.669v2.648H7.078v3.464h3.047v8.39c.63.1 1.28.154 1.937.154.658 0 1.307-.054 1.938-.154v-8.39h2.796z"/>
-                                </svg>
+                            <a href="https://www.instagram.com/aimall.global/" class="social-icon" aria-label="Instagram">
+                                <img src="logos/instagram.png" alt="Instagram">
                             </a>
-                            <a href="#" class="social-icon" aria-label="Instagram">
-                                <svg viewBox="0 0 24 24">
-                                    <defs>
-                                        <radialGradient id="rg" r="150%" cx="30%" cy="107%">
-                                            <stop stop-color="#fdf497" offset="0" />
-                                            <stop stop-color="#fdf497" offset="0.05" />
-                                            <stop stop-color="#fd5949" offset="0.45" />
-                                            <stop stop-color="#d6249f" offset="0.6" />
-                                            <stop stop-color="#285AEB" offset="0.9" />
-                                        </radialGradient>
-                                    </defs>
-                                    <path fill="url(#rg)" d="M12 0C8.74 0 8.333.015 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.74 0 12s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                                </svg>
+                            <a href="https://www.linkedin.com/in/aimall-global/" class="social-icon" aria-label="LinkedIn">
+                                <img src="logos/linked.png" alt="LinkedIn">
                             </a>
-                            <a href="#" class="social-icon" aria-label="YouTube">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505a3.017 3.017 0 00-2.122 2.136C0 8.055 0 12 0 12s0 3.945.501 5.814a3.017 3.017 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.945 24 12 24 12s0-3.945-.502-5.814z"/>
-                                    <path fill="#fff" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                </svg>
+                            <a href="https://x.com/aimallglobal" class="social-icon" aria-label="X">
+                                <img src="logos/X.png" alt="X">
                             </a>
-                            <a href="#" class="social-icon" aria-label="WhatsApp">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#25D366" d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.038 3.069l-.469 1.714 1.757-.461c.746.405 1.591.619 2.443.62h.002c3.181 0 5.769-2.587 5.77-5.767 0-1.542-.613-2.991-1.72-4.103-1.11-1.11-2.559-1.698-4.103-1.698zm3.423 8.21c-.145.405-.729.818-1.002.871-.271.053-.6-.077-1.166-.3-.387-.156-1.572-.647-2.316-1.309a4.87 4.87 0 0 1-1.603-2.222c-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
-                                    <path fill="#25D366" d="M12.031 0C5.408 0 .041 5.367.038 11.992c0 2.118.553 4.186 1.605 6.008L0 24l6.402-1.682c1.737.947 3.697 1.448 5.688 1.449h.005c6.623 0 11.99-5.367 11.993-11.992A11.99 11.99 0 0 0 12.031 0zM12.03 21.796h-.003a9.89 9.89 0 0 1-5.042-1.385l-.362-.214-3.756.985 1.003-3.667-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/>
-                                </svg>
+                            <a href="https://www.youtube.com/" class="social-icon" aria-label="YouTube">
+                                <img src="logos/youtube.png" alt="YouTube">
                             </a>
-                            <a href="#" class="social-icon" aria-label="LinkedIn">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#0A66C2" d="M22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/>
-                                    <path fill="#fff" d="M7.12 20.45V9h-3.51v11.45h3.51zM5.37 7.56c1.13 0 2.04-.91 2.04-2.04 0-1.13-.91-2.04-2.04-2.04-1.13 0-2.04 2.04 2.04 2.04zm15.11 12.89V14.4c0-3.3-1.77-4.83-4.11-4.83-1.89 0-2.73 1.04-3.2 1.77h.03V9.28h-3.41v11.17h3.41v-5.57c0-1.5.28-2.94 2.1-2.94 1.79 0 1.82 1.68 1.82 3.04v5.47h3.36z"/>
-                                </svg>
+                            <a href="https://www.facebook.com/aimallglobal/" class="social-icon" aria-label="Facebook">
+                                <img src="logos/facebook.png" alt="Facebook">
                             </a>
-                            <a href="#" class="social-icon" aria-label="Gmail">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#4285F4" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z" />
-                                    <path fill="#EA4335" d="M0 5.457v13.909c0 .904.732 1.636 1.636 1.636h3.819V11.73L12 16.64V9.573L3.927 3.493C2.309 2.279 0 3.434 0 5.457z" />
-                                    <path fill="#34A853" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64V9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z" />
-                                    <path fill="#FBBC04" d="M20.073 3.493L12 9.573l-8.073-6.08c-1.618-1.214-3.927-.059-3.927 1.964v2.727L12 13.636l12-5.454V5.457c0-2.023-2.309-3.178-3.927-1.964z" />
-                                </svg>
+                            <a href="https://api.whatsapp.com/send?phone=918359890909" class="social-icon" aria-label="WhatsApp">
+                                <img src="logos/whatsapp.png" alt="WhatsApp">
                             </a>
-                            <a href="#" class="social-icon" aria-label="Twitter">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#1DA1F2" d="M23.953 4.57c-.885.392-1.83.656-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                                </svg>
+                            <a href="mailto:admin@uwo24.com" class="social-icon" aria-label="Gmail">
+                                <img src="logos/gmail.png" alt="Gmail">
                             </a>
-                            <a href="#" class="social-icon" aria-label="X">
-                                <svg viewBox="0 0 24 24">
-                                    <path fill="#000" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
-                                </svg>
+                            <a href="https://www.threads.net/@aimallglobal" class="social-icon" aria-label="Threads">
+                                <img src="logos/thread.png" alt="Threads">
                             </a>
+                        </div>
                         </div>
                     </div>
                 </div>
