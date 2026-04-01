@@ -948,9 +948,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('premium-gallery-modal');
         if (modal) {
             modal.classList.add('open');
+            document.body.classList.add('modal-active');
             window.currentPremiumIndex = 0; // Reset or sync
             window.updatePremiumImage();
             document.body.style.overflow = 'hidden';
+            
+            // Auto-start playing when opened
+            window.startGalleryAutoPlay();
         }
     };
 
@@ -958,6 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('premium-gallery-modal');
         if (modal) {
             modal.classList.remove('open');
+            document.body.classList.remove('modal-active');
             document.body.style.overflow = '';
             if (window.galleryAutoPlayInterval) {
                 window.stopGalleryAutoPlay();
@@ -1116,6 +1121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contentBox.innerHTML = legalContent[type];
             if (card) card.setAttribute('data-lenis-prevent', ''); // Prevent Lenis from blocking scroll
             modal.classList.add('active');
+            document.body.classList.add('modal-active');
             document.body.style.overflow = 'hidden';
             if (window.lenis) window.lenis.stop();
         }
@@ -1125,6 +1131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('legal-modal');
         if (modal) {
             modal.classList.remove('active');
+            document.body.classList.remove('modal-active');
             document.body.style.overflow = '';
             if (window.lenis) window.lenis.start();
         }
@@ -1134,7 +1141,145 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') window.closeLegalModal();
     });
+    /* ═══════════════════════════════════════════════════════════════
+       VISION™ PREMIUM WHITE THEME ENGINE
+       Mirroring the A-Series logic but for the Vision section
+       ═══════════════════════════════════════════════════════════════ */
+    (function initVisionShowcase() {
+        const fullImages = window.galleryImages || [
+            'aimallproject/slide-1.png', 'aimallproject/slide-2.png',
+            'aimallproject/slide-3.png', 'aimallproject/slide-4.png'
+        ];
+        const IMAGES = fullImages.slice(0, 11);
+
+        let vIndex = 0;
+        let vAutoplayTimer = null;
+        let vIsAutoPlaying = false;
+        let vIsLiked = false;
+        let vIsRepeat = false;
+
+        const vWrapper = document.getElementById('vision-carousel-wrapper');
+        const vDotsEl = document.getElementById('vision-dots');
+        const vPrevBtn = document.getElementById('vision-prev');
+        const vNextBtn = document.getElementById('vision-next');
+        const vPlayIcon = document.getElementById('vision-play-icon');
+        const vPauseIcon = document.getElementById('vision-pause-icon');
+
+        if (!vWrapper) return;
+
+        function buildVisionCards() {
+            vWrapper.innerHTML = '';
+            IMAGES.forEach((img, i) => {
+                const card = document.createElement('div');
+                card.className = 'vision-v2-card';
+                card.dataset.index = i;
+                card.innerHTML = `
+                    <img class="vision-v2-card-img" src="${img}" alt="Vision slide ${i + 1}" loading="lazy">
+                    <div class="vision-v2-card-overlay">
+                        <div class="vision-v2-view-info">View Gallery</div>
+                    </div>
+                    <div class="vision-v2-card-info">
+                        <span class="vision-v2-card-label">Gallery Slide ${i + 1}</span>
+                        <span class="vision-v2-card-tag">Intelligence View</span>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    const offset = getVisionOffset(i);
+                    if (offset === 0) {
+                        if (typeof window.openPremiumModal === 'function') {
+                           window.openPremiumModal(i);
+                        }
+                    } else {
+                        goToVision(i);
+                    }
+                });
+                vWrapper.appendChild(card);
+            });
+            buildVisionDots();
+            updateVisionOffsets();
+        }
+
+        function getVisionOffset(i) {
+            let o = i - vIndex;
+            const n = IMAGES.length;
+            if (o > n / 2) o -= n;
+            if (o < -n / 2) o += n;
+            return o;
+        }
+
+        function updateVisionOffsets() {
+            const cards = vWrapper.querySelectorAll('.vision-v2-card');
+            cards.forEach((card, i) => {
+                const off = getVisionOffset(i);
+                card.dataset.offset = Math.max(-2, Math.min(2, off));
+            });
+            updateVisionDots();
+        }
+
+        function buildVisionDots() {
+            if (!vDotsEl) return;
+            vDotsEl.innerHTML = '';
+            IMAGES.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'vision-v2-dot' + (i === vIndex ? ' active' : '');
+                dot.addEventListener('click', () => goToVision(i));
+                vDotsEl.appendChild(dot);
+            });
+        }
+
+        function updateVisionDots() {
+            if (!vDotsEl) return;
+            const dots = vDotsEl.querySelectorAll('.vision-v2-dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === vIndex));
+        }
+
+        function goToVision(idx) {
+            vIndex = ((idx % IMAGES.length) + IMAGES.length) % IMAGES.length;
+            updateVisionOffsets();
+        }
+
+        function goNext() { goToVision(vIndex + 1); }
+        function goPrev() { goToVision(vIndex - 1); }
+
+        if (vPrevBtn) vPrevBtn.addEventListener('click', () => { goPrev(); resetVisionAutoplay(); });
+        if (vNextBtn) vNextBtn.addEventListener('click', () => { goNext(); resetVisionAutoplay(); });
+
+        /* Player logic mirrors a-series */
+        function startVisionAutoplay() {
+            clearInterval(vAutoplayTimer);
+            vIsAutoPlaying = true;
+            vAutoplayTimer = setInterval(goNext, 2200);
+            if (vPlayIcon) vPlayIcon.style.display = 'none';
+            if (vPauseIcon) vPauseIcon.style.display = '';
+            document.getElementById('vision-autoplay-btn')?.classList.add('active');
+        }
+        function stopVisionAutoplay() {
+            clearInterval(vAutoplayTimer);
+            vIsAutoPlaying = false;
+            if (vPlayIcon) vPlayIcon.style.display = '';
+            if (vPauseIcon) vPauseIcon.style.display = 'none';
+            document.getElementById('vision-autoplay-btn')?.classList.remove('active');
+        }
+        function resetVisionAutoplay() { if (vIsAutoPlaying) { stopVisionAutoplay(); startVisionAutoplay(); } }
+
+        window.toggleVisionAutoplay = function () { vIsAutoPlaying ? stopVisionAutoplay() : startVisionAutoplay(); };
+        window.shuffleVisionCarousel = function () {
+            goToVision(Math.floor(Math.random() * IMAGES.length));
+            resetVisionAutoplay();
+        };
+        window.toggleVisionRepeat = function () {
+            vIsRepeat = !vIsRepeat;
+            document.getElementById('vision-repeat-btn')?.classList.toggle('active', vIsRepeat);
+        };
+        window.toggleVisionLike = function () {
+            vIsLiked = !vIsLiked;
+            document.getElementById('vision-like-btn')?.classList.toggle('active', vIsLiked);
+        };
+
+        buildVisionCards();
+    })();
 });
+
 
 /* ═══════════════════════════════════════════════════════════════
    A-SERIES™ PREMIUM SHOWCASE ENGINE
@@ -1233,7 +1378,9 @@ document.addEventListener('DOMContentLoaded', () => {
             card.dataset.index = i;
             card.innerHTML = `
                 <img class="aseries-card-img" src="${mod.img}" alt="${mod.label}" loading="lazy">
-                <div class="aseries-card-overlay"></div>
+                <div class="aseries-card-overlay">
+                    <div class="aseries-view-info">View Info</div>
+                </div>
                 <div class="aseries-card-info">
                     <span class="aseries-card-label">${mod.label}</span>
                     <span class="aseries-card-tag">${mod.tag}</span>
@@ -1405,6 +1552,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateModalContent(modalIndex);
         if (modal) {
             modal.classList.add('open');
+            document.body.classList.add('modal-active');
             modal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
         }
@@ -1412,6 +1560,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeAseriesModal = function () {
         if (modal) {
             modal.classList.remove('open');
+            document.body.classList.remove('modal-active');
             modal.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
         }

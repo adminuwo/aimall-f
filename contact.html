@@ -430,6 +430,62 @@
 
             window.addEventListener('load', () => {
                 setTimeout(() => document.getElementById('contact-hero').classList.add('active'), 500);
+
+                // --- Sequential Connect Cards Reveal (Mobile) ---
+                gsap.matchMedia().add("(max-width: 768px)", () => {
+                    const cards = document.querySelectorAll('.connect-grid .connect-card');
+                    const gatekeeper = document.querySelector('.connection-gatekeeper');
+
+                    if (cards.length > 0 && gatekeeper) {
+                        const tl = gsap.timeline({
+                            scrollTrigger: {
+                                trigger: gatekeeper,
+                                start: "top 10%",
+                                end: "+=220%",
+                                pin: true,
+                                scrub: 0.8
+                            }
+                        });
+
+                        // Initial state
+                        gsap.set(cards, { opacity: 0, visibility: 'hidden', scale: 0.9, y: 30 });
+                        gsap.set(cards[0], { opacity: 1, visibility: 'visible', scale: 1, y: 0 });
+
+                        // Transitions
+                        tl.to(cards[0], { opacity: 0, scale: 0.8, y: -50, duration: 1 })
+                          .to(cards[1], { opacity: 1, visibility: 'visible', scale: 1, y: 0, duration: 1 }, "-=0.2")
+                          .to(cards[1], { opacity: 0, scale: 0.8, y: -50, duration: 1 })
+                          .to(cards[2], { opacity: 1, visibility: 'visible', scale: 1, y: 0, duration: 1 }, "-=0.2");
+                    }
+                });
+
+                // --- Sequential Trust Cards Reveal (Mobile) ---
+                gsap.matchMedia().add("(max-width: 768px)", () => {
+                    const cards = document.querySelectorAll('.trust-grid .trust-card');
+                    const section = document.querySelector('.why-us-cinematic');
+
+                    if (cards.length > 0 && section) {
+                        const tl = gsap.timeline({
+                            scrollTrigger: {
+                                trigger: section,
+                                start: "top 10%",
+                                end: "+=220%",
+                                pin: true,
+                                scrub: 0.8
+                            }
+                        });
+
+                        // Initial state
+                        gsap.set(cards, { opacity: 0, visibility: 'hidden', x: "100%", scale: 0.9 });
+                        gsap.set(cards[0], { opacity: 1, visibility: 'visible', x: "0%", scale: 1 });
+
+                        // Transitions
+                        tl.to(cards[0], { opacity: 0, x: "-100%", scale: 0.8, duration: 1 })
+                          .to(cards[1], { opacity: 1, visibility: 'visible', x: "0%", scale: 1, duration: 1 }, "-=0.2")
+                          .to(cards[1], { opacity: 0, x: "-100%", scale: 0.8, duration: 1 })
+                          .to(cards[2], { opacity: 1, visibility: 'visible', x: "0%", scale: 1, duration: 1 }, "-=0.2");
+                    }
+                });
             });
         </script>
 

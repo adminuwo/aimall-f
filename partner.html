@@ -523,7 +523,7 @@
         <!-- PARTNER APPLICATION MODAL           -->
         <!-- ═══════════════════════════════════ -->
         <div id="partner-modal-overlay" onclick="closePartnerModal(event)"
-            style="display:none;position:fixed;inset:0;background:rgba(255,100,0,0.05);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);z-index:9000;align-items:center;justify-content:center;padding:20px;">
+            style="display:none;position:fixed;inset:0;background:rgba(11, 18, 32, 0.6);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);z-index:9000;align-items:center;justify-content:center;padding:20px;">
             <style>
                 #partner-modal::-webkit-scrollbar {
                     display: none;
@@ -532,11 +532,11 @@
                 #partner-modal .form-group input,
                 #partner-modal .form-group select,
                 #partner-modal .form-group textarea {
-                    padding: 28px 20px 12px !important;
-                    background: #fafafa !important;
-                    border: 1.5px solid rgba(140, 115, 64, 0.2) !important;
-                    border-radius: 14px !important;
-                    font-size: 1rem !important;
+                    padding: 24px 16px 8px !important;
+                    background: #f8faff !important;
+                    border: 1.5px solid rgba(42, 82, 190, 0.1) !important;
+                    border-radius: 10px !important;
+                    font-size: 0.9rem !important;
                     color: #1a202c !important;
                     width: 100% !important;
                     box-sizing: border-box !important;
@@ -544,7 +544,7 @@
                 }
 
                 #partner-modal .form-group textarea {
-                    padding-top: 35px !important;
+                    padding-top: 28px !important;
                     resize: none !important;
                 }
 
@@ -552,29 +552,29 @@
                 #partner-modal .form-group select:focus,
                 #partner-modal .form-group textarea:focus {
                     outline: none !important;
-                    border-color: #8c7340 !important;
-                    box-shadow: 0 0 0 3px rgba(140, 115, 64, 0.1) !important;
+                    border-color: #2a52be !important;
+                    box-shadow: 0 0 0 3px rgba(42, 82, 190, 0.1) !important;
                     background: white !important;
                 }
 
                 #partner-modal .form-group label {
                     position: absolute;
-                    left: 20px;
+                    left: 16px;
                     top: 50%;
                     transform: translateY(-50%);
-                    font-size: 0.95rem;
-                    color: rgba(26, 32, 44, 0.5);
+                    font-size: 0.85rem;
+                    color: rgba(42, 82, 190, 0.45);
                     pointer-events: none;
                     transition: all 0.25s ease;
                 }
 
                 #partner-modal .form-group.focused label,
                 #partner-modal .form-group.has-value label {
-                    top: 10px;
+                    top: 8px;
                     transform: translateY(0);
-                    font-size: 0.72rem;
+                    font-size: 0.65rem;
                     font-weight: 700;
-                    color: #8c7340;
+                    color: #2a52be;
                     text-transform: uppercase;
                     letter-spacing: 0.08em;
                 }
@@ -585,25 +585,24 @@
                 }
             </style>
             <div id="partner-modal" data-lenis-prevent
-                style="background:white;border:1px solid rgba(140,115,64,0.15);border-radius:28px;padding:50px;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,0.2);scrollbar-width:none;-ms-overflow-style:none;">
+                style="background:white;border:1px solid rgba(42, 82, 190, 0.1);border-radius:20px;padding:30px;width:100%;max-width:460px;max-height:85vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,0.25);scrollbar-width:none;-ms-overflow-style:none;">
                 <button onclick="closePartnerForm()"
-                    style="position:absolute;top:25px;right:25px;background:rgba(140,115,64,0.08);border:none;color:#8c7340;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;"
-                    onmouseover="this.style.background='rgba(255,77,109,0.1)';this.style.color='#ff4d6d'"
-                    onmouseout="this.style.background='rgba(140,115,64,0.08)';this.style.color='#8c7340'">✕</button>
+                    style="position:absolute;top:15px;right:15px;background:rgba(42, 82, 190, 0.06);border:none;color:#2a52be;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;"
+                    onmouseover="this.style.background='rgba(42, 82, 190, 0.15)';this.style.transform='rotate(90deg)'"
+                    onmouseout="this.style.background='rgba(42, 82, 190, 0.06)';this.style.transform='none'">✕</button>
 
-                <div style="margin-bottom:40px;">
+                <div style="margin-bottom:30px;">
                     <div
-                        style="font-size:.85rem;font-weight:800;letter-spacing:.25em;color:#8c7340;text-transform:uppercase;margin-bottom:12px;">
+                        style="font-size:.7rem;font-weight:800;letter-spacing:.2em;color:#2a52be;text-transform:uppercase;margin-bottom:8px;">
                         Partnership Application</div>
                     <h2
-                        style="font-size:2.4rem;font-weight:800;color:#1a202c;letter-spacing:-.03em;line-height:1.1;margin-bottom:10px;">
+                        style="font-size:1.7rem;font-weight:800;color:#0b1220;letter-spacing:-.03em;line-height:1.2;margin-bottom:6px;">
                         Apply to Partner <br>with AI-Mall™</h2>
-                    <p style="color:rgba(26,32,44,0.6);font-size:1rem;">Fill in your details and our team will reach out
-                        within 48 hours.</p>
+                    <p style="color:rgba(11, 18, 32, 0.6);font-size:0.85rem;">Join the future of global AI commerce.</p>
                 </div>
 
                 <form id="partner-form" onsubmit="handlePartnerSubmission(event)">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
                         <div class="form-group">
                             <input type="text" id="p-name" placeholder=" " required onfocus="setFocus(this)"
                                 onblur="removeFocus(this)">
@@ -615,12 +614,12 @@
                             <label for="p-company">Company *</label>
                         </div>
                     </div>
-                    <div style="margin-bottom:20px;" class="form-group">
+                    <div style="margin-bottom:12px;" class="form-group">
                         <input type="email" id="p-email" placeholder=" " required onfocus="setFocus(this)"
                             onblur="removeFocus(this)">
                         <label for="p-email">Email Address *</label>
                     </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
                         <div class="form-group">
                             <input type="tel" id="p-phone" placeholder=" " onfocus="setFocus(this)"
                                 onblur="removeFocus(this)">
@@ -632,7 +631,7 @@
                             <label for="p-website">Website</label>
                         </div>
                     </div>
-                    <div style="margin-bottom:20px;" class="form-group">
+                    <div style="margin-bottom:12px;" class="form-group">
                         <select id="p-type" required onfocus="setFocus(this)" onblur="removeFocus(this)"
                             onchange="checkSelect(this)">
                             <option value="" disabled selected></option>
@@ -645,21 +644,21 @@
                         </select>
                         <label for="p-type">Partnership Type *</label>
                     </div>
-                    <div style="margin-bottom:30px;" class="form-group">
-                        <textarea id="p-message" rows="4" placeholder=" " onfocus="setFocus(this)"
+                    <div style="margin-bottom:20px;" class="form-group">
+                        <textarea id="p-message" rows="3" placeholder=" " onfocus="setFocus(this)"
                             onblur="removeFocus(this)"></textarea>
-                        <label for="p-message">Tell us about your product</label>
+                        <label for="p-message">About your product</label>
                     </div>
 
                     <button type="submit" id="p-submit-btn"
-                        style="width:100%;padding:22px;border:none;border-radius:16px;background:#8c7340;color:white;font-size:1.1rem;font-weight:800;cursor:pointer;transition:all 0.4s;box-shadow:0 15px 35px rgba(140,115,64,0.25);text-transform:uppercase;letter-spacing:0.1em;"
-                        onmouseover="this.style.transform='translateY(-3px)';this.style.background='#735d33';this.style.boxShadow='0 20px 45px rgba(140,115,64,0.35)';"
-                        onmouseout="this.style.transform='none';this.style.background='#8c7340';this.style.boxShadow='0 15px 35px rgba(140,115,64,0.25)';">
+                        style="width:100%;padding:16px;border:none;border-radius:12px;background:#2a52be;color:white;font-size:0.95rem;font-weight:800;cursor:pointer;transition:all 0.4s;box-shadow:0 10px 25px rgba(42, 82, 190, 0.2);text-transform:uppercase;letter-spacing:0.08em;"
+                        onmouseover="this.style.transform='translateY(-2px)';this.style.background='#1e3a8a';this.style.boxShadow='0 15px 35px rgba(42, 82, 190, 0.35)';"
+                        onmouseout="this.style.transform='none';this.style.background='#2a52be';this.style.boxShadow='0 10px 30px rgba(42, 82, 190, 0.25)';">
                         <span id="p-btn-text">Submit Application →</span>
                         <span id="p-spinner" class="btn-loader" style="display:none;"></span>
                     </button>
                     <p id="p-success-msg"
-                        style="display:none;text-align:center;margin-top:20px;font-weight:700;font-size:1rem;"></p>
+                        style="display:none;text-align:center;margin-top:20px;font-weight:700;font-size:0.95rem;"></p>
                 </form>
             </div>
         </div>
@@ -731,7 +730,7 @@
             </div>
         <script>
             // Using global API configuration from main.js
-            const API_URL = window.API_BASE_URL || 'http://localhost:3001/api';
+            const API_URL = window.API_BASE_URL || 'http://localhost:3003/api';
 
             // ── Chatbot Functions ──
             function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
@@ -943,11 +942,26 @@
                 }
             });
 
+            // Mobile Dropdown Toggle
+            const pNav = document.querySelector('.p-type-nav');
+            if (pNav) {
+                pNav.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        pNav.classList.toggle('open');
+                    }
+                });
+            }
+
             // Allow click to jump to scroll position
             typeItems.forEach((item, index) => {
                 item.addEventListener('click', () => {
                     const scrollTarget = st.start + (index / typeItems.length) * (st.end - st.start) + 50;
                     window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                    
+                    // Close dropdown on mobile after selection
+                    if (window.innerWidth <= 768 && pNav) {
+                        pNav.classList.remove('open');
+                    }
                 });
             });
 
@@ -1009,15 +1023,12 @@
                 );
             }
 
-            // ── Hero Words Reveal (after loader) ──
-            const pWords = document.querySelectorAll('.p-word');
-            gsap.set(pWords, { opacity: 0, y: 40 });
-            // Will be triggered after loader hides (or immediately if no loader)
+            // ── Hero Elements Reveal ──
             const heroReveal = () => {
-                gsap.to(pWords, { opacity: 1, y: 0, duration: 0.9, stagger: 0.08, ease: 'expo.out', delay: 0.3 });
-                gsap.fromTo('.p-hero-badge', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.1 });
-                gsap.fromTo('.p-hero-sub', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.8 });
-                gsap.fromTo('.p-cta-btn', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 1.1 });
+                gsap.fromTo('.section-label', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+                gsap.fromTo('.headline', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', delay: 0.3 });
+                gsap.fromTo('.subheadline', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.6 });
+                gsap.fromTo('.cta-group', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.9 });
             };
 
             // Hook into loader completion

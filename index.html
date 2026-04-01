@@ -497,63 +497,122 @@
             </div>
         </div>
 
-        <!-- VISION SECTION (PREMIUM REDESIGN) -->
-        <section id="vision" class="scroll-section vision-premium-redesign">
-            <div class="container wide">
-                <div class="premium-main-card reveal-card-v3">
-                    <div class="premium-card-grid">
-                        <!-- Left Side: Text Area -->
-                        <div class="vision-text-area">
-                            <span class="v3-badge reveal-item">OUR OPERATING PHILOSOPHY</span>
-                            <h2 class="premium-heading reveal-heading-v3">
-                                Building the<br>
-                                <span class="premium-gradient-text">Intelligence Fabric.</span>
-                            </h2>
-                            <p class="premium-subtext reveal-item">
-                                AI-Mall is designed as a multi-layer intelligent commerce fabric that powers the next
-                                wave of digital transformation with seamless cognitive integration.
-                            </p>
-                            <div class="premium-cta-group reveal-item">
-                                <a href="a-series.html" class="btn-premium-glow">
-                                    Explore Ecosystem <span class="btn-icon">→</span>
-                                </a>
-                                <a href="partner.html" class="btn-premium-outline-v2">
-                                    Partner with Us
-                                </a>
-                            </div>
+        <!-- VISION SECTION (PREMIUM WHITE THEME REDESIGN) -->
+        <section id="vision" class="vision-v2-showcase scroll-section">
+            <!-- Background Elements for White Theme -->
+            <div class="vision-v2-bg">
+                <div class="vision-v2-blob blob-1"></div>
+                <div class="vision-v2-blob blob-2"></div>
+                <div class="vision-v2-blob blob-3"></div>
+            </div>
 
+            <div class="vision-v2-header">
+                <span class="vision-v2-eyebrow">OUR OPERATING PHILOSOPHY</span>
+            </div>
 
-                        </div>
-
-                        <!-- Right Side: Nested Card Area -->
-                        <div class="vision-card-area">
-                            <div class="nested-glass-card floating-vision-card" onclick="openPremiumModal()">
-                                <div class="nested-card-inner">
-                                    <div class="preview-grid">
-                                        <div class="grid-img-wrap"><img src="aimallproject/slide-1.png" alt="AI Visual">
-                                        </div>
-                                        <div class="grid-img-wrap"><img src="aimallproject/slide-2.png" alt="AI Visual">
-                                        </div>
-                                        <div class="grid-img-wrap"><img src="aimallproject/slide-3.png" alt="AI Visual">
-                                        </div>
-                                        <div class="grid-img-wrap"><img src="aimallproject/slide-4.png" alt="AI Visual">
-                                        </div>
-                                    </div>
-                                    <div class="card-hover-overlay">
-                                        <span>View Gallery</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Centered Try Now Button -->
-                            <div class="try-now-wrapper">
-                                <button class="btn-pill-premium" onclick="openPremiumModal()">
-                                    Try Now
-                                    <div class="btn-glow"></div>
-                                </button>
-                            </div>
-                        </div>
+            <div class="vision-v2-inner">
+                <!-- RIGHT: Text Content (Order 2) -->
+                <div class="vision-v2-text-col">
+                    <h2 class="vision-v2-heading">
+                        <span class="vision-v2-heading-line">Building the</span>
+                        <span class="vision-v2-heading-line vision-v2-gradient-text">Intelligence Fabric.</span>
+                    </h2>
+                    <p class="vision-v2-subtext">
+                        AI-Mall is designed as a multi-layer intelligent commerce fabric that powers the next wave of
+                        digital transformation with seamless cognitive integration.
+                    </p>
+                    <div class="vision-v2-cta-row">
+                        <a href="a-series.html" class="vision-v2-btn-primary">
+                            Explore Ecosystem
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </a>
+                        <a href="partner.html" class="vision-v2-btn-ghost">Partner With Us</a>
                     </div>
                 </div>
+
+                <!-- RIGHT: Floating Carousel -->
+                <div class="vision-v2-carousel-col">
+                    <div class="vision-v2-carousel-wrapper" id="vision-carousel-wrapper">
+                        <!-- Cards rendered by JS -->
+                    </div>
+
+                    <!-- Navigation Controls -->
+                    <div class="vision-v2-nav-row">
+                        <button class="vision-v2-nav-btn" id="vision-prev" aria-label="Previous image">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </button>
+                        <div class="vision-v2-dots" id="vision-dots"></div>
+                        <button class="vision-v2-nav-btn" id="vision-next" aria-label="Next image">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Bottom Player Controls -->
+                    <div class="vision-v2-player-controls">
+                        <button class="vision-v2-player-btn" id="vision-like-btn" title="Like"
+                            onclick="toggleVisionLike()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button class="vision-v2-player-btn" id="vision-shuffle-btn" title="Shuffle"
+                            onclick="shuffleVisionCarousel()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="16 3 21 3 21 8"></polyline>
+                                <line x1="4" y1="20" x2="21" y2="3"></line>
+                                <polyline points="21 16 21 21 16 21"></polyline>
+                                <line x1="15" y1="15" x2="21" y2="21"></line>
+                                <line x1="4" y1="4" x2="9" y2="9"></line>
+                            </svg>
+                        </button>
+                        <button class="vision-v2-player-btn vision-v2-play-main" id="vision-autoplay-btn"
+                            title="Auto-Play" onclick="toggleVisionAutoplay()">
+                            <svg id="vision-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            <svg id="vision-pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
+                                style="display:none;">
+                                <rect x="6" y="4" width="4" height="16"></rect>
+                                <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                        </button>
+                        <button class="vision-v2-player-btn" id="vision-repeat-btn" title="Loop"
+                            onclick="toggleVisionRepeat()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                <polyline points="7 23 3 19 7 15"></polyline>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                        </button>
+                        <button class="vision-v2-player-btn" id="vision-volume-btn" title="Volume">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vision-v2-tagline">
+                <span>The Intelligence Layer for Autonomous Commerce.</span>
+                <div class="vision-v2-tagline-line"></div>
             </div>
         </section>
 
@@ -593,10 +652,12 @@
                     <div class="footer-social-hub">
                         <h4>Connect</h4>
                         <div class="social-links">
-                            <a href="https://www.instagram.com/aimall.global/" class="social-icon" aria-label="Instagram">
+                            <a href="https://www.instagram.com/aimall.global/" class="social-icon"
+                                aria-label="Instagram">
                                 <img src="logos/instagram.png" alt="Instagram">
                             </a>
-                            <a href="https://www.linkedin.com/in/aimall-global/" class="social-icon" aria-label="LinkedIn">
+                            <a href="https://www.linkedin.com/in/aimall-global/" class="social-icon"
+                                aria-label="LinkedIn">
                                 <img src="logos/linked.png" alt="LinkedIn">
                             </a>
                             <a href="https://x.com/aimallglobal" class="social-icon" aria-label="X">
@@ -608,7 +669,8 @@
                             <a href="https://www.facebook.com/aimallglobal/" class="social-icon" aria-label="Facebook">
                                 <img src="logos/facebook.png" alt="Facebook">
                             </a>
-                            <a href="https://api.whatsapp.com/send?phone=918359890909" class="social-icon" aria-label="WhatsApp">
+                            <a href="https://api.whatsapp.com/send?phone=918359890909" class="social-icon"
+                                aria-label="WhatsApp">
                                 <img src="logos/whatsapp.png" alt="WhatsApp">
                             </a>
                             <a href="mailto:admin@uwo24.com" class="social-icon" aria-label="Gmail">
@@ -618,88 +680,87 @@
                                 <img src="logos/thread.png" alt="Threads">
                             </a>
                         </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="footer-divider"></div>
+            <div class="footer-divider"></div>
 
-                <div class="footer-bottom">
-                    <div class="footer-legal">
-                        <p>© 2026 Unified Web Options. All rights reserved.</p>
-                        <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
-                    </div>
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <p>© 2026 Unified Web Options. All rights reserved.</p>
+                    <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
                 </div>
+            </div>
             </div>
         </footer>
     </main>
 
     <!-- PREMIUM CHATBOT — EFV™ STYLE -->
-        <div id="ai-chat-assistant">
-            <div class="chat-tooltip" id="chat-tooltip">Ask me anything</div>
-            <div class="chat-orb chatbot-chat-icon" onclick="toggleChat()">
-                <img src="logos/BOT.png" alt="AI Chatbot" style="width: 100%; height: 100%; object-fit: contain;">
+    <div id="ai-chat-assistant">
+        <div class="chat-tooltip" id="chat-tooltip">Ask me anything</div>
+        <div class="chat-orb chatbot-chat-icon" onclick="toggleChat()">
+            <img src="logos/BOT.png" alt="AI Chatbot" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+    </div>
+
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <div class="chat-brand">
+                <div class="chat-logo-icon" onclick="openAdmin()" style="cursor:pointer;"><img src="logos/Logo.png"
+                        alt="AI-Mall" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+                <div class="chat-title-group">
+                    <h4>AI-Mall™ Assistance</h4>
+                    <div class="status-dot"></div>
+                </div>
+            </div>
+            <div class="chat-close" onclick="toggleChat()">✕</div>
+        </div>
+
+        <div class="chat-body" id="chat-body-view">
+            <div id="registration-view" class="registration-view">
+                <div class="reg-welcome">Join AI-Mall™ Intelligence</div>
+                <form class="reg-form" id="chat-reg-form" onsubmit="handleChatReg(event)">
+                    <input type="text" id="chat-reg-name" class="reg-input" placeholder="Full Name *" required>
+                    <input type="email" id="chat-reg-email" class="reg-input" placeholder="Email Address *" required>
+                    <button type="submit" class="reg-btn">
+                        <span>Join Now</span>
+                    </button>
+                </form>
+            </div>
+            <div id="chat-messages" class="chat-messages" style="display:none; flex-direction:column; gap:15px;">
+                <div class="chat-msg msg-ai">Hi, I'm aisa-sout1. How can I help you today?</div>
             </div>
         </div>
 
-        <div id="chat-window" class="chat-window">
-            <div class="chat-header">
-                <div class="chat-brand">
-                    <div class="chat-logo-icon" onclick="openAdmin()" style="cursor:pointer;"><img src="logos/Logo.png"
-                            alt="AI-Mall" style="width:100%; height:100%; object-fit:contain;">
-                    </div>
-                    <div class="chat-title-group">
-                        <h4>AI-Mall™ Assistance</h4>
-                        <div class="status-dot"></div>
-                    </div>
-                </div>
-                <div class="chat-close" onclick="toggleChat()">✕</div>
-            </div>
-
-            <div class="chat-body" id="chat-body-view">
-                <div id="registration-view" class="registration-view">
-                    <div class="reg-welcome">Join AI-Mall™ Intelligence</div>
-                    <form class="reg-form" id="chat-reg-form" onsubmit="handleChatReg(event)">
-                        <input type="text" id="chat-reg-name" class="reg-input" placeholder="Full Name *" required>
-                        <input type="email" id="chat-reg-email" class="reg-input" placeholder="Email Address *"
-                            required>
-                        <button type="submit" class="reg-btn">
-                            <span>Join Now</span>
-                        </button>
-                    </form>
-                </div>
-                <div id="chat-messages" class="chat-messages" style="display:none; flex-direction:column; gap:15px;">
-                    <div class="chat-msg msg-ai">Hi, I'm aisa-sout1. How can I help you today?</div>
-                </div>
-            </div>
-
-            <div class="chat-footer">
-                <div class="chat-input-row">
-                    <input type="text" id="chat-main-input" class="chat-text-input"
-                        placeholder="Register above to chat..." readonly>
-                    <button class="chat-action-btn mic">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5">
-                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                            <line x1="12" y1="19" x2="12" y2="23" />
-                            <line x1="8" y1="23" x2="16" y2="23" />
-                        </svg>
-                    </button>
-                    <button class="chat-action-btn send" onclick="sendMessage()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5">
-                            <path d="M22 2L11 13" />
-                            <path d="M22 2L15 22L11 13L2 9L22 2z" />
-                        </svg>
-                    </button>
-                </div>
+        <div class="chat-footer">
+            <div class="chat-input-row">
+                <input type="text" id="chat-main-input" class="chat-text-input" placeholder="Register above to chat..."
+                    readonly>
+                <button class="chat-action-btn mic">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                        <line x1="12" y1="19" x2="12" y2="23" />
+                        <line x1="8" y1="23" x2="16" y2="23" />
+                    </svg>
+                </button>
+                <button class="chat-action-btn send" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2L15 22L11 13L2 9L22 2z" />
+                    </svg>
+                </button>
             </div>
         </div>
+    </div>
 
-        <script>
-            // AISA™ Chatbot logic moved to main.js for cross-page persistence
-        </script>
+    <script>
+        // AISA™ Chatbot logic moved to main.js for cross-page persistence
+    </script>
 
     <!-- Premium Gallery Modal (Music Player UI) -->
     <div id="premium-gallery-modal" class="premium-modal">

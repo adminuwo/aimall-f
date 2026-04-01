@@ -570,10 +570,10 @@
                             single, seamless flow powered by Google Vertex AI.
                         </p>
 
-                        <div class="aisa-features-scroll-wrapper">
+                        <div class="aisa-features-scroll-wrapper" data-lenis-prevent>
                             <div class="aisa-features-grid">
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon">🧠</div>
+                                    <div class="af-icon"><img src="logos/3d_brain.png" alt="Brain icon"></div>
                                     <div class="af-text">
                                         <strong>High-Reasoning Core</strong>
                                         <p>Gemini Pro & Flash integration for complex coding, scientific analysis, and
@@ -581,7 +581,7 @@
                                     </div>
                                 </div>
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon">🎨</div>
+                                    <div class="af-icon"><img src="logos/3d_media.png" alt="Media icon"></div>
                                     <div class="af-text">
                                         <strong>Media Studio (Veo 3.1)</strong>
                                         <p>Cinematic HD Video and Image generation via Imagen 4.0 with generative
@@ -589,7 +589,7 @@
                                     </div>
                                 </div>
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon">🗂️</div>
+                                    <div class="af-icon"><img src="logos/3d_rag.png" alt="RAG icon"></div>
                                     <div class="af-text">
                                         <strong>Vertex RAG Engine</strong>
                                         <p>Secure, private knowledge bases allowing you to chat with proprietary docs
@@ -597,7 +597,7 @@
                                     </div>
                                 </div>
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon">⚡</div>
+                                    <div class="af-icon"><img src="logos/3d_magic.png" alt="Magic icon"></div>
                                     <div class="af-text">
                                         <strong>Magic Operations</strong>
                                         <p>Deep Search research, Code-writer, and multi-language Voice Synthesis (TTS)
@@ -648,31 +648,57 @@
         // Set initial state for cards (hidden below)
         gsap.set(".upcoming-card", { y: 80, opacity: 0 });
 
-        const doorTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#upcoming-reveal",
-                start: "top top",
-                end: "+=250%",
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1
-            }
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 769px)", () => {
+            const doorTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#upcoming-reveal",
+                    start: "top top",
+                    end: "+=250%",
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1
+                }
+            });
+            doorTl.to(".door-left", { xPercent: -110, duration: 1, ease: "power2.inOut" }, 0)
+                .to(".door-right", { xPercent: 110, duration: 1, ease: "power2.inOut" }, 0)
+                .to(".door-inner-text.left", { xPercent: -50, opacity: 0, duration: 0.8 }, 0)
+                .to(".door-inner-text.right", { xPercent: 50, opacity: 0, duration: 0.8 }, 0)
+                .to(".upcoming-card", { y: 0, opacity: 1, stagger: 0.15, duration: 0.8, ease: "power3.out" }, 0.4);
         });
 
-        // Doors slide open
-        doorTl.to(".door-left", { xPercent: -110, duration: 1, ease: "power2.inOut" }, 0)
-            .to(".door-right", { xPercent: 110, duration: 1, ease: "power2.inOut" }, 0)
-            // Text slides/fades with doors
-            .to(".door-inner-text.left", { xPercent: -50, opacity: 0, duration: 0.8 }, 0)
-            .to(".door-inner-text.right", { xPercent: 50, opacity: 0, duration: 0.8 }, 0)
-            // Cards animate in with stagger after doors start opening
-            .to(".upcoming-card", {
-                y: 0,
-                opacity: 1,
-                stagger: 0.15,
-                duration: 0.8,
-                ease: "power3.out"
-            }, 0.4);
+        mm.add("(max-width: 768px)", () => {
+            const doorTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#upcoming-reveal",
+                    start: "top top",
+                    end: "+=320%", // Faster sensitivity
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1
+                }
+            });
+
+            gsap.set(".upcoming-grid", { display: "block", position: "relative", height: "65vh", width: "100%" });
+            gsap.set(".upcoming-card", { 
+                position: "absolute", top: "50%", left: "50%", 
+                xPercent: -50, yPercent: -50, y: 0,
+                width: "90%", maxWidth: "340px", opacity: 0, visibility: "hidden" 
+            });
+
+            doorTl.to(".door-left", { xPercent: -110, duration: 1 }, 0)
+                .to(".door-right", { xPercent: 110, duration: 1 }, 0)
+                .to(".door-inner-text", { opacity: 0, duration: 0.5 }, 0);
+
+            const cards = gsap.utils.toArray(".upcoming-card");
+            cards.forEach((card, i) => {
+                doorTl.to(card, { opacity: 1, visibility: "visible", y: 0, duration: 1, ease: "power2.out" });
+                if (i < cards.length - 1) {
+                    doorTl.to(card, { opacity: 0, visibility: "hidden", y: -20, duration: 0.6 });
+                }
+            });
+        });
 
         // --- Redeigned Coming Soon Support ---
         ScrollTrigger.create({
