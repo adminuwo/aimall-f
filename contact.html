@@ -33,7 +33,7 @@
 
     <!-- Header / Navigation -->
     <header id="header">
-        <div class="logo" onclick="window.location.href='index.html'">
+        <div class="logo" onclick="openAdmin()">
             <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
         </div>
         <nav id="nav-menu">
@@ -131,7 +131,7 @@
                                 scale and digital transformation.</p>
                         </div>
 
-                        <div class="hq-card" style="margin-top: 30px;">
+                        <div class="hq-card" style="margin-top: 15px;">
                             <div class="section-label">Intelligence Ecosystem</div>
                             <h3>AI-Mall<span class="tm">™</span></h3>
                             <p class="medium-body text-muted">The definitive marketplace for <br> enterprise-grade AI
@@ -253,7 +253,7 @@
             </div>
         </div>
 
-        <div id="chat-window" class="chat-window">
+        <div id="chat-window" class="chat-window" data-lenis-prevent>
             <div class="chat-header">
                 <div class="chat-brand">
                     <div class="chat-logo-icon" onclick="openAdmin()" style="cursor:pointer;"><img
@@ -281,7 +281,7 @@
                 </div>
                 <div id="chat-messages" class="chat-messages"
                     style="display:none; flex-direction:column; gap:15px;">
-                    <div class="chat-msg msg-ai">Hi, I'm aisa-sout1. How can I help you today?</div>
+                    <div class="chat-msg msg-ai">Hi, I'm AI-Mall™ Assistance. How can I help you today?</div>
                 </div>
             </div>
 
@@ -289,7 +289,7 @@
                 <div class="chat-input-row">
                     <input type="text" id="chat-main-input" class="chat-text-input"
                         placeholder="Register above to chat..." readonly>
-                    <button class="chat-action-btn mic">
+                    <button class="chat-action-btn mic" onclick="toggleVoiceRec()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2.5">
                             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
@@ -308,47 +308,7 @@
                 </div>
             </div>
         </div>
-        <script>
-            function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
-            function handleChatReg(e) {
-                e.preventDefault();
-                const n = document.getElementById('chat-reg-name').value;
-                localStorage.setItem('chat_registered', 'true');
-                localStorage.setItem('chat_user', n);
-                document.getElementById('registration-view').style.display = 'none';
-                document.getElementById('chat-messages').style.display = 'flex';
-                const i = document.getElementById('chat-main-input');
-                i.placeholder = "Type message..."; i.readOnly = false;
-                const m = document.getElementById('chat-messages');
-                const w = document.createElement('div'); w.className = 'chat-msg msg-ai'; w.textContent = "Thank you for joining, " + n + "! How can I assist you further?";
-                m.appendChild(w);
-            }
-            function sendMessage() {
-                const i = document.getElementById('chat-main-input'); const val = i.value.trim(); if (!val || i.readOnly) return;
-                const m = document.getElementById('chat-messages'); const u = document.createElement('div'); u.className = 'chat-msg msg-user'; u.textContent = val; m.appendChild(u);
-                i.value = ""; setTimeout(() => {
-                    const a = document.createElement('div'); a.className = 'chat-msg msg-ai'; a.textContent = "Our nodes are processing your request. One of our experts will contact you soon."; m.appendChild(a); m.scrollTop = m.scrollHeight;
-                }, 1000);
-            }
-            function openAdmin() {
-                const email = prompt("Enter Admin Email:");
-                if (email === "admin@uwo24.com") {
-                    const pass = prompt("Enter Password:");
-                    if (pass === "admin@123") {
-                        sessionStorage.setItem('admin_auth', 'true');
-                        window.location.href = "admin.html";
-                    } else {
-                        alert("Incorrect Password!");
-                    }
-                }
-            }
-            window.addEventListener('DOMContentLoaded', () => {
-                if (localStorage.getItem('chat_registered') === 'true') {
-                    document.getElementById('registration-view').style.display = 'none'; document.getElementById('chat-messages').style.display = 'flex';
-                    const i = document.getElementById('chat-main-input'); i.placeholder = "Type message..."; i.readOnly = false;
-                }
-            });
-        </script>
+
 
         <!-- Legal Modal (Terms & Privacy) -->
         <div id="legal-modal" class="legal-modal">
@@ -366,7 +326,7 @@
     <!-- Scripts -->
         <script>
             // Using global API configuration from main.js
-            const API_URL = window.API_BASE_URL || 'http://localhost:3001/api';
+            const API_URL = window.API_BASE_URL || 'http://localhost:3003/api';
 
             function setFocus(el) { el.parentElement.classList.add('focused'); }
             function removeFocus(el) { el.parentElement.classList.remove('focused'); checkContent(el); }
@@ -424,9 +384,7 @@
                 }
             }
 
-            function toggleChat() {
-                document.getElementById('chat-window').classList.toggle('active');
-            }
+
 
             window.addEventListener('load', () => {
                 setTimeout(() => document.getElementById('contact-hero').classList.add('active'), 500);
@@ -441,7 +399,7 @@
                             scrollTrigger: {
                                 trigger: gatekeeper,
                                 start: "top 10%",
-                                end: "+=220%",
+                                end: "+=110%",
                                 pin: true,
                                 scrub: 0.8
                             }
@@ -469,7 +427,7 @@
                             scrollTrigger: {
                                 trigger: section,
                                 start: "top 10%",
-                                end: "+=220%",
+                                end: "+=110%",
                                 pin: true,
                                 scrub: 0.8
                             }
@@ -567,6 +525,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>
 </body>
 

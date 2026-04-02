@@ -17,6 +17,8 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="logos/Logo.png">
+
+    <link rel="icon" type="image/png" href="logos/Logo.png">
 </head>
 
 <body class="aseries-page">
@@ -105,7 +107,7 @@
                     <div class="stack-card glass glow-on-hover" id="card-aibiz" data-tilt>
                         <div class="card-left">
                             <div class="card-icon-main">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.30.00 PM.jpeg">
+                                <img src="logos/aibiz_logo.jpeg">
                             </div>
                         </div>
                         <div class="card-right">
@@ -126,7 +128,7 @@
                     <div class="stack-card glass glow-on-hover" id="card-aistream" data-tilt>
                         <div class="card-left">
                             <div class="card-icon-main">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.29.15 PM.jpeg">
+                                <img src="logos/aibase_logo.jpeg">
                             </div>
                         </div>
                         <div class="card-right">
@@ -147,7 +149,7 @@
                     <div class="stack-card glass glow-on-hover" id="card-aicraft" data-tilt>
                         <div class="card-left">
                             <div class="card-icon-main">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.28.03 PM.jpeg">
+                                <img src="logos/aihire_logo.jpeg">
                             </div>
                         </div>
                         <div class="card-right">
@@ -169,7 +171,7 @@
                     <div class="stack-card glass glow-on-hover" id="card-aioffice" data-tilt>
                         <div class="card-left">
                             <div class="card-icon-main">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.35.34 PM.jpeg">
+                                <img src="logos/aisales_logo.jpeg">
                             </div>
                         </div>
                         <div class="card-right">
@@ -190,7 +192,7 @@
                     <div class="stack-card glass glow-on-hover" id="card-aistudio" data-tilt>
                         <div class="card-left">
                             <div class="card-icon-main">
-                                <img src="  logos/AIwrite.png">
+                                <img src="logos/AIwrite.png">
                             </div>
                         </div>
                         <div class="card-right">
@@ -234,7 +236,7 @@
                     <div class="stack-card glass glow-on-hover" id="card-aidesk" data-tilt>
                         <div class="card-left">
                             <div class="card-icon-main">
-                                <img src="logos/WhatsApp Image 2026-03-23 at 1.34.18 PM.jpeg">
+                                <img src="logos/aipersonal_logo.jpeg">
                             </div>
                         </div>
                         <div class="card-right">
@@ -491,7 +493,7 @@
         </div>
     </div>
 
-    <div id="chat-window" class="chat-window">
+    <div id="chat-window" class="chat-window" data-lenis-prevent>
         <div class="chat-header">
             <div class="chat-brand">
                 <div class="chat-logo-icon" onclick="openAdmin()" style="cursor:pointer;"><img src="logos/Logo.png"
@@ -517,7 +519,7 @@
                 </form>
             </div>
             <div id="chat-messages" class="chat-messages" style="display:none; flex-direction:column; gap:15px;">
-                <div class="chat-msg msg-ai">Hi, I'm aisa-sout1. How can I help you today?</div>
+                <div class="chat-msg msg-ai">Hi, I'm AI-Mall™ Assistance. How can I help you today?</div>
             </div>
         </div>
 
@@ -525,7 +527,7 @@
             <div class="chat-input-row">
                 <input type="text" id="chat-main-input" class="chat-text-input" placeholder="Register above to chat..."
                     readonly>
-                <button class="chat-action-btn mic">
+                <button class="chat-action-btn mic" onclick="toggleVoiceRec()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2.5">
                         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
@@ -741,6 +743,7 @@
             }
         }
     </script>
+    <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>
 </body>
 

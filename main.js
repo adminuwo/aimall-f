@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ? 'http://localhost:3003/api'
         : '/api'; // Use relative path if proxied, or replace with absolute URL
 
+    // ── Global Interface Controls ──
+    // (Consolidated in gateway.js for cinematic performance)
+
     // ═══════════════════════════════════════════
     // 1. LENIS SMOOTH SCROLL
     // ═══════════════════════════════════════════
@@ -689,7 +692,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animateCursor();
 
     // Hover effects for cursor
-    const interactiveEls = 'a, button, .pillar-card, .aseries-nav-btn, .aseries-btn-primary, .v3-btn-premium-cta, [data-tilt]';
+    const interactiveEls = 'a, button, .chat-close, .chat-orb, .pillar-card, .aseries-nav-btn, .aseries-btn-primary, .v3-btn-premium-cta, [data-tilt]';
     document.querySelectorAll(interactiveEls).forEach(el => {
         el.addEventListener('mouseenter', () => {
             cursorBlur.style.width = '60px';
@@ -756,20 +759,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════
     // 9. PREMIUM CHATBOT LOGIC (AISA™)
     // ═══════════════════════════════════════════
+    let lastChatToggle = 0;
     window.toggleChat = () => {
+        const now = Date.now();
+        if (now - lastChatToggle < 400) return; // Prevent double-triggering
+        lastChatToggle = now;
+
         const win = document.getElementById('chat-window');
         const tooltip = document.getElementById('chat-tooltip');
         const orb = document.querySelector('.chatbot-chat-icon');
 
         if (win) {
+            console.log('🔄 Toggling Chat Window');
             win.classList.toggle('active');
-            // Hide engagement elements when chat is opened
+            
             if (win.classList.contains('active')) {
                 if (tooltip) tooltip.classList.remove('visible');
                 if (orb) orb.classList.remove('active-pop');
             }
         }
     };
+
+    // Robust Close Listener with absolute propagation stop
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.chat-close')) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🎯 Close Button Hit (Global Intercept)');
+            window.toggleChat();
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const win = document.getElementById('chat-window');
+            if (win && win.classList.contains('active')) {
+                window.toggleChat();
+            }
+        }
+    });
 
     // Proactive Chatbot Engagement (trigger after delay)
     // Delay: 45 seconds for a premium, non-intrusive feel
@@ -887,7 +916,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                     firstChunk = false;
                                 }
                                 fullText += data.text;
-                                aiMsg.textContent = fullText;
+                                
+                                // Simple markdown-to-HTML parser (Refined for spacing)
+                                let processedText = fullText
+                                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                                    .split('\n').map(line => {
+                                        let trimmed = line.trim();
+                                        if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
+                                            return `<li>${trimmed.substring(2)}</li>`;
+                                        }
+                                        return trimmed;
+                                    }).join('\n');
+
+                                // Group <li> into <ul> and handle line breaks concisely
+                                aiMsg.innerHTML = processedText
+                                    .replace(/(<li>.*?<\/li>[\n\s]*)+/g, (match) => {
+                                        return `<ul style="margin: 4px 0;">${match.trim().replace(/\n/g, '')}</ul>`;
+                                    })
+                                    .replace(/\n\n+/g, '<br>') // Collapse multiple newlines to a single break
+                                    .replace(/\n/g, '<br>');   // Map single newline to single break
+                                
                                 msgBox.scrollTop = msgBox.scrollHeight;
                             }
                         } catch (e) { /* partial chunk */ }
@@ -1292,19 +1340,19 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             label: 'Ai-Hire™',
             tag: 'Recruitment AI',
-            img: 'logos/WhatsApp Image 2026-03-23 at 1.28.03 PM.jpeg',
+            img: 'logos/aihire_logo.jpeg',
             desc: 'AI-powered recruitment engine that screens, ranks, and interviews candidates — cutting time-to-hire by 70%.'
         },
         {
             label: 'Ai-Base™',
             tag: 'Knowledge AI',
-            img: 'logos/WhatsApp Image 2026-03-23 at 1.29.15 PM.jpeg',
+            img: 'logos/aibase_logo.jpeg',
             desc: 'Enterprise knowledge management powered by RAG. Instantly surface answers from your organization\'s entire data corpus.'
         },
         {
             label: 'Ai-Biz™',
             tag: 'Business AI',
-            img: 'logos/WhatsApp Image 2026-03-23 at 1.30.00 PM.jpeg',
+            img: 'logos/aibiz_logo.jpeg',
             desc: 'End-to-end business intelligence module. Automate decisions, forecast trends, and power data-driven growth.'
         },
         {
@@ -1328,13 +1376,13 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             label: 'Ai-SuperAssistance™',
             tag: 'Cognitive AI',
-            img: 'logos/WhatsApp Image 2026-03-23 at 1.34.18 PM.jpeg',
+            img: 'logos/aipersonal_logo.jpeg',
             desc: 'Omni-channel intelligent assistant with memory, context, and enterprise integrations. Your AI co-pilot.'
         },
         {
             label: 'Ai-Sales™',
             tag: 'Revenue AI',
-            img: 'logos/WhatsApp Image 2026-03-23 at 1.35.34 PM.jpeg',
+            img: 'logos/aisales_logo.jpeg',
             desc: 'Predictive sales intelligence that scores leads, drafts outreach, and closes the loop on revenue growth.'
         }
     ];
@@ -1667,22 +1715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     }
 
-    /* ══════════════════════════════
-       INIT
-    ══════════════════════════════ */
     buildCards();
     initParticles();
     setupReveal();
-
-
-    setupReveal();
-
 })();
-
-
-function toggleChat() {
-    const chatWindow = document.getElementById('chat-window');
-    if (!chatWindow) return;
-    chatWindow.classList.toggle('active');
-}
-
