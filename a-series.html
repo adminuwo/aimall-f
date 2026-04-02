@@ -359,24 +359,28 @@
                                     <div class="preview-grid">
                                         <!-- AISA Card -->
                                         <div class="pipeline-block">
+                                            <div class="block-icon"><img src="logos/3d_brain.png" alt="AISA"></div>
                                             <div class="block-badge">AISA™</div>
                                             <div class="block-title">Autonomous Agent</div>
                                             <div class="block-desc">Real-time workflows & memory layers.</div>
                                         </div>
                                         <!-- AI Calling Card -->
                                         <div class="pipeline-block">
+                                            <div class="block-icon"><img src="logos/3d_magic.png" alt="Calling"></div>
                                             <div class="block-badge">AI Calling™</div>
                                             <div class="block-title">Voice Intelligence</div>
                                             <div class="block-desc">Cognitive telephony response systems.</div>
                                         </div>
-                                        <!-- Neuro-Link (Placeholder for 3rd) -->
+                                        <!-- Neuro-Link -->
                                         <div class="pipeline-block">
+                                            <div class="block-icon"><img src="logos/3d_rag.png" alt="RAG"></div>
                                             <div class="block-badge">Core™</div>
                                             <div class="block-title">Neural Engine</div>
                                             <div class="block-desc">Orchestration logic for deep integration.</div>
                                         </div>
-                                        <!-- One platform (Placeholder for 4th) -->
+                                        <!-- Scale -->
                                         <div class="pipeline-block">
+                                            <div class="block-icon"><img src="logos/3d_automation.png" alt="Scale"></div>
                                             <div class="block-badge">Scale™</div>
                                             <div class="block-title">Enterprise Hub</div>
                                             <div class="block-desc">Global deployment & sync architecture.</div>
@@ -387,6 +391,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="mobile-view-more" onclick="window.openAisaModal()">View more <span class="v-chevron">↓</span></div>
                         </div>
                     </div>
                 </div>
@@ -617,7 +622,8 @@
                         </div>
 
                         <div class="aisa-modal-cta">
-                            <a href="contact.html" class="btn-premium-glow">Request Early Access</a>
+                            <a href="https://tally.so/r/w2v8O6" target="_blank" class="btn-premium-glow">Request Early Access</a>
+                            <a href="javascript:void(0)" onclick="closeAisaModal()" class="btn-premium-outline-v2 mobile-cancel-btn">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -714,7 +720,7 @@
         });
 
         // AISA Modal Controls
-        function openAisaModal() {
+        window.openAisaModal = function() {
             const modal = document.getElementById('aisa-modal');
             const video = document.getElementById('aisa-video');
             if (modal) {
@@ -731,9 +737,9 @@
                     { opacity: 1, x: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.4 }
                 );
             }
-        }
+        };
 
-        function closeAisaModal() {
+        window.closeAisaModal = function() {
             const modal = document.getElementById('aisa-modal');
             const video = document.getElementById('aisa-video');
             if (modal) {
@@ -741,7 +747,7 @@
                 document.body.style.overflow = '';
                 if (video) video.pause();
             }
-        }
+        };
     </script>
     <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>

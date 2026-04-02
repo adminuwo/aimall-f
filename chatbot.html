@@ -237,7 +237,7 @@ header{
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const API = window.location.hostname === 'localhost' ? 'http://localhost:3003' : '';
+const API = window.location.hostname === 'localhost' ? 'http://localhost:8080' : '';
 const sessionId = 'sess_' + Math.random().toString(36).slice(2,10);
 let chatHistory = [];
 let isStreaming = false;
@@ -426,7 +426,7 @@ async function send(preset) {
     removeTyping();
     addMsg('ai', '', {});
     const last = document.querySelector('.msg.ai:last-child .bubble');
-    if (last) last.innerHTML = `<span class="error-msg">⚠️ Connection error: ${err.message}<br><small>Is the backend running on port 3003?</small></span>`;
+    if (last) last.innerHTML = `<span class="error-msg">⚠️ Connection error: ${err.message}<br><small>Is the backend running on port 8080?</small></span>`;
   }
 
   isStreaming = false;

@@ -3,10 +3,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── Global API Configuration ──
-    // Change this to your production backend URL (e.g., https://your-backend-service.a.run.app)
+    // Production Backend URL (Cloud Run)
     window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:3003/api'
-        : '/api'; // Use relative path if proxied, or replace with absolute URL
+        ? 'http://localhost:8080/api'
+        : 'https://aimall-b-246449377479.asia-south1.run.app/api';
 
     // ── Global Interface Controls ──
     // (Consolidated in gateway.js for cinematic performance)
@@ -189,6 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loaderOverlay) loaderOverlay.style.display = 'none';
         body.classList.remove('loading');
         body.classList.remove('onboarding-active');
+        // Ensure chatbot is visible if already onboarded
+        if (chatAssistant) {
+            chatAssistant.classList.remove('ai-chat-hidden');
+            chatAssistant.style.opacity = '1';
+            chatAssistant.style.visibility = 'visible';
+        }
         startHeroAnimations();
     }
 
@@ -1167,9 +1173,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = modal?.querySelector('.legal-modal-card');
         if (modal && contentBox && legalContent[type]) {
             contentBox.innerHTML = legalContent[type];
-            if (card) card.setAttribute('data-lenis-prevent', ''); // Prevent Lenis from blocking scroll
-            modal.classList.add('active');
-            document.body.classList.add('modal-active');
+            // Ensure card exists and set attribute before showing
+            if (card) {
+                card.setAttribute('data-lenis-prevent', 'true');
+                card.scrollTop = 0;
+            }
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
             document.body.style.overflow = 'hidden';
             if (window.lenis) window.lenis.stop();
         }
@@ -1179,9 +1189,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('legal-modal');
         if (modal) {
             modal.classList.remove('active');
-            document.body.classList.remove('modal-active');
-            document.body.style.overflow = '';
-            if (window.lenis) window.lenis.start();
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                if (window.lenis) window.lenis.start();
+            }, 500);
         }
     };
 

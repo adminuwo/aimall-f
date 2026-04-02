@@ -465,7 +465,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const API = window.location.hostname === 'localhost' ? 'http://localhost:3003' : '';
+const API = window.location.hostname === 'localhost' ? 'http://localhost:8080' : '';
 let TOKEN = localStorage.getItem('rag_token') || '';
 let currentUser = JSON.parse(localStorage.getItem('rag_user') || '{}');
 let logFilter = '';
