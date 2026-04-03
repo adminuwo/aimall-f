@@ -820,7 +820,7 @@
                 spinner.style.display = 'block';
 
                 try {
-                    const res = await fetch(`${API_URL}/partner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                    const res = await fetch(`${API_URL}/api/partner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
                     const result = await res.json();
                     spinner.style.display = 'none';
                     if (result.success) {

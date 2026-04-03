@@ -716,7 +716,7 @@
                 ADMIN_KEY = 'efvframework';
 
                 // Test auth with backend
-                fetch(`${API}/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })
+                fetch(`${API}/api/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })
                     .then(r => {
                         if (!r.ok) throw new Error("Auth failed");
                         return r.json();
@@ -783,7 +783,7 @@
 
         // ── Stats ──
         function loadStats() {
-            fetch(`${API}/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/admin/stats`, { headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(r => r.json())
                 .then(({ stats }) => {
                     const el1 = document.getElementById('new-contacts-badge');
@@ -795,7 +795,7 @@
 
         // ── Contacts ──
         function loadContacts() {
-            fetch(`${API}/admin/contacts`, { headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/admin/contacts`, { headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(r => r.json())
                 .then(({ data, total }) => {
                     allContacts = data;
@@ -850,7 +850,7 @@
         }
 
         function updateContactStatus(id, status) {
-            fetch(`${API}/admin/contact/${id}/status`, {
+            fetch(`${API}/api/admin/contact/${id}/status`, {
                 method: 'PATCH', headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
                 body: JSON.stringify({ status })
             }).then(() => { showToast('Status updated ✓', 'success'); loadContacts(); loadStats(); });
@@ -858,13 +858,13 @@
 
         function deleteContact(id) {
             if (!confirm('Delete this enquiry?')) return;
-            fetch(`${API}/admin/contact/${id}`, { method: 'DELETE', headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/admin/contact/${id}`, { method: 'DELETE', headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(() => { showToast('Deleted ✓', 'success'); loadContacts(); loadStats(); });
         }
 
         // ── Partners ──
         function loadPartners() {
-            fetch(`${API}/admin/partners`, { headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/admin/partners`, { headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(r => r.json())
                 .then(({ data, total }) => {
                     allPartners = data;
@@ -921,7 +921,7 @@
         }
 
         function updatePartnerStatus(id, status) {
-            fetch(`${API}/admin/partner/${id}/status`, {
+            fetch(`${API}/api/admin/partner/${id}/status`, {
                 method: 'PATCH', headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
                 body: JSON.stringify({ status })
             }).then(() => { showToast(`Application ${status} ✓`, 'success'); loadPartners(); loadStats(); });
@@ -929,13 +929,13 @@
 
         function deletePartner(id) {
             if (!confirm('Delete this application?')) return;
-            fetch(`${API}/admin/partner/${id}`, { method: 'DELETE', headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/admin/partner/${id}`, { method: 'DELETE', headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(() => { showToast('Deleted ✓', 'success'); loadPartners(); loadStats(); });
         }
 
         // ── RAG Documents ──
         function loadDocuments() {
-            fetch(`${API}/documents`, { headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/documents`, { headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(r => r.json())
                 .then(({ data }) => {
                     const tbody = document.getElementById('docs-tbody');
@@ -989,7 +989,7 @@
             progText.textContent = '0%';
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', `${API}/documents/upload`);
+            xhr.open('POST', `${API}/api/documents/upload`);
             xhr.setRequestHeader('x-admin-key', ADMIN_KEY);
 
             xhr.upload.onprogress = (e) => {
@@ -1024,7 +1024,7 @@
 
         function deleteDocument(id) {
             if (!confirm('Permanently remove this document from knowledge base?')) return;
-            fetch(`${API}/documents/${id}`, { method: 'DELETE', headers: { 'x-admin-key': ADMIN_KEY } })
+            fetch(`${API}/api/documents/${id}`, { method: 'DELETE', headers: { 'x-admin-key': ADMIN_KEY } })
                 .then(r => r.json())
                 .then(res => {
                     if (res.success) {

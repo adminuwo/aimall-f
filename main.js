@@ -977,7 +977,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const baseUrl = window.API_BASE_URL;
-            const response = await fetch(`${baseUrl}/rag/chat/stream`, {
+            // Standardize path with /api prefix
+            const response = await fetch(`${baseUrl}/api/rag/chat/stream`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: val, sessionId: 'floating-assistant' }),
