@@ -42,7 +42,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:none;}}
 .login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
 .login-logo .icon{width:44px;height:44px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:22px;}
-.login-logo h1{font-size:20px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.login-logo h1{font-size:20px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .login-card p{color:var(--text2);margin-bottom:28px;font-size:14px;}
 .field{margin-bottom:16px;}
 .field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;}
@@ -70,7 +70,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;
 }
 .sidebar-logo{padding:24px 20px;border-bottom:1px solid var(--glass-border);}
-.sidebar-logo .brand{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sidebar-logo .brand{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .sidebar-logo small{font-size:11px;color:var(--text3);display:block;margin-top:2px;}
 nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
 .nav-item{
@@ -86,7 +86,7 @@ nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
 .user-badge{display:flex;align-items:center;gap:8px;padding:10px;border-radius:8px;background:var(--glass);}
 .user-badge .avatar{width:32px;height:32px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
 .user-badge .info{flex:1;min-width:0;}
-.user-badge .info .name{font-size:12px;font-weight:600;truncate:ellipsis;}
+.user-badge .info .name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .user-badge .info .role{font-size:10px;color:var(--text3);}
 .btn-logout{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:4px;}
 
@@ -126,7 +126,7 @@ nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,142,247,.1);}
 .stat-card:hover::before{opacity:.04;}
 .stat-icon{font-size:28px;margin-bottom:12px;}
-.stat-val{font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-val{font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .stat-label{font-size:12px;color:var(--text2);margin-top:4px;}
 
 /* ── Section Header ── */
@@ -218,11 +218,12 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .score-fill{height:100%;border-radius:2px;background:var(--grad);}
 
 /* ── Responsive ── */
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%);}
-  .main{margin-left:0;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
+/* Global Cinematic Text Reveal */
+.smooth-reveal {
+  opacity:0;filter:blur(8px);transform:translateY(24px);
+  transition:opacity 1.2s cubic-bezier(.23,1,.32,1),filter 1.2s cubic-bezier(.23,1,.32,1),transform 1.2s cubic-bezier(.23,1,.32,1);
 }
+.smooth-reveal.active {opacity:1;filter:blur(0);transform:none;}
 </style>
 </head>
 <body>
@@ -461,11 +462,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
 <!-- Toast -->
 <div id="toast"></div>
 
+<!-- Config -->
+<script src="config.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const API = window.location.hostname === 'localhost' ? 'http://localhost:8080' : '';
+const API = "%VITE_API_BASE_URL%";
 let TOKEN = localStorage.getItem('rag_token') || '';
 let currentUser = JSON.parse(localStorage.getItem('rag_user') || '{}');
 let logFilter = '';
@@ -840,9 +843,22 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 function formatBytes(b) { if(!b) return '0B'; if(b<1024) return b+'B'; if(b<1048576) return (b/1024).toFixed(1)+'KB'; return (b/1048576).toFixed(1)+'MB'; }
 function fmtDate(d) { return new Date(d).toLocaleString('en-IN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); }
 
+// --- Smooth Reveal Init for Admin ---
+function initAdminReveals() {
+  const obs = new IntersectionObserver((es) => {
+    es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('revealed'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('h1,h2,h3,h4,p,li,.stat-val,.stat-label,.badge').forEach(el => {
+    el.classList.add('smooth-reveal');
+    obs.observe(el);
+  });
+}
+window.addEventListener('DOMContentLoaded', initAdminReveals);
+
 // Auto-refresh docs every 5s if on KB page
 setInterval(() => {
-  if (document.getElementById('page-knowledgeBase').classList.contains('active')) {
+  const kb = document.getElementById('page-knowledgeBase');
+  if (kb && kb.classList.contains('active')) {
     loadDocuments();
   }
 }, 5000);

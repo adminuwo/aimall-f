@@ -16,9 +16,8 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="logos/Logo.png">
+    <link rel="icon" type="image/png" href="/logos/Logo.png">
 
-    <link rel="icon" type="image/png" href="logos/Logo.png">
 </head>
 
 <body class="aseries-page">
@@ -35,7 +34,7 @@
 
     <!-- Header / Navigation -->
     <header id="header">
-        <div class="logo" onclick="window.location.href='index.html'">
+        <div class="logo" onclick="openAdmin()">
             <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
         </div>
         <nav id="nav-menu">
@@ -50,6 +49,7 @@
                 <a href="partner.html" class="nav-btn-link">Partner</a>
                 <a href="a-series.html" class="btn-pill-small">Explore</a>
             </div>
+
             <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Toggle Menu">
                 <span class="bar top"></span>
                 <span class="bar mid"></span>
@@ -359,28 +359,28 @@
                                     <div class="preview-grid">
                                         <!-- AISA Card -->
                                         <div class="pipeline-block">
-                                            <div class="block-icon"><img src="logos/3d_brain.png" alt="AISA"></div>
+                                            <div class="block-icon"><img src="/logos/3d_brain.png" alt="AISA"></div>
                                             <div class="block-badge">AISA™</div>
                                             <div class="block-title">Autonomous Agent</div>
                                             <div class="block-desc">Real-time workflows & memory layers.</div>
                                         </div>
                                         <!-- AI Calling Card -->
                                         <div class="pipeline-block">
-                                            <div class="block-icon"><img src="logos/3d_magic.png" alt="Calling"></div>
+                                            <div class="block-icon"><img src="/logos/3d_magic.png" alt="Calling"></div>
                                             <div class="block-badge">AI Calling™</div>
                                             <div class="block-title">Voice Intelligence</div>
                                             <div class="block-desc">Cognitive telephony response systems.</div>
                                         </div>
                                         <!-- Neuro-Link -->
                                         <div class="pipeline-block">
-                                            <div class="block-icon"><img src="logos/3d_rag.png" alt="RAG"></div>
+                                            <div class="block-icon"><img src="/logos/3d_rag.png" alt="RAG"></div>
                                             <div class="block-badge">Core™</div>
                                             <div class="block-title">Neural Engine</div>
                                             <div class="block-desc">Orchestration logic for deep integration.</div>
                                         </div>
                                         <!-- Scale -->
                                         <div class="pipeline-block">
-                                            <div class="block-icon"><img src="logos/3d_automation.png" alt="Scale"></div>
+                                            <div class="block-icon"><img src="/logos/3d_automation.png" alt="Scale"></div>
                                             <div class="block-badge">Scale™</div>
                                             <div class="block-title">Enterprise Hub</div>
                                             <div class="block-desc">Global deployment & sync architecture.</div>
@@ -482,7 +482,12 @@
             <div class="footer-bottom">
                 <div class="footer-legal">
                     <p>© 2026 Unified Web Options. All rights reserved.</p>
-                    <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
+                    <p class="footer-trademark">
+                        <a href="https://aimall24.com" target="_blank">AI-MALL™</a>, 
+                        <a href="https://aseries.in" target="_blank">A-SERIES™</a>, 
+                        <a href="https://uwo24.com" target="_blank">UWO™</a>, 
+                        <a href="https://aisa24.com" target="_blank">AISA™</a> ARE PROPRIETARY TRADEMARKS.
+                    </p>
                 </div>
             </div>
             </div>
@@ -562,13 +567,13 @@
                 <div class="aisa-modal-grid">
                     <div class="aisa-video-side">
                         <div class="aisa-video-container">
-                            <video id="aisa-video" src="intro.mp4" loop muted playsinline></video>
+                            <video id="aisa-video" src="/intro.mp4" loop muted playsinline></video>
                             <div class="aisa-video-overlay"></div>
                         </div>
                     </div>
                     <div class="aisa-info-side">
                         <div class="aisa-modal-brand">
-                            <img src="logos/AISA.png" alt="AISA Logo" class="aisa-modal-logo">
+                            <img src="/logos/AISA.png" alt="AISA Logo" class="aisa-modal-logo">
                         </div>
                         <div class="aisa-modal-badge">AISA™ PLATFORM ARCHITECTURE</div>
                         <h2 class="aisa-modal-title">Autonomous Intelligence</h2>
@@ -580,7 +585,7 @@
                         <div class="aisa-features-scroll-wrapper" data-lenis-prevent>
                             <div class="aisa-features-grid">
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon"><img src="logos/3d_brain.png" alt="Brain icon"></div>
+                                    <div class="af-icon"><img src="/logos/3d_brain.png" alt="Brain icon"></div>
                                     <div class="af-text">
                                         <strong>High-Reasoning Core</strong>
                                         <p>Gemini Pro & Flash integration for complex coding, scientific analysis, and
@@ -588,7 +593,7 @@
                                     </div>
                                 </div>
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon"><img src="logos/3d_media.png" alt="Media icon"></div>
+                                    <div class="af-icon"><img src="/logos/3d_media.png" alt="Media icon"></div>
                                     <div class="af-text">
                                         <strong>Media Studio (Veo 3.1)</strong>
                                         <p>Cinematic HD Video and Image generation via Imagen 4.0 with generative
@@ -596,7 +601,7 @@
                                     </div>
                                 </div>
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon"><img src="logos/3d_rag.png" alt="RAG icon"></div>
+                                    <div class="af-icon"><img src="/logos/3d_rag.png" alt="RAG icon"></div>
                                     <div class="af-text">
                                         <strong>Vertex RAG Engine</strong>
                                         <p>Secure, private knowledge bases allowing you to chat with proprietary docs
@@ -604,7 +609,7 @@
                                     </div>
                                 </div>
                                 <div class="aisa-feature-item">
-                                    <div class="af-icon"><img src="logos/3d_magic.png" alt="Magic icon"></div>
+                                    <div class="af-icon"><img src="/logos/3d_magic.png" alt="Magic icon"></div>
                                     <div class="af-text">
                                         <strong>Magic Operations</strong>
                                         <p>Deep Search research, Code-writer, and multi-language Voice Synthesis (TTS)
@@ -613,6 +618,7 @@
                                 </div>
                             </div>
                         </div>
+                        <button class="aisa-mobile-close-btn" onclick="closeAisaModal()">Close</button>
 
                         <div class="aisa-tech-row reveal-item">
                             <span class="tech-tag">Vite</span>
@@ -749,6 +755,7 @@
             }
         };
     </script>
+    <script src="config.js"></script>
     <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>
 </body>

@@ -292,10 +292,10 @@ body.onboarding-active {
 }
 
 #welcome-card {
-    background: rgba(255, 255, 255, 0.5); /* Added semi-transparent white for visibility */
-    backdrop-filter: blur(20px); /* Adjusted blur */
+    background: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(20px); 
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border for definition */
+    border: 1px solid rgba(255, 255, 255, 0.3); 
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15); 
     border-radius: 28px;
     padding: 45px 40px;
@@ -303,6 +303,7 @@ body.onboarding-active {
     width: 90%;
     text-align: center;
     position: absolute;
+    overflow: hidden; /* For background logo */
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -363,10 +364,46 @@ body.onboarding-active {
 }
 
 #welcome-card p {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: #475569;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
     line-height: 1.6;
+}
+
+.welcome-card-bg-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    opacity: 0.05;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.welcome-tagline {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #2a52be;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.welcome-bullets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.welcome-card-content {
+    position: relative;
+    z-index: 1;
 }
 
 .welcome-buttons {

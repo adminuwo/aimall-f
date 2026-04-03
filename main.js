@@ -2,11 +2,11 @@
 // Smooth Scroll + Universal Reveal System
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ── Global API Configuration ──
-    // Production Backend URL (Cloud Run)
-    window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:8080/api'
-        : 'https://aimall-b-246449377479.asia-south1.run.app/api';
+    // ── Neural Gateway Configuration (Strictly from Frontend Env) ──
+    window.API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    if (!window.API_BASE_URL) {
+        console.error("VITE_API_BASE_URL is not defined in the environment. API calls will fail.");
+    }
 
     // ── Global Interface Controls ──
     // (Consolidated in gateway.js for cinematic performance)
@@ -69,14 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Touch device detection to hide custom cursor
+    // Touch device detection
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) {
-        const cursor = document.getElementById('cursor');
-        const cursorBlur = document.getElementById('cursor-blur');
-        if (cursor) cursor.style.display = 'none';
-        if (cursorBlur) cursorBlur.style.display = 'none';
-        document.body.style.cursor = 'auto';
+        // Handle touch-specific behaviors if needed
     }
 
 
@@ -569,6 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hstripOuter = document.getElementById('hstrip-outer');
     const hstripTrack = document.getElementById('hstrip-track');
     const hstripProgress = document.getElementById('hstrip-progress');
+    const hstripDots = document.getElementById('hstrip-dots');
+    const dots = [];
 
     if (hstripOuter && hstripTrack) {
         const items = hstripTrack.querySelectorAll('.hstrip-item');
@@ -581,28 +579,158 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         );
 
-        // Drag to scroll
-        let isDown = false, startX, scrollLeft;
-        hstripOuter.addEventListener('mousedown', (e) => { isDown = true; hstripOuter.classList.add('is-dragging'); startX = e.pageX - hstripOuter.offsetLeft; scrollLeft = hstripOuter.scrollLeft; });
-        hstripOuter.addEventListener('mouseleave', () => { isDown = false; hstripOuter.classList.remove('is-dragging'); });
-        hstripOuter.addEventListener('mouseup', () => { isDown = false; hstripOuter.classList.remove('is-dragging'); });
-        hstripOuter.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            hstripOuter.scrollLeft = scrollLeft - (e.pageX - hstripOuter.offsetLeft - startX) * 1.5;
+        // Inertial Drag Utility
+        let isDown = false, startX, scrollLeft, vel = 0, lastX;
+        hstripOuter.addEventListener('mousedown', (e) => {
+            isDown = true;
+            hstripOuter.classList.add('is-dragging');
+            startX = e.pageX - hstripOuter.offsetLeft;
+            scrollLeft = hstripOuter.scrollLeft;
+            cancelAnimationFrame(scrollInertia);
         });
+        hstripOuter.addEventListener('mouseleave', () => { isDown = false; hstripOuter.classList.remove('is-dragging'); });
+        hstripOuter.addEventListener('mouseup', () => { isDown = false; hstripOuter.classList.remove('is-dragging'); applyInertia(); });
 
-        // Progress + active tracking
-        hstripOuter.addEventListener('scroll', () => {
-            const max = hstripOuter.scrollWidth - hstripOuter.clientWidth;
-            if (hstripProgress) hstripProgress.style.width = (max > 0 ? (hstripOuter.scrollLeft / max) * 100 : 0) + '%';
-            const cx = hstripOuter.scrollLeft + hstripOuter.clientWidth / 2;
-            items.forEach(item => {
-                item.classList.toggle('is-active', Math.abs(cx - (item.offsetLeft + item.offsetWidth / 2)) < item.offsetWidth * 0.6);
+        let scrollInertia;
+        const applyInertia = () => {
+            if (Math.abs(vel) < 0.1) return;
+            hstripOuter.scrollLeft += vel;
+            vel *= 0.95; // Inertia damping
+            scrollInertia = requestAnimationFrame(applyInertia);
+        };
+
+        // Function to smoothly center any item
+        const scrollToItem = (index) => {
+            if (!items[index]) return;
+            const target = items[index];
+            const targetScroll = target.offsetLeft - (hstripOuter.clientWidth / 2) + (target.offsetWidth / 2);
+
+            gsap.to(hstripOuter, {
+                scrollLeft: targetScroll,
+                duration: 1.2,
+                ease: "expo.inOut",
+                overwrite: true
+            });
+        };
+
+        // Navigation Buttons Logic
+        const hPrev = document.getElementById('hstrip-prev');
+        const hNext = document.getElementById('hstrip-next');
+
+        const getActiveIndex = () => {
+            const viewportCenter = hstripOuter.scrollLeft + hstripOuter.clientWidth / 2;
+            let closestIndex = 0;
+            let minDiff = Infinity;
+            items.forEach((item, i) => {
+                const diff = Math.abs((item.offsetLeft + item.offsetWidth / 2) - viewportCenter);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestIndex = i;
+                }
+            });
+            return closestIndex;
+        };
+
+        if (hPrev) hPrev.onclick = () => scrollToItem(getActiveIndex() - 1);
+        if (hNext) hNext.onclick = () => scrollToItem(getActiveIndex() + 1);
+
+        // Generate Dots with precise hit areas
+        if (hstripDots) {
+            hstripDots.innerHTML = '';
+            items.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'hstrip-dot';
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    scrollToItem(i);
+                };
+                hstripDots.appendChild(dot);
+                dots.push(dot);
+            });
+        }
+
+        const updateArc = () => {
+            const viewportCenter = hstripOuter.scrollLeft + hstripOuter.clientWidth / 2;
+            const scrollMax = hstripOuter.scrollWidth - hstripOuter.clientWidth;
+            if (hstripProgress) hstripProgress.style.width = (scrollMax > 0 ? (hstripOuter.scrollLeft / scrollMax) * 100 : 0) + '%';
+
+            items.forEach((item, i) => {
+                const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+                const distance = itemCenter - viewportCenter;
+                const normalizedDist = Math.max(-2, Math.min(2, distance / (hstripOuter.clientWidth / 1.2)));
+
+                // ARC TRANSFORMS - PRECISION ENGINE
+                const rotateY = normalizedDist * -32;
+                const scale = 1.1 - Math.abs(normalizedDist) * 0.22;
+                const translateZ = -Math.abs(normalizedDist) * 180;
+                const opacity = 1 - Math.abs(normalizedDist) * 0.45;
+                const blur = 0; // Clearer view as requested
+
+
+                gsap.set(item, {
+                    rotateY: rotateY,
+                    scale: Math.max(0.65, scale),
+                    translateZ: translateZ,
+                    opacity: Math.max(0.3, opacity),
+                    filter: `blur(${blur}px)`,
+                    zIndex: Math.round(100 - Math.abs(normalizedDist) * 80)
+                });
+
+                // Detect center card for dots
+                const isActive = Math.abs(distance) < (item.offsetWidth / 2);
+                item.classList.toggle('is-active', isActive);
+
+                if (isActive && dots[i]) {
+                    dots.forEach(d => d.classList.remove('active'));
+                    dots[i].classList.add('active');
+                }
+            });
+        };
+
+        // Navigation Sync Logic (Handled in the refined block above)
+
+
+        hstripOuter.addEventListener('scroll', updateArc);
+        window.addEventListener('resize', updateArc);
+        updateArc();
+
+        // Click to Focus / Center Card
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetScroll = item.offsetLeft - (hstripOuter.clientWidth / 2) + (item.offsetWidth / 2);
+                gsap.to(hstripOuter, {
+                    scrollLeft: targetScroll,
+                    duration: 0.8,
+                    ease: 'power3.inOut'
+                });
             });
         });
 
-        if (items.length > 0) items[0].classList.add('is-active');
+        // Mouse Move Interaction (Micro-tilts)
+        hstripOuter.addEventListener('mousemove', (e) => {
+            if (isDown) {
+                e.preventDefault();
+                const x = e.pageX - hstripOuter.offsetLeft;
+                const walk = (x - startX) * 2.2; // Slightly faster drag
+                hstripOuter.scrollLeft = scrollLeft - walk;
+                vel = (x - lastX) * 2;
+                lastX = x;
+            } else {
+                // Subtle tilt for the visible cards
+                const rect = hstripOuter.getBoundingClientRect();
+                const mx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
+                items.forEach(item => {
+                    if (item.classList.contains('is-active')) {
+                        gsap.to(item, {
+                            rotateX: (e.clientY / window.innerHeight - 0.5) * -15,
+                            rotateY: (mx * 10) + (parseFloat(item.style.rotateY) || 0), // Base arc + tilt
+                            duration: 0.6,
+                            ease: 'power2.out'
+                        });
+                    }
+                });
+            }
+        });
     }
 
     // ── Trust / Connect Grid (Contact page) ──
@@ -655,79 +783,40 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
-    // ═══════════════════════════════════════════
-    // 6. SMOOTH CUSTOM CURSOR & TEXT REVEAL
-    // ═══════════════════════════════════════════
+    // 6. LOGIC CLEANUP
+    // (Custom cursor removed to restore default system pointer)
 
-    // Create Cursor Elements if missing
-    let cursor = document.getElementById('cursor');
-    let cursorBlur = document.getElementById('cursor-blur');
+    // --- Global Smooth Cinematic Text Reveal ---
+    const revealObserverOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -10px 0px"
+    };
 
-    if (!cursor) {
-        cursor = document.createElement('div');
-        cursor.id = 'cursor';
-        cursor.className = 'custom-cursor';
-        document.body.appendChild(cursor);
-    }
-    if (!cursorBlur) {
-        cursorBlur = document.createElement('div');
-        cursorBlur.id = 'cursor-blur';
-        cursorBlur.className = 'custom-cursor-follower';
-        document.body.appendChild(cursorBlur);
-    }
-
-    let mouseX = 0, mouseY = 0, ballX = 0, ballY = 0, blurX = 0, blurY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    function animateCursor() {
-        // Smooth interpolation
-        ballX += (mouseX - ballX) * 0.15;
-        ballY += (mouseY - ballY) * 0.15;
-        blurX += (mouseX - blurX) * 0.1;
-        blurY += (mouseY - blurY) * 0.1;
-
-        cursor.style.transform = `translate3d(${mouseX - 4}px, ${mouseY - 4}px, 0)`;
-        cursorBlur.style.transform = `translate3d(${blurX - 20}px, ${blurY - 20}px, 0)`;
-
-        requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-
-    // Hover effects for cursor
-    const interactiveEls = 'a, button, .chat-close, .chat-orb, .pillar-card, .aseries-nav-btn, .aseries-btn-primary, .v3-btn-premium-cta, [data-tilt]';
-    document.querySelectorAll(interactiveEls).forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursorBlur.style.width = '60px';
-            cursorBlur.style.height = '60px';
-            cursorBlur.style.backgroundColor = 'rgba(42, 82, 190, 0.1)';
-            cursor.style.transform += ' scale(2.5)';
-        });
-        el.addEventListener('mouseleave', () => {
-            cursorBlur.style.width = '40px';
-            cursorBlur.style.height = '40px';
-            cursorBlur.style.backgroundColor = 'rgba(42, 82, 190, 0.05)';
-            cursor.style.transform = cursor.style.transform.replace(' scale(2.5)', '');
-        });
-    });
-
-    // --- Global Smooth Text Reveal ---
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('active');
+                entry.target.classList.add('revealed');
                 revealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, revealObserverOptions);
 
-    // Apply reveal class to all text-heavy elements
-    const textSelectors = 'h1, h2, h3, h4, h5, h6, p, .v3-badge, .aseries-subtext, .subheadline';
+    // Apply reveal class to all text-heavy elements across all pages
+    const textSelectors = [
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'li', 'span:not(.nav-logo-text)',
+        '.v3-badge', '.aseries-subtext', '.subheadline', '.section-label',
+        '.module-title', '.module-desc', '.footer-link',
+        '.stat-num', '.stat-label', '.lt-uwo-badge', '.lt-feat-text',
+        '.m-badge', '.m-word', '.min-val', '.min-label', '.hstrip-label',
+        '.hstrip-title', '.hstrip-item-title', '.hstrip-item-desc',
+        '.founder-name', '.founder-role', '.founder-quote', '.founder-bio',
+        '.trait-chip', '.v-num', '.v-lbl'
+    ].join(', ');
+
     document.querySelectorAll(textSelectors).forEach(el => {
-        el.classList.add('smooth-reveal');
+        if (!el.classList.contains('smooth-reveal')) {
+            el.classList.add('smooth-reveal');
+        }
         revealObserver.observe(el);
     });
 
@@ -778,7 +867,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (win) {
             console.log('🔄 Toggling Chat Window');
             win.classList.toggle('active');
-            
+
             if (win.classList.contains('active')) {
                 if (tooltip) tooltip.classList.remove('visible');
                 if (orb) orb.classList.remove('active-pop');
@@ -922,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     firstChunk = false;
                                 }
                                 fullText += data.text;
-                                
+
                                 // Simple markdown-to-HTML parser (Refined for spacing)
                                 let processedText = fullText
                                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
@@ -941,7 +1030,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     })
                                     .replace(/\n\n+/g, '<br>') // Collapse multiple newlines to a single break
                                     .replace(/\n/g, '<br>');   // Map single newline to single break
-                                
+
                                 msgBox.scrollTop = msgBox.scrollHeight;
                             }
                         } catch (e) { /* partial chunk */ }
@@ -1006,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.currentPremiumIndex = 0; // Reset or sync
             window.updatePremiumImage();
             document.body.style.overflow = 'hidden';
-            
+
             // Auto-start playing when opened
             window.startGalleryAutoPlay();
         }
@@ -1247,7 +1336,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const offset = getVisionOffset(i);
                     if (offset === 0) {
                         if (typeof window.openPremiumModal === 'function') {
-                           window.openPremiumModal(i);
+                            window.openPremiumModal(i);
                         }
                     } else {
                         goToVision(i);

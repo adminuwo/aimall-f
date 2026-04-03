@@ -120,7 +120,7 @@ header{
 }
 .welcome .icon{font-size:56px;margin-bottom:16px;display:block;animation:float 4s ease infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.welcome h2{font-size:22px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.welcome h2{font-size:22px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
 .welcome p{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px;}
 .suggestions{display:flex;flex-direction:column;gap:8px;}
 .suggestion{
@@ -175,6 +175,13 @@ header{
 .load-bar{width:200px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
 .load-fill{height:100%;background:var(--grad);border-radius:2px;animation:load-anim 1.8s ease forwards;}
 @keyframes load-anim{from{width:0%;}to{width:100%;}}
+
+/* Global Cinematic Text Reveal */
+.smooth-reveal {
+  opacity:0;filter:blur(8px);transform:translateY(24px);
+  transition:opacity 1.2s cubic-bezier(.23,1,.32,1),filter 1.2s cubic-bezier(.23,1,.32,1),transform 1.2s cubic-bezier(.23,1,.32,1);
+}
+.smooth-reveal.revealed {opacity:1;transform:none;}
 </style>
 </head>
 <body>
@@ -182,7 +189,7 @@ header{
 <!-- Loader -->
 <div id="loadOverlay">
   <div class="load-logo">🤖</div>
-  <div style="font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">AISA</div>
+  <div style="font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">AISA</div>
   <div style="font-size:12px;color:var(--text2);">Initializing AI Knowledge System…</div>
   <div class="load-bar"><div class="load-fill"></div></div>
 </div>
@@ -237,7 +244,7 @@ header{
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const API = window.location.hostname === 'localhost' ? 'http://localhost:8080' : '';
+const API = "%VITE_API_BASE_URL%";
 const sessionId = 'sess_' + Math.random().toString(36).slice(2,10);
 let chatHistory = [];
 let isStreaming = false;
@@ -433,6 +440,18 @@ async function send(preset) {
   document.getElementById('sendBtn').disabled = false;
   document.getElementById('msgInput').focus();
 }
+
+// --- Smooth Reveal Init for Chatbot ---
+function initChatReveals() {
+  const obs = new IntersectionObserver((es) => {
+    es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('revealed'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('h1,h2,p,.suggestion').forEach(el => {
+    el.classList.add('smooth-reveal');
+    obs.observe(el);
+  });
+}
+window.addEventListener('load', initChatReveals);
 </script>
 </body>
 </html>

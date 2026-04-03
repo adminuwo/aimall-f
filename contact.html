@@ -325,8 +325,8 @@
 
     <!-- Scripts -->
         <script>
-            // Using global API configuration from main.js
-            const API_URL = window.API_BASE_URL || 'http://localhost:8080/api';
+            // Using global API configuration (Strictly Env)
+            const API_URL = "%VITE_API_BASE_URL%";
 
             function setFocus(el) { el.parentElement.classList.add('focused'); }
             function removeFocus(el) { el.parentElement.classList.remove('focused'); checkContent(el); }
@@ -513,7 +513,12 @@
                 <div class="footer-bottom">
                     <div class="footer-legal">
                         <p>© 2026 Unified Web Options. All rights reserved.</p>
-                        <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
+                        <p class="footer-trademark">
+                            <a href="https://aimall24.com" target="_blank">AI-MALL™</a>, 
+                            <a href="https://aseries.in" target="_blank">A-SERIES™</a>, 
+                            <a href="https://uwo24.com" target="_blank">UWO™</a>, 
+                            <a href="https://aisa24.com" target="_blank">AISA™</a> ARE PROPRIETARY TRADEMARKS.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -525,6 +530,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="config.js"></script>
     <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>
 </body>

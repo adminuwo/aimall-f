@@ -101,23 +101,30 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar glass">
-        <div class="container nav-container">
-            <a href="index.html" class="logo">
-                <img src="logos/Logo.png" alt="AI-Mall Logo" style="height: 40px; width: auto;">
-            </a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="a-series.html">A-Series™</a>
-                <a href="partner.html">Partner</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-            </div>
-            <div class="nav-actions">
-                <button class="btn btn-primary-nav" onclick="location.href='contact.html'">Access Ecosystem</button>
-            </div>
+    <header id="header">
+        <div class="logo" onclick="openAdmin()">
+            <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
         </div>
-    </nav>
+        <nav id="nav-menu">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="a-series.html" class="nav-link">A-Series™</a>
+            <a href="partner.html" class="nav-link">Partners</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <div class="header-actions">
+            <div class="header-cta desktop-only">
+                <a href="partner.html" class="nav-btn-link">Partner</a>
+                <a href="a-series.html" class="btn-pill-small">Explore</a>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Toggle Menu">
+                <span class="bar top"></span>
+                <span class="bar mid"></span>
+                <span class="bar bot"></span>
+            </button>
+        </div>
+    </header>
 
     <main class="terms-content">
         <div class="terms-card">
@@ -250,5 +257,12 @@
             </div>
         </div>
     </footer>
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="config.js"></script>
+    <script src="gateway.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>

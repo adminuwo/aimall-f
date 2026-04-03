@@ -134,17 +134,26 @@
 
         <!-- Welcome Card (Onboarding Modal) -->
         <div id="welcome-card" style="display: none;">
-            <div class="welcome-card-content">
-                <div class="welcome-icon">
-                    <img src="logos/BOT.png" alt="AI Assistant" class="welcome-bot-img">
+                <div class="welcome-card-bg-logo">
+                    <img src="logos/Logo.png" alt="">
                 </div>
-                <h2>Hello, I'm AIMALL assistance</h2>
-                <p>Your intelligent assistant for navigating AI solutions.</p>
-                <div class="welcome-buttons">
-                    <button id="btn-try-now" class="btn-primary">Try Now</button>
-                    <button id="btn-got-it" class="btn-secondary">Got It</button>
+                <div class="welcome-card-content">
+                    <div class="welcome-icon">
+                        <img src="logos/BOT.png" alt="AI Assistant" class="welcome-bot-img">
+                    </div>
+                    <h2>Hello, I'm AIMALL assistance</h2>
+                    <div class="welcome-tagline">Your Unified Gateway to the AI Ecosystem</div>
+                    <p>Explore a next-generation marketplace of enterprise-grade AI. Whether you're looking for A-Series™ solutions or Global Partnerships, I'm here to guide your journey.</p>
+                    <div class="welcome-bullets">
+                        <span>✦ Smart RAG Search</span>
+                        <span>✦ 24/7 Digital Support</span>
+                        <span>✦ Seamless Scaling</span>
+                    </div>
+                    <div class="welcome-buttons">
+                        <button id="btn-try-now" class="btn-primary">Get Started</button>
+                        <button id="btn-got-it" class="btn-secondary">Explore First</button>
+                    </div>
                 </div>
-            </div>
         </div>
     </div>
 
@@ -690,7 +699,12 @@
             <div class="footer-bottom">
                 <div class="footer-legal">
                     <p>© 2026 Unified Web Options. All rights reserved.</p>
-                    <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
+                    <p class="footer-trademark">
+                        <a href="https://aimall24.com" target="_blank">AI-MALL™</a>, 
+                        <a href="https://aseries.in" target="_blank">A-SERIES™</a>, 
+                        <a href="https://uwo24.com" target="_blank">UWO™</a>, 
+                        <a href="https://aisa24.com" target="_blank">AISA™</a> ARE PROPRIETARY TRADEMARKS.
+                    </p>
                 </div>
             </div>
             </div>
@@ -890,6 +904,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="config.js"></script>
     <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>
 </body>

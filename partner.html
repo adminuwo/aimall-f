@@ -35,7 +35,7 @@
 
     <!-- Header / Navigation -->
     <header id="header">
-        <div class="logo" onclick="window.location.href='index.html'">
+        <div class="logo" onclick="openAdmin()">
             <img src="logos/Logo.png" alt="AI-Mall" class="nav-logo-img">
         </div>
         <nav id="nav-menu">
@@ -514,7 +514,12 @@
                 <div class="footer-bottom">
                     <div class="footer-legal">
                         <p>© 2026 Unified Web Options. All rights reserved.</p>
-                        <p class="footer-trademark">AI-Mall™, A-Series™, UWO™, AISA™ are proprietary trademarks.</p>
+                        <p class="footer-trademark">
+                            <a href="https://aimall24.com" target="_blank">AI-MALL™</a>, 
+                            <a href="https://aseries.in" target="_blank">A-SERIES™</a>, 
+                            <a href="https://uwo24.com" target="_blank">UWO™</a>, 
+                            <a href="https://aisa24.com" target="_blank">AISA™</a> ARE PROPRIETARY TRADEMARKS.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -731,8 +736,8 @@
                 </div>
             </div>
         <script>
-            // Using global API configuration from main.js
-            const API_URL = window.API_BASE_URL || 'http://localhost:8080/api';
+            // Using global API configuration (Strictly Env)
+            const API_URL = "%VITE_API_BASE_URL%";
 
             // ── Chatbot Functions ──
             function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
@@ -928,8 +933,8 @@
             const st = ScrollTrigger.create({
                 id: "partner-types-st",
                 trigger: "#partner-types",
-                start: "top top",
-                end: "+=2500", // Increased scroll distance for smoother feel
+                start: "top 5%", 
+                end: "+=2200", 
                 pin: true,
                 scrub: 1,
                 onUpdate: (self) => {
@@ -938,6 +943,15 @@
                     const index = Math.min(Math.floor(prog * count), count - 1);
                     const targetType = typeItems[index].dataset.type;
                     
+                    // Progressive Item Reveal on Left Side
+                    typeItems.forEach((item, idx) => {
+                        if (idx <= index) {
+                            gsap.to(item, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+                        } else {
+                            gsap.to(item, { opacity: 0.15, y: 10, duration: 0.4, ease: 'power2.out' });
+                        }
+                    });
+
                     if (targetType !== currentActive) {
                         switchType(targetType);
                     }
@@ -1071,13 +1085,6 @@
             );
 
             // ── Types Section Reveal ──
-            gsap.fromTo('.p-type-item',
-                { opacity: 0, x: -40 },
-                {
-                    opacity: 1, x: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
-                    scrollTrigger: { trigger: '#partner-types', start: 'top 80%', once: true }
-                }
-            );
             gsap.fromTo('.p-type-panel',
                 { opacity: 0, x: 40 },
                 {
@@ -1087,6 +1094,7 @@
             );
         });
     </script>
+    <script src="config.js"></script>
     <script src="gateway.js"></script>
     <script type="module" src="main.js"></script>
 </body>
