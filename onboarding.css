@@ -372,13 +372,18 @@ body.onboarding-active {
 
 .welcome-card-bg-logo {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 250px;
-    opacity: 0.05;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.08;
     z-index: 0;
     pointer-events: none;
+}
+
+.welcome-card-bg-logo img {
+    width: 250px;
+    height: auto;
 }
 
 .welcome-tagline {
