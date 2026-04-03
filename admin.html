@@ -689,7 +689,11 @@
     <!-- Config -->
     <script src="config.js"></script>
     <script>
-        const API = "%VITE_API_BASE_URL%";
+        // Smart Domain Detection (Fallback if env is missing)
+        const host = window.location.hostname;
+        const isLive = host === 'ai-mall.in' || host.includes('run.app');
+        const envVal = "%VITE_API_BASE_URL%";
+        const API = (!envVal.startsWith('%') ? envVal : null) || (isLive ? 'https://aimall-b-246449377479.asia-south1.run.app' : 'http://localhost:8080');
         let ADMIN_KEY = '';
         let allContacts = [];
         let allPartners = [];

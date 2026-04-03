@@ -325,8 +325,11 @@
 
     <!-- Scripts -->
         <script>
-            // Using global API configuration (Strictly Env)
-            const API_URL = "%VITE_API_BASE_URL%";
+            // Smart Domain Detection (Fallback if env is missing)
+            const host = window.location.hostname;
+            const isLive = host === 'ai-mall.in' || host.includes('run.app');
+            const envVal = "%VITE_API_BASE_URL%";
+            const API_URL = (!envVal.startsWith('%') ? envVal : null) || (isLive ? 'https://aimall-b-246449377479.asia-south1.run.app' : 'http://localhost:8080');
 
             function setFocus(el) { el.parentElement.classList.add('focused'); }
             function removeFocus(el) { el.parentElement.classList.remove('focused'); checkContent(el); }
