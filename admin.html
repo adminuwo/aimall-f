@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | AI-Mall™</title>
+    <title>Admin Dashboard | AI-MALL™</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/png" href="logos/Logo.png">
+    <link rel="icon" type="image/png" href="/logos/Logo.png">
     <style>
         :root {
             --bg: #020408;
@@ -492,7 +492,7 @@
     <!-- LOGIN SCREEN -->
     <div id="login-screen">
         <div class="login-box">
-            <div class="login-logo">AI-Mall™</div>
+            <div class="login-logo">AI-MALL™</div>
             <p class="login-sub">Neural Intel System Entrance</p>
             <input type="email" id="admin-email-input" class="login-input" placeholder="Admin Identity (Email)"
                 onkeydown="if(event.key==='Enter')doLogin()">
@@ -507,7 +507,7 @@
     <div id="dashboard">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-logo">AI-Mall™ <span>Cloud Intelligence</span></div>
+            <div class="sidebar-logo">AI-MALL™ <span>Cloud Intelligence</span></div>
             <div class="nav-items">
                 <div class="nav-item active" onclick="showTab('rag')" id="nav-rag">
                     <span class="nav-icon">🧠</span> Knowledge Base
@@ -536,7 +536,7 @@
                 <div class="page-header">
                     <div>
                         <div class="page-title">Neural Assets</div>
-                        <div class="page-subtitle">Managed Intelligence Knowledge for AI-Mall™ Platform</div>
+                        <div class="page-subtitle">Managed Intelligence Knowledge for AI-MALL™ Platform</div>
                     </div>
                     <div style="display:flex; gap:16px;">
                         <button class="refresh-btn" onclick="loadDocuments()">🔄 Sync Node</button>
@@ -600,7 +600,7 @@
                 <div class="page-header">
                     <div>
                         <div class="page-title">Intel Enquiries</div>
-                        <div class="page-subtitle">Submissions from AI-Mall™ Frontend Interface</div>
+                        <div class="page-subtitle">Submissions from AI-MALL™ Frontend Interface</div>
                     </div>
                     <button class="refresh-btn" onclick="loadContacts()">🔄 Refresh Enquiries</button>
                 </div>
@@ -687,8 +687,10 @@
     <div id="toast"></div>
 
     <!-- Config -->
-    <script src="config.js"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/config.js" type="module"></script>
+    <script src="/gateway.js" type="module"></script>
+    <script type="module">
         // Smart Domain Detection (Fallback if env is missing)
         const host = window.location.hostname;
         const isLive = host === 'ai-mall.in' || host.includes('run.app');

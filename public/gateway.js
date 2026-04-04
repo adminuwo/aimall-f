@@ -1,5 +1,5 @@
 /**
- * AI-Mall™ — Universal Gateway System
+ * AI-MALL™ — Universal Gateway System
  * Handles Admin Login (Custom Modal) and Voice Recognition
  */
 
@@ -10,7 +10,7 @@
         <div id="admin-auth-modal" class="admin-modal-overlay" style="display:none;">
             <div class="admin-modal-card">
                 <div class="admin-modal-close" onclick="closeAdminModal()">×</div>
-                <div class="admin-modal-logo">AI-Mall™</div>
+                <div class="admin-modal-logo">AI-MALL™</div>
                 <div class="admin-modal-title">Administrative Gateway</div>
                 <div class="admin-modal-sub">Neural Intel System Entrance</div>
                 

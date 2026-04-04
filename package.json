@@ -1,7 +1,7 @@
 {
   "name": "ai-mall-landing",
   "version": "1.0.0",
-  "description": "High-end cinematic AI-Mall landing page",
+  "description": "High-end cinematic AI-MALL landing page",
   "main": "main.js",
   "scripts": {
     "dev": "vite",

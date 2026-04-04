@@ -8,8 +8,8 @@
     --clr-accent-purple: #1b3a8a;
     /* Royal Blue Dark */
     --clr-text-primary: #050a1a;
-    --clr-text-secondary: #4a5c7a;
-    --clr-text-muted: #8a9bbd;
+    --clr-text-secondary: #050a1a;
+    --clr-text-muted: #1a1a1a;
 
     /* Glassmorphism */
     --glass-bg: rgba(255, 255, 255, 0.45);
@@ -3254,6 +3254,12 @@ footer {
     box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1);
 }
 
+.map-card iframe {
+    margin-top: -110px; /* Fully hides the place info box */
+    height: calc(450px + 110px); 
+    display: block;
+}
+
 .map-info-overlay {
     position: absolute;
     bottom: 30px;
@@ -4298,7 +4304,7 @@ body.modal-active #ai-chat-assistant {
 .uwo-subtext {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #4a5568;
+    color: #050a1a;
     margin-bottom: 40px;
 }
 
@@ -4358,7 +4364,7 @@ body.modal-active #ai-chat-assistant {
 .stat-label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #718096;
+    color: #050a1a;
     margin-top: 8px;
 }
 
@@ -4460,7 +4466,7 @@ body.modal-active #ai-chat-assistant {
 .uwo-footer-cta {
     font-size: 1rem;
     font-weight: 700;
-    color: #4a5568;
+    color: #050a1a;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -4530,7 +4536,7 @@ body.modal-active #ai-chat-assistant {
 .mission-bg-base {
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('mission_hero_bg.png');
+    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/mission_hero_bg.png');
     background-size: cover;
     background-position: center;
     opacity: 1;
@@ -4631,7 +4637,7 @@ body.modal-active #ai-chat-assistant {
 
 .m-support-line {
     font-size: 1.15rem;
-    color: #4a5568;
+    color: #050a1a;
     opacity: 0.7;
     margin-bottom: 60px;
 }
@@ -4666,7 +4672,7 @@ body.modal-active #ai-chat-assistant {
 
 .min-label {
     font-size: 0.85rem;
-    color: #718096;
+    color: #050a1a;
     margin-top: 10px;
     text-transform: uppercase;
     font-weight: 600;
@@ -4769,7 +4775,7 @@ body.modal-active #ai-chat-assistant {
 
 .card-content p {
     font-size: 0.95rem;
-    color: #4a5568;
+    color: #050a1a;
     line-height: 1.7;
     margin: 0;
 }
@@ -4899,7 +4905,7 @@ body.modal-active #ai-chat-assistant {
 
 .hstrip-sub {
     font-size: 1rem;
-    color: #718096;
+    color: #050a1a;
     font-weight: 500;
 }
 
@@ -4912,7 +4918,7 @@ body.modal-active #ai-chat-assistant {
     cursor: grab;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 20px 80px 60px;
+    padding: 20px 0 60px;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -4927,10 +4933,10 @@ body.modal-active #ai-chat-assistant {
 /* Track — horizontal flex row with 3D context */
 .hstrip-track {
     display: flex;
-    gap: 30px;
+    gap: 100px;
     width: max-content;
     align-items: center;
-    padding: 0 80px;
+    padding: 0;
     /* Start from left instead of centering */
     transform-style: preserve-3d;
 }
@@ -4964,8 +4970,8 @@ body.modal-active #ai-chat-assistant {
 /* 3D Arc States (Updated via JS but set baseline) */
 .hstrip-item.is-active {
     background: #ffffff;
-    box-shadow: 0 40px 100px rgba(42, 82, 190, 0.12);
-    border-color: rgba(42, 82, 190, 0.15);
+    box-shadow: 0 50px 120px rgba(42, 82, 190, 0.2); 
+    border: 2px solid rgba(42, 82, 190, 0.25);
     z-index: 50;
 }
 
@@ -5270,7 +5276,7 @@ body.modal-active #ai-chat-assistant {
 /* --- Leadership / Profile Section --- */
 .profile-section {
     padding: 120px 0;
-    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('leadership_bg.png');
+    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('/leadership_bg.png');
     background-size: cover;
     background-position: center;
 }
@@ -5467,7 +5473,7 @@ body.modal-active #ai-chat-assistant {
 
 .p-section-sub {
     font-size: 1rem;
-    color: #718096;
+    color: #050a1a;
     font-weight: 500;
 }
 
@@ -5610,7 +5616,7 @@ body.modal-active #ai-chat-assistant {
 
 .p-hero-sub {
     font-size: 1.2rem;
-    color: #4a5568;
+    color: #050a1a;
     line-height: 1.8;
     margin-bottom: 48px;
     opacity: 0;
@@ -5662,7 +5668,7 @@ body.modal-active #ai-chat-assistant {
 .p-type-bg-sync {
     position: absolute;
     inset: 0;
-    opacity: 0.6;
+    opacity: 0.15;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -6332,11 +6338,11 @@ body.modal-active #ai-chat-assistant {
 }
 
 .p-cta-heading {
-    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-size: clamp(2.5rem, 7vw, 5.2rem);
     font-weight: 900;
     color: white;
     letter-spacing: -.05em;
-    line-height: 1.0;
+    line-height: 1.15;
     margin: 15px 0 20px;
 }
 
@@ -6460,7 +6466,7 @@ body.modal-active #ai-chat-assistant {
     }
 
     .p-cta-heading {
-        font-size: 3rem;
+        font-size: 2.2rem;
     }
 
     .p-streams-progress-wrap {
@@ -7123,7 +7129,7 @@ body.modal-active #ai-chat-assistant {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('aseries_door_bg.png') center/cover no-repeat;
+    background: url('/aseries_door_bg.png') center/cover no-repeat;
     background-attachment: fixed;
     opacity: 0.85;
     /* Increased opacity for more detail visibility */
@@ -7582,7 +7588,7 @@ body.modal-active #ai-chat-assistant {
     display: flex;
     align-items: center;
     position: relative;
-    background: url('logos/oneplatform.png') center/cover no-repeat fixed;
+    background: url('/logos/oneplatform.png') center/cover no-repeat fixed;
     overflow: hidden;
 }
 
@@ -7666,7 +7672,7 @@ body.modal-active #ai-chat-assistant {
 .premium-subtext {
     font-size: 1.1rem;
     line-height: 1.7;
-    color: #4a5c7a;
+    color: #050a1a;
     margin-bottom: 40px;
     max-width: 480px;
 }
@@ -7861,7 +7867,7 @@ body.modal-active #ai-chat-assistant {
 
 .block-desc {
     font-size: 0.8rem;
-    color: #4a5c7a;
+    color: #050a1a;
     line-height: 1.5;
     font-weight: 500;
 }
@@ -7996,7 +8002,7 @@ body.modal-active #ai-chat-assistant {
 .legal-content-section p {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #4b5563;
+    color: #050a1a;
     margin-bottom: 15px;
 }
 
@@ -8136,7 +8142,7 @@ body.modal-active #ai-chat-assistant {
 .icon-btn {
     background: transparent;
     border: none;
-    color: #4a5c7a;
+    color: #050a1a;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
@@ -8272,7 +8278,7 @@ footer {
 .footer-social-hub h4 {
     font-size: 0.65rem !important;
     font-weight: 800 !important;
-    color: #4a5c7a !important;
+    color: #050a1a !important;
 }
 
 .social-links {
@@ -10622,7 +10628,7 @@ footer {
     border-radius: 50%;
     border: none;
     background: transparent;
-    color: #64748b;
+    color: #050a1a;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10647,7 +10653,7 @@ footer {
     align-items: center;
     gap: 20px;
     margin-top: 80px;
-    color: #64748b;
+    color: #050a1a;
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.2em;
@@ -11173,4 +11179,31 @@ footer {
 
 .footer-trademark a:hover {
     color: #2a52be;
+}
+
+/* Reduced AISA Modal CTA Button Sizing & Spacing */
+.aisa-modal-cta {
+    display: flex !important;
+    gap: 20px !important;
+    align-items: center;
+    margin-top: 30px !important;
+}
+
+.aisa-modal-cta .btn-premium-glow {
+    padding: 10px 28px !important;
+    font-size: 0.88rem !important;
+    min-width: 180px;
+    justify-content: center;
+}
+
+.aisa-modal-cta .btn-premium-outline-v2 {
+    padding: 9px 24px !important;
+    font-size: 0.85rem !important;
+    min-width: 120px;
+    justify-content: center;
+}
+
+/* --- Partner Hero Background Opacity Adjustment --- */
+#partner-hero .parallax-img {
+    opacity: 0.18; /* Reduced for better depth and readability */
 }

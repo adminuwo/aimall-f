@@ -1,4 +1,4 @@
-// AI-Mall™ — Universal Cinematic Engine
+// AI-MALL™ — Universal Cinematic Engine
 // Smooth Scroll + Universal Reveal System
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -97,6 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (loaderOverlay && !hasOnboarded) {
         body.classList.add('onboarding-active');
+
+        const header = document.getElementById('header');
+        if (header) {
+            header.style.opacity = '0';
+            header.style.pointerEvents = 'none';
+        }
 
         // Hide chatbot while onboarding
         if (chatAssistant) chatAssistant.classList.add('ai-chat-hidden');
@@ -232,6 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (openChat && window.toggleChat) {
                         setTimeout(() => window.toggleChat(), 500);
                     }
+                }
+
+                // Reveal Header
+                const header = document.getElementById('header');
+                if (header) {
+                    header.style.transition = 'opacity 1.2s ease';
+                    header.style.opacity = '1';
+                    header.style.pointerEvents = 'auto';
                 }
             }, 800);
         }, 400);
@@ -610,6 +624,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const scrollToItem = (index) => {
             if (!items[index]) return;
             const target = items[index];
+            
+            // Calculate target scroll to bring the item's center to the viewport center
+            const trackPadding = parseFloat(getComputedStyle(hstripTrack).paddingLeft) || 0;
             const targetScroll = target.offsetLeft - (hstripOuter.clientWidth / 2) + (target.offsetWidth / 2);
 
             gsap.to(hstripOuter, {
@@ -638,8 +655,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return closestIndex;
         };
 
-        if (hPrev) hPrev.onclick = () => scrollToItem(getActiveIndex() - 1);
-        if (hNext) hNext.onclick = () => scrollToItem(getActiveIndex() + 1);
+        if (hPrev) {
+            hPrev.onclick = (e) => {
+                e.preventDefault();
+                const current = getActiveIndex();
+                const targetIdx = (current - 1 + items.length) % items.length;
+                scrollToItem(targetIdx);
+            };
+        }
+        if (hNext) {
+            hNext.onclick = (e) => {
+                e.preventDefault();
+                const current = getActiveIndex();
+                const targetIdx = (current + 1) % items.length;
+                scrollToItem(targetIdx);
+            };
+        }
 
         // Generate Dots with precise hit areas
         if (hstripDots) {
@@ -668,8 +699,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // ARC TRANSFORMS - PRECISION ENGINE
                 const rotateY = normalizedDist * -32;
-                const scale = 1.1 - Math.abs(normalizedDist) * 0.22;
-                const translateZ = -Math.abs(normalizedDist) * 180;
+                const scale = 1.25 - Math.abs(normalizedDist) * 0.35; // Increased base scale for active card
+                const translateZ = 50 - Math.abs(normalizedDist) * 230; // Closer feel for active card
                 const opacity = 1 - Math.abs(normalizedDist) * 0.45;
                 const blur = 0; // Clearer view as requested
 
@@ -697,9 +728,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Navigation Sync Logic (Handled in the refined block above)
 
 
+        const updatePadding = () => {
+            if (!items.length) return;
+            const sidePadding = (hstripOuter.clientWidth / 2) - (items[0].offsetWidth / 2);
+            hstripTrack.style.paddingLeft = `${sidePadding}px`;
+            hstripTrack.style.paddingRight = `${sidePadding}px`;
+            updateArc();
+        };
+
         hstripOuter.addEventListener('scroll', updateArc);
-        window.addEventListener('resize', updateArc);
-        updateArc();
+        window.addEventListener('resize', updatePadding);
+        updatePadding();
 
         // Click to Focus / Center Card
         items.forEach(item => {
@@ -938,12 +977,9 @@ document.addEventListener('DOMContentLoaded', () => {
             input.readOnly = false;
         }
 
+        // Do not append welcome message on first registration as requested
         const msgBox = document.getElementById('chat-messages');
         if (msgBox) {
-            const welcome = document.createElement('div');
-            welcome.className = 'chat-msg msg-ai';
-            welcome.textContent = `Welcome back, ${n}! How can I assist you with the AI-Mall™ ecosystem today?`;
-            msgBox.appendChild(welcome);
             msgBox.scrollTop = msgBox.scrollHeight;
         }
     };
@@ -1053,7 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (err.name === 'AbortError') {
                 aiMsg.textContent = "Request timed out. The AI is taking too long to synthesize - please try again later.";
             } else {
-                aiMsg.textContent = "Connectivity error. Unable to reach AI-Mall™ servers.";
+                aiMsg.textContent = "Connectivity error. Unable to reach AI-MALL™ servers.";
             }
         }
         msgBox.scrollTop = msgBox.scrollHeight;
@@ -1064,8 +1100,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const rv = document.getElementById('registration-view');
         const mv = document.getElementById('chat-messages');
         const ci = document.getElementById('chat-main-input');
+        const n = localStorage.getItem('chat_user') || "User";
+        
         if (rv) rv.style.display = 'none';
-        if (mv) mv.style.display = 'flex';
+        if (mv) {
+            mv.style.display = 'flex';
+            // Replace general greeting with personalized welcome for returning users
+            mv.innerHTML = `<div class="chat-msg msg-ai">Welcome back, ${n}! How can I assist you with the AI-MALL™ ecosystem today?</div>`;
+        }
         if (ci) {
             ci.placeholder = "Type message...";
             ci.readOnly = false;
@@ -1175,25 +1217,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const legalContent = {
         terms: `
             <div class="legal-content-header">
-                <h2 class="legal-content-title"><img src="logos/Logo.png" alt="AI-Mall" class="legal-logo-icon"> AIMall™ – Terms & Conditions</h2>
+                <h2 class="legal-content-title"><img src="logos/Logo.png" alt="AI-MALL" class="legal-logo-icon"> AI-MALL™ – Terms & Conditions</h2>
             </div>
             <div class="legal-content-scroll-box">
                 <div class="legal-content-section">
                     <h3>1. 🔹 Acceptance of Terms</h3>
-                    <p>Welcome to AIMall™, a platform owned and operated by <strong>Unified Web Options & Services Pvt. Ltd. (UWO™)</strong>.</p>
-                    <p>By accessing, registering, or using AIMall™, you confirm that you have read, understood, and agreed to be bound by these Terms & Conditions (“Terms”). If you do not agree, you must discontinue use immediately.</p>
+                    <p>Welcome to AI-MALL™, a platform owned and operated by <strong>Unified Web Options (UWO™)</strong>.</p>
+                    <p>By accessing, registering, or using AI-MALL™, you confirm that you have read, understood, and agreed to be bound by these Terms & Conditions. If you do not agree, you must discontinue use immediately.</p>
                 </div>
                 <div class="legal-content-section">
-                    <h3>2. 🔹 About AIMall™</h3>
-                    <p>AIMall™ is a unified AI marketplace and execution ecosystem that enables users to access multiple AI tools, perform tasks (content creation, automation, data processing), and interact through AISA™ (AI Super Assistant). AIMall™ functions as an orchestration platform, not a standalone AI model provider.</p>
+                    <h3>2. 🔹 About AI-MALL™</h3>
+                    <p>AI-MALL™ is a unified AI marketplace and execution ecosystem that enables users to access multiple AI tools, perform tasks (content creation, automation, data processing), and interact through AISA™ (AI Super Assistant). AI-MALL™ functions as an orchestration platform, not a standalone AI model provider.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>3. 🔹 Eligibility</h3>
-                    <p>Must be at least 18 years of age, have legal capacity for agreements, and provide accurate registration information.</p>
+                    <p>Have legal capacity for agreements, and provide accurate registration information.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>4. 🔹 Account Security</h3>
-                    <p>You are responsible for maintaining credential confidentiality and all activities under your account. AIMall™ is not liable for unauthorized access.</p>
+                    <p>You are responsible for maintaining credential confidentiality and all activities under your account. AI-MALL™ is not liable for unauthorized access.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>5. 🔹 Use of the Platform</h3>
@@ -1201,15 +1243,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="legal-content-section">
                     <h3>6. 🔹 AI Functionality & Limitations</h3>
-                    <p>AI outputs may be inaccurate, incomplete, or biased. AI should NOT be relied upon for critical, legal, medical, or financial decisions without human validation. AIMall™ is an assistive system, not a replacement for human judgment.</p>
+                    <p>AI outputs may be inaccurate, incomplete, or biased. AI should NOT be relied upon for critical, legal, medical, or financial decisions without human validation. AI-MALL™ is an assistive system, not a replacement for human judgment.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>7. 🔹 Third-Party Services</h3>
-                    <p>Access to third-party AI tools is subject to their own terms. AIMall™ does not control or guarantee their performance.</p>
+                    <p>Access to third-party AI tools is subject to their own terms. AI-MALL™ does not control or guarantee their performance.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>8. 🔹 Intellectual Property</h3>
-                    <p>Platform technology, branding, and AISA™ are owned by UWO™. Users retain ownership of created content but grant AIMall™ a license for platform functionality.</p>
+                    <p>Platform technology, branding, and AISA™ are owned by UWO™. Users retain ownership of created content but grant AI-MALL™ a license for platform functionality.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>9. 🔹 Payments & Subscriptions</h3>
@@ -1217,7 +1259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="legal-content-section">
                     <h3>12. 🔹 Limitation of Liability</h3>
-                    <p>AIMall™/UWO™ shall not be liable for errors in AI outputs, loss of data, revenue, or decisions made based on platform data. Use is at your own risk.</p>
+                    <p>AI-MALL™/UWO™ shall not be liable for errors in AI outputs, loss of data, revenue, or decisions made based on platform data. Use is at your own risk.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>15. 🔹 Governing Law</h3>
@@ -1234,7 +1276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `,
         privacy: `
             <div class="legal-content-header">
-                <h2 class="legal-content-title"><img src="logos/Logo.png" alt="AI-Mall" class="legal-logo-icon"> AIMall™ – Privacy Policy</h2>
+                <h2 class="legal-content-title"><img src="logos/Logo.png" alt="AI-MALL" class="legal-logo-icon"> AI-MALL™ – Privacy Policy</h2>
             </div>
             <div class="legal-content-scroll-box">
                 <div class="legal-content-section">
@@ -1247,7 +1289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="legal-content-section">
                     <h3>3. Third-Party AI Data Processing</h3>
-                    <p>When you utilize third-party AI tools via AIMall™, relevant data may be processed by those providers according to their respective privacy policies.</p>
+                    <p>When you utilize third-party AI tools via AI-MALL™, relevant data may be processed by those providers according to their respective privacy policies.</p>
                 </div>
                 <div class="legal-content-section">
                     <h3>4. Security Measures</h3>
@@ -1449,49 +1491,49 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             label: 'Ai-Hire™',
             tag: 'Recruitment AI',
-            img: 'logos/aihire_logo.jpeg',
+            img: '/logos/aihire_logo.jpeg',
             desc: 'AI-powered recruitment engine that screens, ranks, and interviews candidates — cutting time-to-hire by 70%.'
         },
         {
             label: 'Ai-Base™',
             tag: 'Knowledge AI',
-            img: 'logos/aibase_logo.jpeg',
+            img: '/logos/aibase_logo.jpeg',
             desc: 'Enterprise knowledge management powered by RAG. Instantly surface answers from your organization\'s entire data corpus.'
         },
         {
             label: 'Ai-Biz™',
             tag: 'Business AI',
-            img: 'logos/aibiz_logo.jpeg',
+            img: '/logos/aibiz_logo.jpeg',
             desc: 'End-to-end business intelligence module. Automate decisions, forecast trends, and power data-driven growth.'
         },
         {
             label: 'Derm-Foundation™',
             tag: 'Healthcare AI',
-            img: 'logos/Derm.jpeg',
+            img: '/logos/Derm.jpeg',
             desc: 'Clinical-grade dermatology AI trained on millions of skin pathology cases. Enables early, accurate detection.'
         },
         {
             label: 'Geospatial-Foundation™',
             tag: 'Remote Sensing AI',
-            img: 'logos/GEOspatial.jpeg',
+            img: '/logos/GEOspatial.jpeg',
             desc: 'Satellite & aerial imagery analysis at enterprise scale. Urban planning, agriculture, environmental monitoring.'
         },
         {
             label: 'Bio-Psync™',
             tag: 'Pathology AI',
-            img: 'logos/Biopsync.jpeg',
+            img: '/logos/Biopsync.jpeg',
             desc: 'AI pathology engine for digital biopsy analysis. Accelerates diagnosis with precision histopathology models.'
         },
         {
-            label: 'Ai-SuperAssistance™',
+            label: 'Ai-SuperAssistant™',
             tag: 'Cognitive AI',
-            img: 'logos/aipersonal_logo.jpeg',
+            img: '/logos/aipersonal_logo.jpeg',
             desc: 'Omni-channel intelligent assistant with memory, context, and enterprise integrations. Your AI co-pilot.'
         },
         {
             label: 'Ai-Sales™',
             tag: 'Revenue AI',
-            img: 'logos/aisales_logo.jpeg',
+            img: '/logos/aisales_logo.jpeg',
             desc: 'Predictive sales intelligence that scores leads, drafts outreach, and closes the loop on revenue growth.'
         }
     ];
