@@ -1136,6 +1136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     window.currentPremiumIndex = 0;
     window.galleryAutoPlayInterval = null;
+    window.isGalleryLiked = false;
+    window.isGalleryRepeat = false;
+    window.isGalleryMuted = false;
 
     window.openPremiumModal = function () {
         const modal = document.getElementById('premium-gallery-modal');
@@ -1199,6 +1202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sBtn = document.getElementById('pause-icon');
         if (pBtn) pBtn.style.display = 'none';
         if (sBtn) sBtn.style.display = 'block';
+        window.premiumGalleryNext(); // Immediate next slide
         window.galleryAutoPlayInterval = setInterval(window.premiumGalleryNext, 3500);
     };
 
@@ -1209,6 +1213,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sBtn) sBtn.style.display = 'none';
         clearInterval(window.galleryAutoPlayInterval);
         window.galleryAutoPlayInterval = null;
+    };
+
+    window.toggleGalleryLike = function () {
+        window.isGalleryLiked = !window.isGalleryLiked;
+        const btn = document.getElementById('gallery-like-btn');
+        if (btn) btn.classList.toggle('active', window.isGalleryLiked);
+    };
+
+    window.shuffleGallery = function () {
+        window.currentPremiumIndex = Math.floor(Math.random() * window.premiumImages.length);
+        window.updatePremiumImage();
+    };
+
+    window.toggleGalleryRepeat = function () {
+        window.isGalleryRepeat = !window.isGalleryRepeat;
+        const btn = document.getElementById('gallery-repeat-btn');
+        if (btn) btn.classList.toggle('active', window.isGalleryRepeat);
+    };
+
+    window.toggleGalleryVolume = function () {
+        window.isGalleryMuted = !window.isGalleryMuted;
+        const btn = document.getElementById('gallery-volume-btn');
+        if (btn) btn.classList.toggle('active', window.isGalleryMuted);
     };
 
     // ═══════════════════════════════════════════
@@ -1447,10 +1474,12 @@ document.addEventListener('DOMContentLoaded', () => {
         function startVisionAutoplay() {
             clearInterval(vAutoplayTimer);
             vIsAutoPlaying = true;
+            goNext(); // Immediate transition
             vAutoplayTimer = setInterval(goNext, 2200);
             if (vPlayIcon) vPlayIcon.style.display = 'none';
             if (vPauseIcon) vPauseIcon.style.display = '';
-            document.getElementById('vision-autoplay-btn')?.classList.add('active');
+            const btn = document.getElementById('vision-autoplay-btn');
+            if (btn) btn.classList.add('active');
         }
         function stopVisionAutoplay() {
             clearInterval(vAutoplayTimer);
@@ -1473,6 +1502,13 @@ document.addEventListener('DOMContentLoaded', () => {
         window.toggleVisionLike = function () {
             vIsLiked = !vIsLiked;
             document.getElementById('vision-like-btn')?.classList.toggle('active', vIsLiked);
+        };
+
+        let vIsMuted = false;
+        window.toggleVisionVolume = function() {
+            vIsMuted = !vIsMuted;
+            const btn = document.getElementById('vision-volume-btn');
+            if (btn) btn.classList.toggle('active', vIsMuted);
         };
 
         buildVisionCards();
@@ -1544,6 +1580,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAutoPlaying = false;
     let isLiked = false;
     let isRepeat = false;
+    let isMuted = false;
     let dragStartX = 0;
     let isDragging = false;
     let modalIndex = 0;
@@ -1656,8 +1693,20 @@ document.addEventListener('DOMContentLoaded', () => {
         updateOffsets();
     }
 
-    function goNext() { goTo(currentIndex + 1); }
-    function goPrev() { goTo(currentIndex - 1); }
+    function goNext() { 
+        goTo(currentIndex + 1); 
+        if (modal && modal.classList.contains('open')) {
+            modalIndex = currentIndex;
+            updateModalContent(modalIndex);
+        }
+    }
+    function goPrev() { 
+        goTo(currentIndex - 1); 
+        if (modal && modal.classList.contains('open')) {
+            modalIndex = currentIndex;
+            updateModalContent(modalIndex);
+        }
+    }
 
     /* ══════════════════════════════
        NAVIGATION CONTROLS
@@ -1690,17 +1739,38 @@ document.addEventListener('DOMContentLoaded', () => {
     function startAutoplay() {
         clearInterval(autoplayTimer);
         isAutoPlaying = true;
+        goNext(); // Immediate transition
         autoplayTimer = setInterval(goNext, 2800);
+        
+        // Handle icons in main section
         if (playIcon) playIcon.style.display = 'none';
         if (pauseIcon) pauseIcon.style.display = '';
-        document.getElementById('aseries-autoplay-btn')?.classList.add('active');
+        
+        // Handle icons in modal if open
+        const mpIcon = document.getElementById('aseries-modal-play-icon');
+        const msIcon = document.getElementById('aseries-modal-pause-icon');
+        if (mpIcon) mpIcon.style.display = 'none';
+        if (msIcon) msIcon.style.display = 'block';
+
+        const b = document.getElementById('aseries-autoplay-btn');
+        if (b) b.classList.add('active');
     }
     function stopAutoplay() {
         clearInterval(autoplayTimer);
         isAutoPlaying = false;
+        
+        // Handle icons in main section
         if (playIcon) playIcon.style.display = '';
         if (pauseIcon) pauseIcon.style.display = 'none';
-        document.getElementById('aseries-autoplay-btn')?.classList.remove('active');
+        
+        // Handle icons in modal if open
+        const mpIcon = document.getElementById('aseries-modal-play-icon');
+        const msIcon = document.getElementById('aseries-modal-pause-icon');
+        if (mpIcon) mpIcon.style.display = 'block';
+        if (msIcon) msIcon.style.display = 'none';
+
+        const b = document.getElementById('aseries-autoplay-btn');
+        if (b) b.classList.remove('active');
     }
     function resetAutoplay() { if (isAutoPlaying) { stopAutoplay(); startAutoplay(); } }
 
@@ -1725,6 +1795,11 @@ document.addEventListener('DOMContentLoaded', () => {
             b.classList.toggle('active', isLiked);
             b.querySelector('svg path') && (b.querySelector('svg path').style.fill = isLiked ? '#f43f5e' : 'none');
         });
+    };
+    window.toggleAseriesVolume = function() {
+        isMuted = !isMuted;
+        const btns = document.querySelectorAll('#aseries-volume-btn, #aseries-modal-volume-btn');
+        btns.forEach(b => b.classList.toggle('active', isMuted));
     };
 
     /* ══════════════════════════════
@@ -1767,10 +1842,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.nextAseriesModal = function () {
         modalIndex = (modalIndex + 1) % MODULES.length;
         updateModalContent(modalIndex);
+        goTo(modalIndex); // Keep main carousel in sync
     };
     window.prevAseriesModal = function () {
         modalIndex = (modalIndex - 1 + MODULES.length) % MODULES.length;
         updateModalContent(modalIndex);
+        goTo(modalIndex); // Keep main carousel in sync
     };
 
     /* Keyboard nav for modal */

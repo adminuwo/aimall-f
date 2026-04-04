@@ -409,7 +409,7 @@
                                 <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
                             </svg>
                         </button>
-                        <button class="aseries-player-btn" id="aseries-volume-btn" title="Volume">
+                        <button class="aseries-player-btn" id="aseries-volume-btn" title="Volume" onclick="toggleAseriesVolume()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -483,11 +483,16 @@
                             <line x1="5" y1="19" x2="5" y2="5"></line>
                         </svg>
                     </button>
-                    <button class="aseries-modal-ctrl-btn aseries-modal-play-btn" onclick="toggleAseriesAutoplay()"
+                    <button class="aseries-modal-ctrl-btn aseries-modal-play-btn" id="aseries-modal-autoplay-btn" onclick="toggleAseriesAutoplay()"
                         title="Auto-Play">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <svg id="aseries-modal-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
+                        <svg id="aseries-modal-pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+
                     </button>
                     <button class="aseries-modal-ctrl-btn" onclick="nextAseriesModal()" title="Next">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -496,7 +501,7 @@
                             <line x1="19" y1="5" x2="19" y2="19"></line>
                         </svg>
                     </button>
-                    <button class="aseries-modal-ctrl-btn" title="Volume">
+                    <button class="aseries-modal-ctrl-btn" id="aseries-modal-volume-btn" onclick="toggleAseriesVolume()" title="Volume">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -609,7 +614,7 @@
                                 <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
                             </svg>
                         </button>
-                        <button class="vision-v2-player-btn" id="vision-volume-btn" title="Volume">
+                        <button class="vision-v2-player-btn" id="vision-volume-btn" title="Volume" onclick="toggleVisionVolume()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -810,7 +815,7 @@
                     <div class="controls-row">
                         <!-- Left Side: Icon -->
                         <div class="control-group">
-                            <button class="icon-btn like-btn" title="Like">
+                            <button class="icon-btn like-btn" id="gallery-like-btn" title="Like" onclick="toggleGalleryLike()">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path
@@ -822,7 +827,7 @@
 
                         <!-- Center: Playback Controls -->
                         <div class="playback-controls">
-                            <button class="icon-btn shuffle-btn" title="Shuffle">
+                            <button class="icon-btn shuffle-btn" id="gallery-shuffle-btn" title="Shuffle" onclick="shuffleGallery()">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <polyline points="16 3 21 3 21 8"></polyline>
@@ -860,7 +865,7 @@
                                 </svg>
                             </button>
 
-                            <button class="icon-btn repeat-btn" title="Repeat">
+                            <button class="icon-btn repeat-btn" id="gallery-repeat-btn" title="Repeat" onclick="toggleGalleryRepeat()">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <polyline points="17 1 21 5 17 9"></polyline>
@@ -873,7 +878,7 @@
 
                         <!-- Right: Volume -->
                         <div class="control-group">
-                            <button class="icon-btn volume-btn">
+                            <button class="icon-btn volume-btn" id="gallery-volume-btn" title="Volume" onclick="toggleGalleryVolume()">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
