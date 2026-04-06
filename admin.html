@@ -244,12 +244,142 @@
             border-color: rgba(220, 38, 38, 0.1);
         }
 
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 101;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
         /* Content Area */
         .main-content {
             margin-left: 280px;
             width: calc(100% - 280px);
             padding: 48px 64px;
             min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -280px;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+                opacity: 1;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 80px 20px 40px;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .page-header > div:last-child {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                flex: 1;
+                justify-content: center;
+                min-width: 140px;
+            }
+
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .login-box {
+                width: 90%;
+                padding: 32px 24px;
+            }
+
+            .login-logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .action-btn {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         .page-header {
@@ -510,7 +640,15 @@
 
     <!-- DASHBOARD -->
     <div id="dashboard">
-        <aside class="sidebar">
+        <div class="mobile-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="mobile-logo">AI-MALL</div>
+            <div style="width: 24px;"></div> <!-- Spacer -->
+        </div>
+
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo">AI-MALL <span>Intelligence Ecosystem</span></div>
             <div class="nav-items">
                 <div class="nav-item active" onclick="showTab('rag')" id="nav-rag">
@@ -1070,6 +1208,23 @@
             setTimeout(() => t.className = '', 3000);
         }
 
+        // ── Mobile Sidebar Toggle ──
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Close sidebar on nav click (mobile)
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
         // Auto-refresh every 30s
         setInterval(() => {
             if (ADMIN_KEY) {
@@ -1095,6 +1250,7 @@
         window.handleRagUpload = handleRagUpload;
         window.deleteDocument = deleteDocument;
         window.showToast = showToast;
+        window.toggleSidebar = toggleSidebar;
     </script>
 </body>
 
