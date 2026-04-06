@@ -100,8 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const header = document.getElementById('header');
         if (header) {
-            header.style.opacity = '0';
-            header.style.pointerEvents = 'none';
+            // Keep header visible so branding and menu are accessible
+            header.style.opacity = '1';
+            header.style.pointerEvents = 'auto';
         }
 
         // Hide chatbot while onboarding
@@ -620,6 +621,34 @@ document.addEventListener('DOMContentLoaded', () => {
             scrollInertia = requestAnimationFrame(applyInertia);
         };
 
+        // Touch Swipe Support for Mobile
+        let touchStartX = 0;
+        hstripOuter.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            scrollLeft = hstripOuter.scrollLeft;
+            cancelAnimationFrame(scrollInertia);
+        }, { passive: true });
+
+        hstripOuter.addEventListener('touchmove', (e) => {
+            const x = e.touches[0].clientX;
+            const walk = (x - touchStartX) * 1.5;
+            hstripOuter.scrollLeft = scrollLeft - walk;
+        }, { passive: true });
+
+        hstripOuter.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const dx = endX - touchStartX;
+            if (Math.abs(dx) > 30) {
+                // If swipe is significant, move to next/prev
+                const current = getActiveIndex();
+                if (dx < 0) {
+                    scrollToItem((current + 1) % items.length);
+                } else {
+                    scrollToItem((current - 1 + items.length) % items.length);
+                }
+            }
+        }, { passive: true });
+
         // Function to smoothly center any item
         const scrollToItem = (index) => {
             if (!items[index]) return;
@@ -656,20 +685,20 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if (hPrev) {
-            hPrev.onclick = (e) => {
+            hPrev.addEventListener('click', (e) => {
                 e.preventDefault();
                 const current = getActiveIndex();
                 const targetIdx = (current - 1 + items.length) % items.length;
                 scrollToItem(targetIdx);
-            };
+            });
         }
         if (hNext) {
-            hNext.onclick = (e) => {
+            hNext.addEventListener('click', (e) => {
                 e.preventDefault();
                 const current = getActiveIndex();
                 const targetIdx = (current + 1) % items.length;
                 scrollToItem(targetIdx);
-            };
+            });
         }
 
         // Generate Dots with precise hit areas
@@ -678,10 +707,10 @@ document.addEventListener('DOMContentLoaded', () => {
             items.forEach((_, i) => {
                 const dot = document.createElement('div');
                 dot.className = 'hstrip-dot';
-                dot.onclick = (e) => {
+                dot.addEventListener('click', (e) => {
                     e.stopPropagation();
                     scrollToItem(i);
-                };
+                });
                 hstripDots.appendChild(dot);
                 dots.push(dot);
             });
@@ -1469,6 +1498,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (vPrevBtn) vPrevBtn.addEventListener('click', () => { goPrev(); resetVisionAutoplay(); });
         if (vNextBtn) vNextBtn.addEventListener('click', () => { goNext(); resetVisionAutoplay(); });
+
+        /* Touch Swipe for mobile */
+        let vTouchStartX = 0;
+        if (vWrapper) {
+            vWrapper.addEventListener('touchstart', (e) => { vTouchStartX = e.touches[0].clientX; }, { passive: true });
+            vWrapper.addEventListener('touchend', (e) => {
+                const dx = e.changedTouches[0].clientX - vTouchStartX;
+                if (Math.abs(dx) > 40) { dx < 0 ? goNext() : goPrev(); resetVisionAutoplay(); }
+            }, { passive: true });
+        }
 
         /* Player logic mirrors a-series */
         function startVisionAutoplay() {

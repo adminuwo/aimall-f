@@ -5221,28 +5221,37 @@ body.modal-active #ai-chat-assistant {
 /* ---- MOBILE: vertical stack ---- */
 @media (max-width: 768px) {
     .hstrip-outer {
-        overflow-x: hidden;
-        padding: 0 30px 40px;
-        cursor: default;
+        overflow-x: auto;
+        padding: 40px 0;
+        cursor: grab;
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+        -webkit-overflow-scrolling: touch;
+    }
+    .hstrip-outer::-webkit-scrollbar {
+        display: none; /* Hide scrollbar Chrome/Safari */
     }
 
     .hstrip-track {
-        flex-direction: column;
-        width: 100%;
-        gap: 50px;
+        display: flex;
+        flex-direction: row !important;
+        width: fit-content !important;
+        gap: 30px !important;
+        padding-left: 50vw !important;
+        padding-right: 50vw !important;
     }
 
     .hstrip-item {
-        width: 100%;
-        padding: 0;
-        border-bottom: 1px solid rgba(42, 82, 190, 0.08);
-        padding-bottom: 40px;
-        opacity: 1 !important;
-        transform: none !important;
+        width: 280px !important;
+        flex-shrink: 0 !important;
+        opacity: 0.4 !important;
+        transform: scale(0.85) !important;
+        transition: all 0.5s ease;
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
     }
-
-    .hstrip-item:not(:last-child)::after {
-        display: none;
+    .hstrip-item.is-active {
+        opacity: 1 !important;
+        transform: scale(1) !important;
     }
 
     .hstrip-num {
@@ -9262,6 +9271,7 @@ footer {
     z-index: 2;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 20px;
     margin-top: 60px;
     color: rgba(255, 255, 255, 0.88);
@@ -9269,6 +9279,9 @@ footer {
     letter-spacing: 0.22em;
     text-transform: uppercase;
     font-weight: 700;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
 }
 
 .aseries-tagline-line {
@@ -9583,6 +9596,28 @@ footer {
         height: 280px;
     }
 
+    /* Mobile-friendly carousel nav */
+    .aseries-nav-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .aseries-dots {
+        gap: 12px !important;
+    }
+
+    .aseries-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .aseries-player-controls {
+        display: none !important;
+    }
+
     .aseries-card {
         width: 172px;
         height: 220px;
@@ -9813,7 +9848,9 @@ footer {
 
     .aseries-carousel-col {
         width: 100%;
-        overflow: hidden;
+        overflow: visible;
+        opacity: 1 !important;
+        transform: translateX(0) !important;
     }
 
     .aseries-carousel-wrapper {
@@ -10651,6 +10688,7 @@ footer {
 .vision-v2-tagline {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 20px;
     margin-top: 80px;
     color: #050a1a;
@@ -10658,6 +10696,9 @@ footer {
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
 }
 
 .vision-v2-tagline-line {
@@ -10686,6 +10727,27 @@ footer {
 @media (max-width: 768px) {
     .vision-v2-carousel-wrapper {
         height: 280px;
+    }
+
+    /* Mobile-friendly vision nav */
+    .vision-v2-nav-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+    }
+    .vision-v2-dots {
+        gap: 12px !important;
+    }
+
+    .vision-v2-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .vision-v2-player-controls {
+        display: none !important;
     }
 
     .vision-v2-card {
@@ -10817,19 +10879,59 @@ footer {
         background: white !important;
         border-color: rgba(0, 0, 0, 0.1) !important;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        min-height: 80px;
+        padding: 10px 20px !important;
+        gap: 15px !important;
+        margin-bottom: 10px;
+        text-align: left !important;
+    }
+
+    .pipeline-block .block-icon {
+        margin-bottom: 0 !important;
+        flex-shrink: 0;
+    }
+
+    .pipeline-block .block-info-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: visible !important;
     }
 
     .pipeline-block .block-title {
         color: #000 !important;
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
     }
 
     .pipeline-block .block-desc {
-        color: #333 !important;
+        color: #64748b !important;
+        font-size: 0.7rem !important;
+        margin: 2px 0 0 !important;
+        line-height: 1.3 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
     }
 
     .pipeline-block .block-badge {
-        background: rgba(0, 0, 0, 0.05) !important;
-        color: #000 !important;
+        background: rgba(0, 102, 255, 0.08) !important;
+        color: #0066ff !important;
+        font-size: 0.65rem !important;
+        padding: 2px 8px !important;
+        border-radius: 4px !important;
+        width: fit-content !important;
+        margin-bottom: 4px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
     }
 
     /* Style for the new mobile close button in AISA modal */

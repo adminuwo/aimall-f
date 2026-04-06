@@ -15,6 +15,7 @@ body.onboarding-active {
     align-items: center;
     justify-content: center;
     transition: opacity 0.8s ease, visibility 0.8s, background 0.8s ease, backdrop-filter 0.8s ease;
+    overflow-y: auto; /* Allow scrolling for tall onboarding cards */
 }
 
 #onboarding-overlay.show-blur {
@@ -23,6 +24,7 @@ body.onboarding-active {
     -webkit-backdrop-filter: blur(15px);
     justify-content: flex-start; /* Start from top instead of center */
     padding-top: 110px; /* Offset to start below navbar */
+    padding-bottom: 40px;
 }
 
 #new-loader {
@@ -300,15 +302,17 @@ body.onboarding-active {
     border: 1px solid rgba(255, 255, 255, 0.3); 
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15); 
     border-radius: 28px;
-    padding: 30px 25px; /* Smaller padding */
-    max-width: 360px; /* Smaller max-width */
+    padding: 30px 25px;
+    max-width: 360px;
     width: 90%;
+    margin-bottom: 40px;
     text-align: center;
-    position: relative; /* Change to relative to respect parent flex padding */
+    position: relative;
     overflow: hidden; 
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    flex-shrink: 0;
 }
 
 #welcome-card.visible {
@@ -690,8 +694,11 @@ body.onboarding-active {
 /* Onboarding Responsive Overhaul */
 @media (max-width: 768px) {
     #welcome-card {
-        padding: 30px 20px;
-        width: 85%;
+        padding: 25px 18px;
+        width: 88%;
+        max-width: 340px;
+        margin-top: 10px;
+        margin-bottom: 20px;
     }
 
     .welcome-buttons {
@@ -701,6 +708,8 @@ body.onboarding-active {
 
     .welcome-buttons button {
         width: 100%;
+        padding: 12px 20px;
+        font-size: 0.88rem;
     }
 
     #onboarding-overlay .intro-controls-v2 {
@@ -718,6 +727,39 @@ body.onboarding-active {
 
     .new-loader-text {
         font-size: 1.2rem;
+    }
+
+    #onboarding-overlay.show-blur {
+        padding-top: 70px;
+        padding-bottom: 30px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .welcome-icon {
+        width: 75px;
+        height: 75px;
+        margin-bottom: 6px;
+    }
+
+    #welcome-card h2 {
+        font-size: 1.4rem;
+    }
+
+    #welcome-card p {
+        font-size: 0.85rem;
+        margin-bottom: 18px;
+    }
+
+    .welcome-tagline {
+        font-size: 0.75rem;
+        margin-bottom: 8px;
+    }
+
+    .welcome-bullets {
+        gap: 8px;
+        margin-bottom: 20px;
+        font-size: 0.73rem;
     }
 }
 
