@@ -859,7 +859,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // 6. LOGIC CLEANUP
-    // (Custom cursor removed to restore default system pointer)
+    // ── Custom Cursor Premium Engine ──
+    const cursor = document.getElementById('cursor');
+    const cursorBlur = document.getElementById('cursor-blur');
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    if (cursor && cursorBlur && !isTouch) {
+        gsap.set([cursor, cursorBlur], { opacity: 0 });
+
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                opacity: 1,
+                duration: 0.1,
+                ease: 'power2.out'
+            });
+            gsap.to(cursorBlur, {
+                x: e.clientX,
+                y: e.clientY,
+                opacity: 1,
+                duration: 0.45,
+                ease: 'power2.out'
+            });
+        });
+
+        const interactiveEls = 'a, button, .clickable, [onclick], .aseries-nav-btn, .vision-v2-nav-btn, .social-icon, .nav-logo-img, .btn-premium';
+        document.querySelectorAll(interactiveEls).forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(cursorBlur, { scale: 1.6, backgroundColor: 'rgba(59, 130, 246, 0.15)', borderColor: 'rgba(59, 130, 246, 0.6)', duration: 0.3 });
+                gsap.to(cursor, { scale: 1.5, backgroundColor: '#3b82f6', duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(cursorBlur, { scale: 1, backgroundColor: 'transparent', borderColor: 'rgba(42, 82, 190, 0.3)', duration: 0.3 });
+                gsap.to(cursor, { scale: 1, backgroundColor: 'var(--clr-text-primary)', duration: 0.3 });
+            });
+        });
+
+        document.addEventListener('mousedown', () => gsap.to(cursorBlur, { scale: 0.8, duration: 0.2 }));
+        document.addEventListener('mouseup', () => gsap.to(cursorBlur, { scale: 1, duration: 0.2 }));
+    }
 
     // --- Global Smooth Cinematic Text Reveal ---
     const revealObserverOptions = {
