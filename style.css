@@ -1183,51 +1183,68 @@ footer::before {
 
 .social-links {
     display: flex;
-    gap: 12px;
+    gap: 6px;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 10px 5px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.social-links::-webkit-scrollbar {
+    display: none;
 }
 
 .social-icon {
-    width: 28px;
-    /* Standardized to Facebook's visual scale */
-    height: 28px;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     background: transparent;
     border: none;
-    box-shadow: none;
 }
 
 .social-icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border-radius: 50%;
-    /* Force circularity where possible */
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-/* Individual scaling for visually larger logos */
-/* Individual scaling removed as new icons are consistent */
-.social-icon[aria-label="Gmail"] img,
-.social-icon[aria-label="Threads"] img {
-    transform: none;
+/* Balance circular vs square icons visually */
+.social-icon[aria-label="X"] img,
+.social-icon[aria-label="Facebook"] img,
+.social-icon[aria-label="WhatsApp"] img,
+.social-icon[aria-label="Threads"] img,
+.social-icon[aria-label="Pinterest"] img,
+.social-icon[aria-label="Reddit"] img,
+.social-icon[aria-label="Quora"] img,
+.social-icon[aria-label="Medium"] img {
+    transform: scale(0.72) !important;
+}
+
+.social-icon[aria-label="Gmail"] img {
+    transform: scale(0.75) !important;
+}
+
+.social-icon[aria-label="YouTube"] img {
+    transform: scale(0.85) !important;
 }
 
 .social-icon:hover {
-    transform: translateY(-3px) scale(1.1);
+    transform: translateY(-4px);
 }
 
 .social-icon:hover img {
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
-    transform: scale(0.85);
-    /* Maintain scale on hover */
-}
-
-.social-icon:hover img {
-    transform: scale(1.1);
+    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.15));
 }
 
 /* Bottom Bar */
@@ -8249,13 +8266,36 @@ footer {
 }
 
 .social-links {
-    gap: 12px !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding: 10px 5px !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.social-links::-webkit-scrollbar {
+    display: none !important;
 }
 
 .social-icon {
+    flex: 0 0 auto !important;
     width: 38px !important;
     height: 38px !important;
 }
+
+.social-icon img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+/* Maintain visual balance even with override */
+/* See lines ~1222 for the balanced scales */
 
 /* Right Side Navigation (Centered Content) */
 .footer-nav {
@@ -9900,11 +9940,20 @@ footer {
 
     .social-links {
         display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        max-width: 280px;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 6px;
         margin: 0 auto;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 10px 5px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .social-links::-webkit-scrollbar {
+        display: none;
     }
 
     .footer-bottom {
