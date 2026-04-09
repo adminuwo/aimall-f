@@ -146,12 +146,7 @@ body {
     line-height: 1.6;
 }
 
-/* Hide default cursor on desktop to allow custom cursor */
-@media (min-width: 1025px) {
-    body, a, button, [onclick], .clickable {
-        cursor: none !important;
-    }
-}
+
 
 
 
@@ -1215,10 +1210,10 @@ footer::before {
 }
 
 /* Individual scaling for visually larger logos */
+/* Individual scaling removed as new icons are consistent */
 .social-icon[aria-label="Gmail"] img,
 .social-icon[aria-label="Threads"] img {
-    transform: scale(0.8);
-    /* Scale down specifically */
+    transform: none;
 }
 
 .social-icon:hover {
@@ -2387,29 +2382,7 @@ footer {
     color: inherit;
 }
 
-/* --- Custom Cursor --- */
-#cursor {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background: var(--clr-text-primary);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 200000;
-    transform: translate(-50%, -50%);
-}
 
-#cursor-blur {
-    position: fixed;
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(42, 82, 190, 0.3);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 199999;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, background-color 0.3s;
-}
 
 /* --- Utilities --- */
 .desktop-only {
@@ -9963,18 +9936,9 @@ footer {
     .section-header {
         margin-bottom: 40px;
     }
-
-    /* Hide cursor on touch devices */
-    .custom-cursor,
-    #cursor,
-    #cursor-blur {
-        display: none !important;
-    }
-
-    body {
-        cursor: auto !important;
-    }
 }
+
+
 
 /* 9. A-Series Specific Responsive */
 @media (max-width: 768px) {
