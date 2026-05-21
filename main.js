@@ -6,13 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const host = window.location.hostname;
     const isLive = host === 'ai-mall.in' || host.includes('run.app');
     
-    // Explicit env variable > Domain-based detection > Localhost fallback
-    window.API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (
-        isLive ? 'https://aimall-b-246449377479.asia-south1.run.app' : 'http://localhost:8080'
-    );
+    // Explicit env variable from .env
+    window.API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     if (!window.API_BASE_URL) {
-        console.error("VITE_API_BASE_URL is not defined and domain detection failed. API calls will fail.");
+        console.error("VITE_API_BASE_URL is not defined in .env. API calls will fail.");
     }
 
     // ── Global Interface Controls ──

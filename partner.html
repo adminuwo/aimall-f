@@ -747,11 +747,9 @@
                 </div>
             </div>
         <script>
-            // Smart Domain Detection (Fallback if env is missing)
-            const host = window.location.hostname;
-            const isLive = host === 'ai-mall.in' || host.includes('run.app');
+            // Environment Variable loaded from .env
             const envVal = "%VITE_API_BASE_URL%";
-            const API_URL = (!envVal.startsWith('%') ? envVal : null) || (isLive ? 'https://aimall-b-246449377479.asia-south1.run.app' : 'http://localhost:8080');
+            const API_URL = !envVal.startsWith('%') ? envVal : '';
 
             // ── Chatbot Functions ──
             function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
